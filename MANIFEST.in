@@ -1,0 +1,6 @@
+include LICENSE.txt
+include README.md
+include setup.py
+recursive-include backend/edw_shop/templates *.*
+recursive-include backend/edw_shop/static *.*
+recursive-include backend/edw_shop/locale *.po *.mo

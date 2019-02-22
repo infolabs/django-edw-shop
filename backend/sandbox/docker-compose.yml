@@ -1,0 +1,17 @@
+version: '3'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - '.:/app'
+      - '${DOCKER_COMPOSE_PROJECTS_PATH}/django-edw:/django-edw'
+      - '${DOCKER_COMPOSE_PROJECTS_PATH}/django-edw-shop:/django-edw-shop'
+    ports:
+      - '8000-8010:8000-8010'
+    command:
+      - /bin/bash
+      - -c
+      - sleep 1d
