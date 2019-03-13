@@ -16,12 +16,12 @@ from django.utils import timezone
 from django.utils.html import format_html
 from django.utils.translation import ugettext_lazy as _
 
-from shop.conf import app_settings
-from shop.admin.order import OrderItemInline
-from shop.models.order import OrderItemModel
-from shop.models.delivery import DeliveryModel, DeliveryItemModel
-from shop.modifiers.pool import cart_modifiers_pool
-from shop.serializers.order import OrderDetailSerializer
+from edw_shop.conf import app_settings
+from edw_shop.admin.order import OrderItemInline
+from edw_shop.models.order import OrderItemModel
+from edw_shop.models.delivery import DeliveryModel, DeliveryItemModel
+from edw_shop.modifiers.pool import cart_modifiers_pool
+from edw_shop.serializers.order import OrderDetailSerializer
 
 
 class OrderItemForm(models.ModelForm):

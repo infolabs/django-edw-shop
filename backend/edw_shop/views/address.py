@@ -12,9 +12,9 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.renderers import BrowsableAPIRenderer
 
-from shop.models.address import ShippingAddressModel, BillingAddressModel
-from shop.models.cart import CartModel
-from shop.rest.money import JSONRenderer
+from edw_shop.models.address import ShippingAddressModel, BillingAddressModel
+from edw_shop.models.cart import CartModel
+from edw_shop.rest.money import JSONRenderer
 
 
 class AddressEditView(GenericAPIView):

@@ -7,7 +7,7 @@ from __future__ import unicode_literals
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
-from shop.models.address import BaseShippingAddress, BaseBillingAddress, CountryField
+from edw_shop.models.address import BaseShippingAddress, BaseBillingAddress, CountryField
 
 
 class AddressModelMixin(models.Model):

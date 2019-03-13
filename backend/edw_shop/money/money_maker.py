@@ -14,7 +14,7 @@ from django.utils.translation import get_language
 
 from cms.utils.helpers import classproperty
 
-from shop.conf import app_settings
+from edw_shop.conf import app_settings
 from .iso4217 import CURRENCIES
 
 

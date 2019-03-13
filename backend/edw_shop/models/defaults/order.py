@@ -8,7 +8,7 @@ from django.db import models
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _, pgettext_lazy
 
-from shop.models import order
+from edw_shop.models import order
 
 
 class Order(order.BaseOrder):

@@ -8,10 +8,10 @@ from django.db import models
 
 from rest_framework import serializers
 
-from shop.conf import app_settings
-from shop.models.cart import CartModel, CartItemModel, BaseCartItem
-from shop.money import Money
-from shop.rest.money import MoneyField
+from edw_shop.conf import app_settings
+from edw_shop.models.cart import CartModel, CartItemModel, BaseCartItem
+from edw_shop.money import Money
+from edw_shop.rest.money import MoneyField
 
 
 class ExtraCartRow(serializers.Serializer):

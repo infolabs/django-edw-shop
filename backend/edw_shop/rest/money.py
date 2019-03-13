@@ -10,7 +10,7 @@ from django.utils import six
 from rest_framework import renderers
 from rest_framework import serializers
 from rest_framework.utils import encoders
-from shop.money import AbstractMoney
+from edw_shop.money import AbstractMoney
 
 
 class JSONEncoder(encoders.JSONEncoder):

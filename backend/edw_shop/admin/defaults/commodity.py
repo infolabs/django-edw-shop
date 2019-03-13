@@ -9,8 +9,8 @@ from django.contrib import admin
 from django.utils.translation import ugettext_lazy as _
 from adminsortable2.admin import SortableAdminMixin
 from cms.admin.placeholderadmin import PlaceholderAdminMixin, FrontendEditableAdminMixin
-from shop.admin.product import CMSPageAsCategoryMixin, CMSPageFilter
-from shop.models.defaults.commodity import Commodity
+from edw_shop.admin.product import CMSPageAsCategoryMixin, CMSPageFilter
+from edw_shop.models.defaults.commodity import Commodity
 
 if settings.USE_I18N:
     from parler.admin import TranslatableAdmin

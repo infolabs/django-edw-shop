@@ -18,7 +18,7 @@ from adminsortable2.admin import SortableInlineAdminMixin
 
 from cms.models import Page
 
-from shop.models.related import ProductPageModel, ProductImageModel
+from edw_shop.models.related import ProductPageModel, ProductImageModel
 
 
 class ProductImageInline(SortableInlineAdminMixin, admin.StackedInline):
@@ -28,7 +28,7 @@ class ProductImageInline(SortableInlineAdminMixin, admin.StackedInline):
 
 
 def _find_catalog_list_apphook():
-    from shop.cms_apphooks import CatalogListCMSApp
+    from edw_shop.cms_apphooks import CatalogListCMSApp
     from cms.apphook_pool import apphook_pool
 
     for name, app in apphook_pool.apps.items():

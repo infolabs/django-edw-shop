@@ -10,10 +10,10 @@ from rest_framework import generics, mixins
 from rest_framework.exceptions import NotFound, PermissionDenied, MethodNotAllowed
 from rest_framework.renderers import BrowsableAPIRenderer
 
-from shop.rest.money import JSONRenderer
-from shop.rest.renderers import CMSPageRenderer
-from shop.serializers.order import OrderListSerializer, OrderDetailSerializer
-from shop.models.order import OrderModel
+from edw_shop.rest.money import JSONRenderer
+from edw_shop.rest.renderers import CMSPageRenderer
+from edw_shop.serializers.order import OrderListSerializer, OrderDetailSerializer
+from edw_shop.models.order import OrderModel
 
 
 class OrderView(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.UpdateModelMixin,

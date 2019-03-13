@@ -6,7 +6,7 @@ from __future__ import unicode_literals
 
 from rest_framework import serializers
 
-from shop.forms.checkout import (
+from edw_shop.forms.checkout import (
     ShippingAddressForm, BillingAddressForm, CustomerForm, ShippingMethodForm, PaymentMethodForm, ExtraAnnotationForm)
 
 

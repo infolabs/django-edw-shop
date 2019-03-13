@@ -17,10 +17,10 @@ from filer.fields import image
 from djangocms_text_ckeditor.fields import HTMLField
 from polymorphic.query import PolymorphicQuerySet
 
-from shop.conf import app_settings
-from shop.models.product import BaseProduct, BaseProductManager, CMSPageReferenceMixin
-from shop.models.defaults.mapping import ProductPage
-from shop.money.fields import MoneyField
+from edw_shop.conf import app_settings
+from edw_shop.models.product import BaseProduct, BaseProductManager, CMSPageReferenceMixin
+from edw_shop.models.defaults.mapping import ProductPage
+from edw_shop.money.fields import MoneyField
 
 
 if settings.USE_I18N:

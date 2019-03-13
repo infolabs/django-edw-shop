@@ -4,7 +4,7 @@ Source: https://github.com/awesto/django-shop/blob/27c8b8bc1db5bff958c480613dcf3
 """
 from __future__ import unicode_literals
 
-from shop.admin.order import BaseOrderAdmin
+from edw_shop.admin.order import BaseOrderAdmin
 
 
 class OrderAdmin(BaseOrderAdmin):

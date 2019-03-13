@@ -17,11 +17,11 @@ from django.utils.translation import pgettext_lazy
 
 from fsm_admin.mixins import FSMTransitionMixin
 
-from shop.conf import app_settings
-from shop.models.customer import CustomerModel
-from shop.models.order import OrderItemModel, OrderPayment
-from shop.modifiers.pool import cart_modifiers_pool
-from shop.serializers.order import OrderDetailSerializer
+from edw_shop.conf import app_settings
+from edw_shop.models.customer import CustomerModel
+from edw_shop.models.order import OrderItemModel, OrderPayment
+from edw_shop.modifiers.pool import cart_modifiers_pool
+from edw_shop.serializers.order import OrderDetailSerializer
 
 
 class OrderPaymentInline(admin.TabularInline):

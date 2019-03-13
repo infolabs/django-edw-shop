@@ -15,11 +15,11 @@ from rest_framework.viewsets import GenericViewSet
 
 from cms.plugin_pool import plugin_pool
 
-from shop.conf import app_settings
-from shop.models.cart import CartModel
-from shop.serializers.checkout import CheckoutSerializer
-from shop.serializers.cart import CartSummarySerializer
-from shop.modifiers.pool import cart_modifiers_pool
+from edw_shop.conf import app_settings
+from edw_shop.models.cart import CartModel
+from edw_shop.serializers.checkout import CheckoutSerializer
+from edw_shop.serializers.cart import CartSummarySerializer
+from edw_shop.modifiers.pool import cart_modifiers_pool
 
 
 class CheckoutViewSet(GenericViewSet):
@@ -34,7 +34,7 @@ class CheckoutViewSet(GenericViewSet):
         super(CheckoutViewSet, self).__init__(**kwargs)
         self.dialog_forms = set([import_string(fc) for fc in app_settings.SHOP_DIALOG_FORMS])
         try:
-            from shop.cascade.plugin_base import DialogFormPluginBase
+            from edw_shop.cascade.plugin_base import DialogFormPluginBase
         except ImproperlyConfigured:
             # cmsplugins_cascade has not been installed
             pass

@@ -11,9 +11,9 @@ from rest_framework import status, viewsets
 from rest_framework.decorators import list_route
 from rest_framework.response import Response
 
-from shop.conf import app_settings
-from shop.models.cart import CartModel, CartItemModel
-from shop.serializers.cart import (BaseCartSerializer, CartSerializer, CartItemSerializer,
+from edw_shop.conf import app_settings
+from edw_shop.models.cart import CartModel, CartItemModel
+from edw_shop.serializers.cart import (BaseCartSerializer, CartSerializer, CartItemSerializer,
                                    WatchSerializer, WatchItemSerializer)
 
 

@@ -6,7 +6,7 @@ from __future__ import unicode_literals
 
 from django.core.validators import MinValueValidator
 from django.db.models import IntegerField
-from shop.models import cart
+from edw_shop.models import cart
 
 
 class CartItem(cart.BaseCartItem):

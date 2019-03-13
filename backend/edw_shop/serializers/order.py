@@ -8,10 +8,10 @@ from django.utils import timezone
 
 from rest_framework import serializers
 
-from shop.conf import app_settings
-from shop.models.cart import CartModel
-from shop.models.order import OrderModel
-from shop.rest.money import MoneyField
+from edw_shop.conf import app_settings
+from edw_shop.models.cart import CartModel
+from edw_shop.models.order import OrderModel
+from edw_shop.rest.money import MoneyField
 
 
 class OrderListSerializer(serializers.ModelSerializer):
