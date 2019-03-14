@@ -5,3 +5,5 @@ from django.utils.translation import ugettext_lazy as _
 __version__ = '0.0.1'
 
 _('edw_shop')
+
+default_app_config = 'edw_shop.apps.ShopConfig'

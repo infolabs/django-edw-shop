@@ -13,7 +13,7 @@ from rest_framework.decorators import list_route
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
 
-from cms.plugin_pool import plugin_pool
+#from cms.plugin_pool import plugin_pool
 
 from edw_shop.conf import app_settings
 from edw_shop.models.cart import CartModel
@@ -30,22 +30,22 @@ class CheckoutViewSet(GenericViewSet):
     serializer_class = CheckoutSerializer
     cart_serializer_class = CartSummarySerializer
 
-    def __init__(self, **kwargs):
-        super(CheckoutViewSet, self).__init__(**kwargs)
-        self.dialog_forms = set([import_string(fc) for fc in app_settings.SHOP_DIALOG_FORMS])
-        try:
-            from edw_shop.cascade.plugin_base import DialogFormPluginBase
-        except ImproperlyConfigured:
-            # cmsplugins_cascade has not been installed
-            pass
-        else:
-            # gather form classes from Cascade plugins for our checkout views
-            for p in plugin_pool.get_all_plugins():
-                if issubclass(p, DialogFormPluginBase):
-                    if hasattr(p, 'form_classes'):
-                        self.dialog_forms.update([import_string(fc) for fc in p.form_classes])
-                    if hasattr(p, 'form_class'):
-                        self.dialog_forms.add(import_string(p.form_class))
+    # def __init__(self, **kwargs):
+        # super(CheckoutViewSet, self).__init__(**kwargs)
+        # self.dialog_forms = set([import_string(fc) for fc in app_settings.SHOP_DIALOG_FORMS])
+        # try:
+            # from edw_shop.cascade.plugin_base import DialogFormPluginBase
+        # except ImproperlyConfigured:
+            # # cmsplugins_cascade has not been installed
+            # pass
+        # else:
+            # # gather form classes from Cascade plugins for our checkout views
+            # for p in plugin_pool.get_all_plugins():
+                # if issubclass(p, DialogFormPluginBase):
+                    # if hasattr(p, 'form_classes'):
+                        # self.dialog_forms.update([import_string(fc) for fc in p.form_classes])
+                    # if hasattr(p, 'form_class'):
+                        # self.dialog_forms.add(import_string(p.form_class))
 
     @list_route(methods=['put'], url_path='upload')
     def upload(self, request):

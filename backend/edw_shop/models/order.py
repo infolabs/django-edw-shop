@@ -23,13 +23,16 @@ from rest_framework.exceptions import PermissionDenied
 
 from django_fsm import FSMField, transition
 from ipware.ip import get_ip
-from cms.models import Page
+#from cms.models import Page
 
-from shop_edw.conf import app_settings
-from shop_edw.models.cart import CartItemModel
-from shop_edw.models.fields import JSONField
-from shop_edw.money.fields import MoneyField, MoneyMaker
 from edw import deferred
+from edw.models.entity import EntityModel
+from edw.models.mixins.entity.fsm import FSMMixin
+
+from edw_shop.conf import app_settings
+from edw_shop.models.cart import CartItemModel
+from edw_shop.models.fields import JSONField
+from edw_shop.money.fields import MoneyField, MoneyMaker
 from .product import BaseProduct
 
 
@@ -94,24 +97,24 @@ class OrderManager(models.Manager):
             raise PermissionDenied(detail=detail)
         return self.get_queryset().filter(customer=request.customer).order_by('-updated_at', )
 
-    def get_summary_url(self):
-        """
-        Returns the URL of the page with the list view for all orders related to the current customer
-        """
-        if hasattr(self, '_summary_url'):
-            return self._summary_url
-        try:  # via CMS pages
-            page = Page.objects.public().get(reverse_id='shop-order')
-        except Page.DoesNotExist:
-            page = Page.objects.public().filter(application_urls='OrderApp').first()
-        if page:
-            self._summary_url = page.get_absolute_url()
-        else:
-            try:  # through hardcoded urlpatterns
-                self._summary_url = reverse('shop-order')
-            except NoReverseMatch:
-                self._summary_url = 'cms-page_or_view_with_reverse_id=shop-order_does_not_exist/'
-        return self._summary_url
+    # def get_summary_url(self):
+        # """
+        # Returns the URL of the page with the list view for all orders related to the current customer
+        # """
+        # if hasattr(self, '_summary_url'):
+            # return self._summary_url
+        # try:  # via CMS pages
+            # page = Page.objects.public().get(reverse_id='shop-order')
+        # except Page.DoesNotExist:
+            # page = Page.objects.public().filter(application_urls='OrderApp').first()
+        # if page:
+            # self._summary_url = page.get_absolute_url()
+        # else:
+            # try:  # through hardcoded urlpatterns
+                # self._summary_url = reverse('shop-order')
+            # except NoReverseMatch:
+                # self._summary_url = 'cms-page_or_view_with_reverse_id=shop-order_does_not_exist/'
+        # return self._summary_url
 
     def get_latest_url(self):
         """
@@ -160,8 +163,9 @@ class WorkflowMixinMetaclass(deferred.ForeignKeyBuilder):
         return result
 
 
+#class BaseOrder(with_metaclass(WorkflowMixinMetaclass, models.Model)):
 @python_2_unicode_compatible
-class BaseOrder(with_metaclass(WorkflowMixinMetaclass, models.Model)):
+class BaseOrder(EntityModel.materialized):
     """
     An Order is the "in process" counterpart of the shopping cart, which freezes the state of the
     cart on the moment of purchase. It also holds stuff like the shipping and billing addresses,
@@ -207,24 +211,24 @@ class BaseOrder(with_metaclass(WorkflowMixinMetaclass, models.Model)):
         **decimalfield_kwargs
     )
 
-    created_at = models.DateTimeField(
-        _("Created at"),
-        auto_now_add=True,
-    )
+    # created_at = models.DateTimeField(
+        # _("Created at"),
+        # auto_now_add=True,
+    # )
 
-    updated_at = models.DateTimeField(
-        _("Updated at"),
-        auto_now=True,
-    )
+    # updated_at = models.DateTimeField(
+        # _("Updated at"),
+        # auto_now=True,
+    # )
 
     extra = JSONField(
         verbose_name=_("Extra fields"),
         help_text=_("Arbitrary information for this order object on the moment of purchase."),
     )
 
-    stored_request = JSONField(
-        help_text=_("Parts of the Request objects on the moment of purchase."),
-    )
+    # stored_request = JSONField(
+        # help_text=_("Parts of the Request objects on the moment of purchase."),
+    # )
 
     objects = OrderManager()
 

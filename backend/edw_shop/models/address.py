@@ -11,7 +11,7 @@ from django.template.loader import select_template
 from django.utils.translation import ugettext_lazy as _
 
 from edw import deferred
-from shop_edw.conf import app_settings
+from edw_shop.conf import app_settings
 
 
 class AddressManager(models.Manager):

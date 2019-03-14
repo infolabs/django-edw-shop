@@ -12,9 +12,10 @@ from django.db import models
 from django.core.exceptions import ImproperlyConfigured
 from django.utils.translation import ugettext_lazy as _
 
-from edw_shop import deferred
+from edw import deferred
+from edw.models.customer import CustomerModel
+
 from edw_shop.models.fields import JSONField
-from edw_shop.models.customer import CustomerModel
 from edw_shop.models.product import BaseProduct
 from edw_shop.modifiers.pool import cart_modifiers_pool
 from edw_shop.money import Money

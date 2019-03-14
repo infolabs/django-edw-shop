@@ -6,7 +6,7 @@ from __future__ import unicode_literals
 
 from django.db.models import SET_DEFAULT
 
-from shop import deferred
+from edw import deferred
 from edw_shop.models.address import BaseShippingAddress, BaseBillingAddress
 from edw_shop.models.cart import BaseCart
 
