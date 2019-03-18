@@ -14,7 +14,7 @@ from django.utils.encoding import force_text
 from django.utils.translation import ugettext_lazy as _
 #from polymorphic.manager import PolymorphicManager
 #from polymorphic.models import PolymorphicModel
-#from edw import deferred
+from edw import deferred
 from edw.models.entity import EntityModel
 
 
@@ -187,4 +187,4 @@ class BaseProduct(EntityModel.materialized):
         return cart_item_qs.first()
 
 
-#ProductModel = deferred.MaterializedModel(BaseProduct)
+ProductModel = deferred.MaterializedModel(BaseProduct)

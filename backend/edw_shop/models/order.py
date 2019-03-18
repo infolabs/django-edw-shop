@@ -33,7 +33,7 @@ from edw_shop.conf import app_settings
 from edw_shop.models.cart import CartItemModel
 from edw_shop.models.fields import JSONField
 from edw_shop.money.fields import MoneyField, MoneyMaker
-from .product import BaseProduct
+from .product import BaseProduct, ProductModel
 
 
 class OrderQuerySet(models.QuerySet):
@@ -230,10 +230,10 @@ class BaseOrder(EntityModel.materialized):
         # help_text=_("Parts of the Request objects on the moment of purchase."),
     # )
 
-    objects = OrderManager()
+    #objects = OrderManager()
 
-    class Meta:
-        abstract = True
+    #class Meta:
+        #abstract = True
 
     def __str__(self):
         return self.get_number()
@@ -476,7 +476,7 @@ class BaseOrderItem(with_metaclass(deferred.ForeignKeyBuilder, models.Model)):
     )
 
     product = deferred.ForeignKey(
-        BaseProduct,
+        'BaseProduct',
         null=True,
         blank=True,
         on_delete=models.SET_NULL,

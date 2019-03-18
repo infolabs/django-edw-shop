@@ -16,7 +16,7 @@ class ShopConfig(AppConfig):
         #from django_fsm.signals import post_transition
         from edw_shop.models.fields import JSONField
         from rest_framework.serializers import ModelSerializer
-        from edw.deferred import ForeignKeyBuilder
+        #from edw.deferred import ForeignKeyBuilder
         from edw_shop.rest.fields import JSONSerializerField
         #from edw_shop.models.notification import order_event_notification
 
@@ -26,4 +26,4 @@ class ShopConfig(AppConfig):
         ModelSerializer.serializer_field_mapping[JSONField] = JSONSerializerField
 
         # perform some sanity checks
-        ForeignKeyBuilder.check_for_pending_mappings()
+        #ForeignKeyBuilder.check_for_pending_mappings()
