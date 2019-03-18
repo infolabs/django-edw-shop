@@ -106,7 +106,7 @@ class BaseProduct(EntityModel.materialized):
     # )
 
     class Meta:
-        # abstract = True
+        abstract = True
         verbose_name = _("Product")
         verbose_name_plural = _("Products")
 
