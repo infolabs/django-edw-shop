@@ -1,0 +1,10 @@
+{% comment %}
+Source: https://github.com/awesto/django-shop/blob/0ebd3002214e7f99c0501dd5e975677587e7750b/shop/templates/shop/admin/order-extra.html
+{% endcomment %}
+{% load i18n %}
+{% for row in rows %}
+<label>&emsp;{{ row.1.label }}:</label><p>{{ row.1.amount }}</p>
+{% endfor %}
+<label>&emsp;{% trans "Shipping" %}:</label><p>{{ shipping_modifier|default:"–" }}</p>
+<label>&emsp;{% trans "Payment" %}:</label><p>{{ payment_modifier|default:"–" }}</p>
+<label>&emsp;{% trans "Annotation" %}:</label><p>{{ annotation|default:"–" }}</p>

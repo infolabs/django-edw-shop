@@ -1,0 +1,10 @@
+{% comment %}
+Source: https://github.com/awesto/django-shop/blob/b8d52e85dc4d8b458010f5a7e968c9789c323741/shop/templates/shop/admin/change_form.html
+{% endcomment %}
+{% extends "fsm_admin/change_form.html" %}
+
+{% block field_sets %}
+{% for fieldset in adminform %}
+  {% include "edw_shop/admin/includes/fieldset.html" %}
+{% endfor %}
+{% endblock %}

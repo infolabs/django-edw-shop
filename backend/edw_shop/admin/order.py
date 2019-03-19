@@ -18,6 +18,14 @@ from django.utils.translation import pgettext_lazy
 from fsm_admin.mixins import FSMTransitionMixin
 
 from edw.models.customer import CustomerModel
+from edw.admin.entity import (
+    EntityCharacteristicOrMarkInline,
+    EntityRelationInline,
+    EntityRelatedDataMartInline,
+    EntityChildModelAdmin,
+)
+from edw.admin.entity.entity_image import EntityImageInline
+from edw.admin.entity.entity_file import EntityFileInline
 
 from edw_shop.conf import app_settings
 from edw_shop.models.order import OrderItemModel, OrderPayment
@@ -53,7 +61,7 @@ class OrderItemInline(admin.StackedInline):
         'render_as_html_extra',
     ]
     readonly_fields = ['product_code', 'quantity', 'unit_price', 'line_total', 'render_as_html_extra']
-    template = 'shop/admin/edit_inline/stacked-order.html'
+    template = 'edw_shop/admin/edit_inline/stacked-order.html'
 
     def has_add_permission(self, request, obj=None):
         return False
@@ -68,34 +76,42 @@ class OrderItemInline(admin.StackedInline):
         item_extra_template = select_template([
             '{0}/admin/orderitem-{1}-extra.html'.format(app_settings.APP_LABEL, obj.product.product_model),
             '{0}/admin/orderitem-product-extra.html'.format(app_settings.APP_LABEL),
-            'shop/admin/orderitem-product-extra.html',
+            'edw_shop/admin/orderitem-product-extra.html',
         ])
         return item_extra_template.render(obj.extra)
     render_as_html_extra.short_description = pgettext_lazy('admin', "Extra data")
 
 
-class StatusListFilter(admin.SimpleListFilter):
-    title = pgettext_lazy('admin', "Status")
-    parameter_name = 'status'
+# class StatusListFilter(admin.SimpleListFilter):
+    # title = pgettext_lazy('admin', "Status")
+    # parameter_name = 'status'
 
-    def lookups(self, request, model_admin):
-        lookups = dict(model_admin.model._transition_targets)
-        lookups.pop('new')
-        lookups.pop('created')
-        return lookups.items()
+    # def lookups(self, request, model_admin):
+        # lookups = dict(model_admin.model._transition_targets)
+        # lookups.pop('new')
+        # lookups.pop('created')
+        # return lookups.items()
 
-    def queryset(self, request, queryset):
-        if self.value():
-            return queryset.filter(status=self.value())
-        return queryset
+    # def queryset(self, request, queryset):
+        # if self.value():
+            # return queryset.filter(status=self.value())
+        # return queryset
 
 
-class BaseOrderAdmin(FSMTransitionMixin, admin.ModelAdmin):
+class BaseOrderAdmin(FSMTransitionMixin, EntityChildModelAdmin):
     list_display = ['get_number', 'customer', 'status_name', 'get_total', 'created_at']
-    list_filter = [StatusListFilter]
+    #list_filter = [StatusListFilter]
     fsm_field = ['status']
     date_hierarchy = 'created_at'
-    inlines = [OrderItemInline, OrderPaymentInline]
+    inlines = [
+        OrderItemInline,
+        OrderPaymentInline,
+        EntityCharacteristicOrMarkInline,
+        EntityRelationInline,
+        EntityRelatedDataMartInline,
+        EntityImageInline,
+        EntityFileInline
+    ]
     readonly_fields = ['get_number', 'status_name', 'get_total', 'get_subtotal',
                        'get_customer_link', 'get_outstanding_amount', 'created_at', 'updated_at',
                        'render_as_html_extra', 'stored_request']
@@ -105,13 +121,13 @@ class BaseOrderAdmin(FSMTransitionMixin, admin.ModelAdmin):
               ('get_subtotal', 'get_total', 'get_outstanding_amount'),
               'render_as_html_extra', 'stored_request']
     actions = None
-    change_form_template = 'shop/admin/change_form.html'
+    change_form_template = 'edw_shop/admin/change_form.html'
 
     def __init__(self, *args, **kwargs):
         super(BaseOrderAdmin, self).__init__(*args, **kwargs)
         self.extra_template = select_template([
             '{}/admin/order-extra.html'.format(app_settings.APP_LABEL),
-            'shop/admin/order-extra.html',
+            'edw_shop/admin/order-extra.html',
         ])
 
     def get_number(self, obj):
@@ -199,14 +215,14 @@ class PrintOrderAdminMixin(object):
     def render_confirmation(self, request, pk=None):
         template = select_template([
             '{}/print/order-confirmation.html'.format(app_settings.APP_LABEL.lower()),
-            'shop/print/order-confirmation.html'
+            'edw_shop/print/order-confirmation.html'
         ])
         return self._render_letter(request, pk, template)
 
     def render_invoice(self, request, pk=None):
         template = select_template([
             '{}/print/invoice.html'.format(app_settings.APP_LABEL.lower()),
-            'shop/print/invoice.html'
+            'edw_shop/print/invoice.html'
         ])
         return self._render_letter(request, pk, template)
 

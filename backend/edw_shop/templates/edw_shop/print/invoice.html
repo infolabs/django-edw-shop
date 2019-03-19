@@ -1,0 +1,12 @@
+{% comment %}
+Source: https://github.com/awesto/django-shop/blob/646d9b603c3cbbd7fcc4a8f225f5ac1970d5d54c/shop/templates/shop/print/invoice.html
+{% endcomment %}
+{% extends "shop/print/base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Invoice" %} {{ order.get_number }}{% endblock %}
+
+{% block content %}
+	<h4>{% trans "Invoice" %}: {{ order.get_number }}</h4>
+	{% include "shop/print/order.html" %}
+{% endblock %}

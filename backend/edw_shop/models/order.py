@@ -28,6 +28,7 @@ from ipware.ip import get_ip
 from edw import deferred
 from edw.models.entity import EntityModel
 from edw.models.mixins.entity.fsm import FSMMixin
+from edw.models.mixins.entity.notification import NotificationMixin
 
 from edw_shop.conf import app_settings
 from edw_shop.models.cart import CartItemModel
@@ -165,7 +166,7 @@ class WorkflowMixinMetaclass(deferred.ForeignKeyBuilder):
 
 #class BaseOrder(with_metaclass(WorkflowMixinMetaclass, models.Model)):
 @python_2_unicode_compatible
-class BaseOrder(EntityModel.materialized):
+class BaseOrder(NotificationMixin, FSMMixin, EntityModel.materialized):
     """
     An Order is the "in process" counterpart of the shopping cart, which freezes the state of the
     cart on the moment of purchase. It also holds stuff like the shipping and billing addresses,

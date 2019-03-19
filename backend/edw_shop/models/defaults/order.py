@@ -8,13 +8,12 @@ from django.db import models
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _, pgettext_lazy
 
-from edw_shop.models.order import BaseOrder
-
-from edw.models.mixins.entity.notification import NotificationMixin
 from edw.models.mixins.entity.fsm import FSMMixin
 
+from edw_shop.models.order import BaseOrder
 
-class Order(NotificationMixin, BaseOrder):
+
+class Order(BaseOrder):
     """Default materialized model for Order"""
     number = models.PositiveIntegerField(
         _("Order Number"),
@@ -61,6 +60,13 @@ class Order(NotificationMixin, BaseOrder):
     def get_number(self):
         number = str(self.number)
         return '{}-{}'.format(number[:4], number[4:])
+
+    def get_name(self):
+        return self.__repr__()
+
+    @property
+    def entity_name(self):
+        return self.get_name()
 
     @classmethod
     def resolve_number(cls, number):

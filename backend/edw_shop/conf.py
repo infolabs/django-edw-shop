@@ -21,7 +21,9 @@ class DefaultSettings(object):
 
         result = self._setting('SHOP_APP_LABEL')
         if not result:
-            raise ImproperlyConfigured("SHOP_APP_LABEL setting must be set")
+            result = self._setting('EDW_APP_LABEL')
+            if not result:
+                raise ImproperlyConfigured("SHOP_APP_LABEL setting must be set")
         return result
 
     @property
@@ -80,13 +82,13 @@ class DefaultSettings(object):
         Depending on the materialized customer model, use this directive to configure the
         customer serializer.
 
-        Defaults to :class:`shop.serializers.defaults.CustomerSerializer`.
+        Defaults to :class:`edw_shop.serializers.defaults.CustomerSerializer`.
         """
         from django.core.exceptions import ImproperlyConfigured
         from django.utils.module_loading import import_string
-        from shop.serializers.bases import BaseCustomerSerializer
+        from edw_shop.serializers.bases import BaseCustomerSerializer
 
-        s = self._setting('SHOP_CUSTOMER_SERIALIZER', 'shop.serializers.defaults.CustomerSerializer')
+        s = self._setting('SHOP_CUSTOMER_SERIALIZER', 'edw_shop.serializers.defaults.CustomerSerializer')
         CustomerSerializer = import_string(s)
         if not issubclass(CustomerSerializer, BaseCustomerSerializer):
             raise ImproperlyConfigured(
@@ -104,7 +106,7 @@ class DefaultSettings(object):
         """
         from django.core.exceptions import ImproperlyConfigured
         from django.utils.module_loading import import_string
-        from shop.serializers.bases import ProductSerializer
+        from edw_shop.serializers.bases import ProductSerializer
 
         pss = self._setting('SHOP_PRODUCT_SUMMARY_SERIALIZER')
         if pss:
@@ -127,12 +129,12 @@ class DefaultSettings(object):
         This serializer is only used by the plugin editors, when selecting a product using a
         drop down menu with auto-completion.
 
-        Defaults to :class:`shop.serializers.defaults.ProductSelectSerializer`.
+        Defaults to :class:`edw_shop.serializers.defaults.ProductSelectSerializer`.
         """
         from django.utils.module_loading import import_string
 
         s = self._setting('SHOP_PRODUCT_SELECT_SERIALIZER',
-                          'shop.serializers.defaults.ProductSelectSerializer')
+                          'edw_shop.serializers.defaults.ProductSelectSerializer')
         ProductSelectSerializer = import_string(s)
         return ProductSelectSerializer
 
@@ -143,12 +145,12 @@ class DefaultSettings(object):
         cart icon symbol. Since this icon normally is visible all the time, and hence updated quite
         frequently, only add fields which are necessary.
 
-        Defaults to :class:`shop.serializers.cart.CartIconCaptionSerializer`.
+        Defaults to :class:`edw_shop.serializers.cart.CartIconCaptionSerializer`.
         """
         from django.utils.module_loading import import_string
 
         s = self._setting('SHOP_CART_ICON_CAPTION_SERIALIZER',
-                          'shop.serializers.cart.CartIconCaptionSerializer')
+                          'edw_shop.serializers.cart.CartIconCaptionSerializer')
         CartIconCaptionSerializer = import_string(s)
         return CartIconCaptionSerializer
 
@@ -158,14 +160,14 @@ class DefaultSettings(object):
         Depending on the materialized OrderItem model, use this directive to configure the
         serializer.
 
-        Defaults to :class:`shop.serializers.defaults.OrderItemSerializer`.
+        Defaults to :class:`edw_shop.serializers.defaults.OrderItemSerializer`.
         """
         from django.core.exceptions import ImproperlyConfigured
         from django.utils.module_loading import import_string
-        from shop.serializers.bases import BaseOrderItemSerializer
+        from edw_shop.serializers.bases import BaseOrderItemSerializer
 
         s = self._setting('SHOP_ORDER_ITEM_SERIALIZER',
-                          'shop.serializers.defaults.OrderItemSerializer')
+                          'edw_shop.serializers.defaults.OrderItemSerializer')
         OrderItemSerializer = import_string(s)
         if not issubclass(OrderItemSerializer, BaseOrderItemSerializer):
             raise ImproperlyConfigured(
@@ -178,20 +180,20 @@ class DefaultSettings(object):
         Specifies the list of :ref:`reference/cart-modifiers`. They are are applied on each cart item and the
         cart final sums.
 
-        This list typically starts with ``'shop.modifiers.defaults.DefaultCartModifier'`` as its first entry,
+        This list typically starts with ``'edw_shop.modifiers.defaults.DefaultCartModifier'`` as its first entry,
         followed by other cart modifiers.
         """
         from django.utils.module_loading import import_string
 
-        cart_modifiers = self._setting('SHOP_CART_MODIFIERS', ['shop.modifiers.defaults.DefaultCartModifier'])
+        cart_modifiers = self._setting('SHOP_CART_MODIFIERS', ['edw_shop.modifiers.defaults.DefaultCartModifier'])
         return tuple(import_string(mc) for mc in cart_modifiers)
 
     @property
     def SHOP_VALUE_ADDED_TAX(self):
         """
         Use this convenience settings if you can apply the same tax rate for all products
-        and you use one of the default tax modifiers :class:`shop.modifiers.taxes.CartIncludeTaxModifier`
-        or :class:`shop.modifiers.taxes.CartExcludedTaxModifier`.
+        and you use one of the default tax modifiers :class:`edw_shop.modifiers.taxes.CartIncludeTaxModifier`
+        or :class:`edw_shop.modifiers.taxes.CartExcludedTaxModifier`.
 
         If your products require individual tax rates or you ship into states with different tax rates,
         then you must provide your own tax modifier.
@@ -259,7 +261,7 @@ class DefaultSettings(object):
     @property
     def SHOP_DIALOG_FORMS(self):
         """
-        Specify a list of dialog forms available in our :class:`shop.views.checkout.CheckoutViewSet`.
+        Specify a list of dialog forms available in our :class:`edw_shop.views.checkout.CheckoutViewSet`.
         This allows us to use its endpoint ``resolve('shop:checkout-upload')`` in a generic way.
 
         If Cascade plugins are used for the forms in the checkout view, this list can be empty.
@@ -274,14 +276,14 @@ class DefaultSettings(object):
         ones provided.
         """
         cascade_forms = {
-            'CustomerForm': 'shop.forms.checkout.CustomerForm',
-            'GuestForm': 'shop.forms.checkout.GuestForm',
-            'ShippingAddressForm': 'shop.forms.checkout.ShippingAddressForm',
-            'BillingAddressForm': 'shop.forms.checkout.BillingAddressForm',
-            'PaymentMethodForm': 'shop.forms.checkout.PaymentMethodForm',
-            'ShippingMethodForm': 'shop.forms.checkout.ShippingMethodForm',
-            'ExtraAnnotationForm': 'shop.forms.checkout.ExtraAnnotationForm',
-            'AcceptConditionForm': 'shop.forms.checkout.AcceptConditionForm',
+            'CustomerForm': 'edw_shop.forms.checkout.CustomerForm',
+            'GuestForm': 'edw_shop.forms.checkout.GuestForm',
+            'ShippingAddressForm': 'edw_shop.forms.checkout.ShippingAddressForm',
+            'BillingAddressForm': 'edw_shop.forms.checkout.BillingAddressForm',
+            'PaymentMethodForm': 'edw_shop.forms.checkout.PaymentMethodForm',
+            'ShippingMethodForm': 'edw_shop.forms.checkout.ShippingMethodForm',
+            'ExtraAnnotationForm': 'edw_shop.forms.checkout.ExtraAnnotationForm',
+            'AcceptConditionForm': 'edw_shop.forms.checkout.AcceptConditionForm',
         }
         cascade_forms.update(self._setting('SHOP_CASCADE_FORMS', {}))
         return cascade_forms

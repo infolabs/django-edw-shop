@@ -1,0 +1,15 @@
+{% comment %}
+Source: https://github.com/awesto/django-shop/blob/e7a997ca533012ce9868d19740f2967f8ff5aae9/shop/templates/shop/print/order-confirmation.html
+{% endcomment %}
+{% extends "shop/print/base.html" %}
+{% load i18n %}
+
+{% block email-thead %}
+	{{ block.super }}
+	{% block email-title %}{% trans "Order confirmation for" %} {{ data.get_number }}{% endblock %}
+{% endblock %}
+
+{% block content %}
+	<h4>{% trans "Delivery Note" %}: {{ order.get_number }}</h4>
+	{% include "shop/print/order.html" %}
+{% endblock %}
