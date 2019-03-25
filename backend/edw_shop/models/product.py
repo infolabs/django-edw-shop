@@ -124,13 +124,13 @@ class BaseProduct(EntityModel.materialized):
         """
         return self.polymorphic_ctype.model
 
-    def get_absolute_url(self):
-        """
-        Hook for returning the canonical Django URL of this product.
-        """
-        msg = "Method get_absolute_url() must be implemented by subclass: `{}`"
-        raise NotImplementedError(msg.format(self.__class__.__name__))
-
+    # def get_absolute_url(self):
+    #     """
+    #     Hook for returning the canonical Django URL of this product.
+    #     """
+    #     msg = "Method get_absolute_url() must be implemented by subclass: `{}`"
+    #     raise NotImplementedError(msg.format(self.__class__.__name__))
+    #
     def get_price(self, request):
         """
         Hook for returning the current price of this product.

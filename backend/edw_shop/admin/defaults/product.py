@@ -1,0 +1,41 @@
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+
+from django.utils.translation import ugettext_lazy as _
+
+from edw.admin.entity import (
+    EntityCharacteristicOrMarkInline,
+    EntityRelationInline,
+    EntityRelatedDataMartInline,
+    EntityChildModelAdmin,
+)
+from edw.admin.entity.entity_image import EntityImageInline
+from edw.admin.entity.entity_file import EntityFileInline
+
+from edw_shop.admin.defaults.forms import EntityAdminForm
+
+
+class ProductAdmin(EntityChildModelAdmin):
+
+    base_form = EntityAdminForm
+
+    inlines = [
+        EntityCharacteristicOrMarkInline,
+        EntityRelationInline,
+        EntityRelatedDataMartInline,
+        EntityImageInline,
+        EntityFileInline
+    ]
+
+    prepopulated_fields = {'slug': ['product_name']}
+
+    base_fieldsets = (
+        (_("Main params"), {
+            'fields': ('product_name', 'slug', 'product_code', 'unit_price', 'active', 'created_at',
+                       'terms', 'description'),
+        }),
+    )
+
+    save_as = True
+
+    readonly_fields = []
