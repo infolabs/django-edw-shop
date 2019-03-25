@@ -8,27 +8,27 @@ msgid ""
 msgstr ""
 "Project-Id-Version: django-shop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-03-21 15:59+0300\n"
-"PO-Revision-Date: 2019-03-21 16:49+0300\n"
+"POT-Creation-Date: 2019-03-25 16:38+0300\n"
+"PO-Revision-Date: 2019-03-25 16:39+0300\n"
 "Last-Translator: chrisglass <tribaal@gmail.com>\n"
+"Language-Team: \n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"Language-Team: \n"
 "X-Generator: Poedit 2.2.1\n"
 
 #: __init__.py:7
 msgid "edw_shop"
 msgstr "Система интернет дистрибьюции"
 
-#: admin/defaults/forms/__init__.py:15 models/defaults/product.py:25
+#: admin/defaults/forms/__init__.py:15 models/defaults/product.py:49
 msgid "Description"
 msgstr "Описание"
 
-#: admin/defaults/product.py:33
+#: admin/defaults/product.py:35
 msgid "Main params"
 msgstr "Основные параметры"
 
@@ -1126,7 +1126,7 @@ msgstr "Замбия"
 msgid "Zimbabwe"
 msgstr "Зимбабве"
 
-#: models/cart.py:86 models/defaults/product.py:22 models/order.py:472
+#: models/cart.py:86 models/defaults/product.py:46 models/order.py:472
 msgid "Product code"
 msgstr "Код товара"
 
@@ -1236,32 +1236,41 @@ msgstr "Заказы"
 msgid "Ordered quantity"
 msgstr "Заказанное количество"
 
-#: models/defaults/product.py:20 models/order.py:464
+#: models/defaults/product.py:37
+msgid "Tile"
+msgstr "Плитка"
+
+#: models/defaults/product.py:38
+msgid "List"
+msgstr "Список"
+
+#: models/defaults/product.py:44 models/order.py:464
 msgid "Product name"
 msgstr "Название товара"
 
-#: models/defaults/product.py:21
+#: models/defaults/product.py:45
 msgid "Slug"
 msgstr "Путь"
 
-#: models/defaults/product.py:21
+#: models/defaults/product.py:45
 msgid "Used for URLs, auto-generated from name if blank."
 msgstr "Используется авто-генерация URL, если это поле пустое."
 
-#: models/defaults/product.py:23 models/order.py:488
+#: models/defaults/product.py:47 models/order.py:488
 msgid "Unit price"
 msgstr "Стоимость единицы"
 
-#: models/defaults/product.py:24
+#: models/defaults/product.py:48
 msgid "Net price for this product"
 msgstr "Стоимость товара в этом магазине"
 
-#: models/defaults/product.py:36 models/order.py:484 models/product.py:110
+#: models/defaults/product.py:59 models/defaults/product.py:81
+#: models/order.py:484 models/product.py:110
 #: templates/edw_shop/print/order.html:12
 msgid "Product"
 msgstr "Товар"
 
-#: models/defaults/product.py:37 models/product.py:111
+#: models/defaults/product.py:60 models/product.py:111
 msgid "Products"
 msgstr "Товары"
 
