@@ -2,6 +2,7 @@
 from __future__ import unicode_literals
 
 from django.db import models
+from django.core.urlresolvers import reverse
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 
@@ -59,12 +60,36 @@ class Product(BaseProduct):
         verbose_name = _("Product")
         verbose_name_plural = _("Products")
 
+    class RESTMeta:
+        include = {
+            'detail_url': ('rest_framework.serializers.CharField', {
+                'source': 'get_detail_url',
+                'read_only': True
+            }),
+        }
+
     @property
     def entity_name(self):
         return self.product_name
 
     def __str__(self):
         return self.product_name
+
+    def get_detail_url(self, data_mart=None):
+        if data_mart is None:
+            data_mart = self.data_mart
+        if data_mart:
+            page = data_mart.get_cached_detail_page()
+            return reverse('product_detail', args=[page.url.strip('/'), self.pk] if page is not None else [self.pk])
+        else:
+            return reverse('product_detail', args=[self.pk])
+
+    def get_summary_extra(self, context):
+        data_mart = context['data_mart']
+        extra = {
+            'url': self.get_detail_url(data_mart)
+        }
+        return extra
 
     def get_price(self, request):
         return self.unit_price

@@ -41,3 +41,6 @@ class ProductAdmin(EntityChildModelAdmin):
     save_as = True
 
     readonly_fields = []
+
+    def view_on_site(self, obj):
+        return obj.get_detail_url()
