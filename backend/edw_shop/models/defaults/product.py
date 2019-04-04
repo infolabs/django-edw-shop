@@ -5,6 +5,7 @@ from django.db import models
 from django.core.urlresolvers import reverse
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
+from django.utils.functional import cached_property
 
 from edw.models.term import TermModel
 
@@ -17,6 +18,8 @@ from edw_fluent.models.page_layout import (
     get_layout_slug_by_model_name,
     get_or_create_view_layouts_root
 )
+
+from sid.models.entity import EntityImage, EntityFile
 
 _publication_root_terms_system_flags_restriction = (
     TermModel.system_flags.delete_restriction
@@ -66,6 +69,18 @@ class Product(BaseProduct):
                 'source': 'get_detail_url',
                 'read_only': True
             }),
+            'gallery': ('edw.rest.serializers.related.entity_image.EntityImageSerializer', {
+                'read_only': True,
+                'many': True
+            }),
+            'thumbnail': ('edw.rest.serializers.related.entity_image.EntityImageSerializer', {
+                'read_only': True,
+                'many': True
+            }),
+            'attachments': ('edw.rest.serializers.related.entity_file.EntityFileSerializer', {
+                'read_only': True,
+                'many': True
+            }),
         }
 
     @property
@@ -84,6 +99,17 @@ class Product(BaseProduct):
         else:
             return reverse('product_detail', args=[self.pk])
 
+    @cached_property
+    def breadcrumbs(self):
+        data_mart = self.data_mart
+
+        if data_mart:
+            page = data_mart.get_cached_detail_page()
+            if page:
+                return page.breadcrumb
+
+        return None
+
     def get_summary_extra(self, context):
         data_mart = context['data_mart']
         extra = {
@@ -93,6 +119,41 @@ class Product(BaseProduct):
 
     def get_price(self, request):
         return self.unit_price
+
+    @cached_property
+    def gallery(self):
+        return list(self.get_gallery())
+
+    def get_gallery(self):
+        return EntityImage.objects.filter(entity=self, key=None).select_related('image').order_by('order')
+
+    @cached_property
+    def thumbnail(self):
+        return list(self.get_thumbnail())
+
+    def get_thumbnail(self):
+        return EntityImage.objects.filter(entity=self, key=EntityImage.THUMBNAIL_KEY).order_by('order')
+
+    @cached_property
+    def attachments(self):
+        return list(self.get_attachments())
+
+    def get_attachments(self):
+        return EntityFile.objects.filter(entity=self, key=None).order_by('order')
+
+    @cached_property
+    def thumbnails(self):
+        thumbnails = [x.image for x in
+                      EntityImage.objects.filter(entity=self, key=EntityImage.THUMBNAIL_KEY).order_by('order')]
+        if thumbnails:
+            return thumbnails
+        else:
+            thumbnails = [x.image for x in self.gallery]
+            if thumbnails:
+                return thumbnails[:1]
+            else:
+                return self.ordered_images[:1]
+
 
     @classmethod
     def validate_term_model(cls):
