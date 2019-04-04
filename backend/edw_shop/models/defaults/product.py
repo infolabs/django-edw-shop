@@ -59,6 +59,9 @@ class Product(BaseProduct):
         verbose_name = _("Product")
         verbose_name_plural = _("Products")
 
+    class RESTMeta:
+        lookup_fields = ('id', 'slug')
+
     @property
     def entity_name(self):
         return self.product_name
