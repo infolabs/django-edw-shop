@@ -52,7 +52,6 @@ class Product(BaseProduct):
                             help_text=_("Net price for this product"), default=0.0)
     description = models.TextField(verbose_name=_('Description'), blank=True, null=True)
 
-
     # common fields for the catalog's list- and detail views
 
     # filter expression used to search for a product item using the Select2 widget
@@ -64,6 +63,7 @@ class Product(BaseProduct):
         verbose_name_plural = _("Products")
 
     class RESTMeta:
+        lookup_fields = ('id', 'slug')
         include = {
             'detail_url': ('rest_framework.serializers.CharField', {
                 'source': 'get_detail_url',
