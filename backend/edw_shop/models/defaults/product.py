@@ -66,6 +66,7 @@ class Product(BaseProduct):
                 'source': 'get_detail_url',
                 'read_only': True
             }),
+            'product_code': ('rest_framework.serializers.CharField', {})
         }
 
     @property
