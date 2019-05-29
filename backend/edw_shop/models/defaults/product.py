@@ -47,7 +47,7 @@ class Product(BaseProduct):
     # common product fields
     product_name = models.CharField(_("Product name"), max_length=255, blank=False, null=False)
     slug = models.SlugField(_("Slug"), help_text=_("Used for URLs, auto-generated from name if blank."))
-    product_code = models.CharField(_("Product code"), max_length=255, unique=True, default='')
+    product_code = models.CharField(_("Product code"), max_length=255, default='', blank=True, null=True)
     unit_price = MoneyField(_("Unit price"), decimal_places=3,
                             help_text=_("Net price for this product"), default=0.0)
     description = models.TextField(verbose_name=_('Description'), blank=True, null=True)
@@ -81,7 +81,7 @@ class Product(BaseProduct):
                 'read_only': True,
                 'many': True
             }),
-            'product_code': ('rest_framework.serializers.CharField', {})
+            'product_code': ('rest_framework.serializers.CharField', {'required': False})
         }
 
     @property
