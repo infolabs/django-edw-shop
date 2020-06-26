@@ -20,10 +20,10 @@ class OrderAdmin(BaseOrderAdmin):
         fields.extend(['shipping_address_text', 'billing_address_text'])
         return fields
 
-    def get_readonly_fields(self, request, obj=None):
-        readonly_fields = list(super(OrderAdmin, self).get_readonly_fields(request, obj))
-        readonly_fields.extend(['shipping_address_text', 'billing_address_text'])
-        return readonly_fields
+    # def get_readonly_fields(self, request, obj=None):
+    #     readonly_fields = list(super(OrderAdmin, self).get_readonly_fields(request, obj))
+    #     readonly_fields.extend(['shipping_address_text', 'billing_address_text'])
+    #     return readonly_fields
 
     def get_search_fields(self, request):
         search_fields = list(super(OrderAdmin, self).get_search_fields(request))

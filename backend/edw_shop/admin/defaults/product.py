@@ -29,7 +29,7 @@ class ProductAdmin(EntityChildModelAdmin):
 
     prepopulated_fields = {'slug': ['product_name']}
 
-    list_display = ['product_name', 'product_code', 'unit_price', 'created_at', 'updated_at', 'active']
+    list_display = ['product_name', 'sid', 'unit_price', 'created_at', 'updated_at', 'active']
 
     base_fieldsets = (
         (_("Main params"), {
@@ -37,7 +37,7 @@ class ProductAdmin(EntityChildModelAdmin):
                        'terms', 'description'),
         }),
     )
-
+    search_fields = ['product_name', 'sid',]
     save_as = True
 
     readonly_fields = []

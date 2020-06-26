@@ -13,6 +13,8 @@ from edw_shop.conf import app_settings
 from edw_shop.models.product import BaseProduct
 from edw_shop.money.fields import MoneyField
 
+from edw_shop.rest.validators.product import ProductValidator
+
 from edw_fluent.models.page_layout import (
     get_views_layouts,
     get_layout_slug_by_model_name,
@@ -47,10 +49,35 @@ class Product(BaseProduct):
     # common product fields
     product_name = models.CharField(_("Product name"), max_length=255, blank=False, null=False)
     slug = models.SlugField(_("Slug"), help_text=_("Used for URLs, auto-generated from name if blank."))
+
+    sid = models.CharField(verbose_name=_('SID'), max_length=255, unique=True, null=True, blank=True,
+                           help_text=_("Secondary ID needed for purposes of external exchange system."))
+
+    sku = models.CharField(verbose_name=_('SKU'), max_length=255, null=True, blank=True, default='',
+                           help_text=_("Show in product detail description"))
+
     product_code = models.CharField(_("Product code"), max_length=255, default='', blank=True, null=True)
+
+    description = models.TextField(verbose_name=_('Description'), blank=True, null=True)
+
+    unit = models.CharField(verbose_name=_('measurment unit'), max_length=50, null=True, blank=True, default='',
+                            help_text=_("Basic measurement unit of product"))
+
     unit_price = MoneyField(_("Unit price"), decimal_places=3,
                             help_text=_("Net price for this product"), default=0.0)
-    description = models.TextField(verbose_name=_('Description'), blank=True, null=True)
+
+    step = models.DecimalField(verbose_name=_('addition step'), default=1, max_digits=10, decimal_places=3,
+                               help_text=_(
+                                   "Step for sale product. For example: You set price is per linear meter, but the product is only sold by the piece, the length of one piece 1.49 meters. Set step as 1.49"))
+
+    is_display_price_per_step = models.BooleanField(default=False,
+                                                    verbose_name=_('Display price per step instead one unit price'))
+
+    in_stock = models.IntegerField(verbose_name=_('quantity in stock'), null=True, blank=True, help_text=_(
+        """"" - out of stock; "0" - sold out; "N" - N quantity in stock"""))
+
+    estimated_delivery = models.CharField(max_length=255, verbose_name=_('estimated delivery'), null=True, blank=True,
+                                          help_text=_("""If not empty then show this instead "in stock" or "out of stock" """))
 
     # common fields for the catalog's list- and detail views
 
@@ -64,6 +91,10 @@ class Product(BaseProduct):
 
     class RESTMeta:
         lookup_fields = ('id', 'slug')
+
+        validators = [ProductValidator()]
+
+
         include = {
             'detail_url': ('rest_framework.serializers.CharField', {
                 'source': 'get_detail_url',
@@ -84,12 +115,86 @@ class Product(BaseProduct):
             'product_code': ('rest_framework.serializers.CharField', {'required': False})
         }
 
+        @staticmethod
+        def _update_entity(self, instance, validated_data):
+            print "___UPDDAAAte"
+
+            # если есть текстовый контент заменяем все содержание публикации
+            html_content = validated_data.pop('html_content', None)
+
+
+        def create(self, validated_data):
+            print "create product rest"
+            print validated_data
+            origin_validated_data = validated_data.copy()
+
+            for key in ('transition', 'html_content'):
+                validated_data.pop(key, None)
+
+            instance = super(self.__class__, self).create(validated_data)
+
+            #self.Meta.model.RESTMeta._get_or_create_placeholder(self, instance)
+            self.Meta.model.RESTMeta._update_entity(self, instance, origin_validated_data)
+
+            return instance
+
+        def update(self, instance, validated_data):
+            print "update product rest"
+            print validated_data
+            print instance
+            self.Meta.model.RESTMeta._update_entity(self, instance, validated_data)
+            return super(self.__class__, self).update(instance, validated_data)
+
+
     @property
     def entity_name(self):
         return self.product_name
 
     def __str__(self):
         return self.product_name
+
+    #product properties
+    @property
+    def get_sid(self):
+        return self.sid if self.sid else ""
+
+
+    @property
+    def get_sku(self):
+        return self.sku if self.sku else ""
+
+    @property
+    def get_product_code(self):
+        return self.product_code if self.product_code else ""
+
+    @property
+    def get_unit(self):
+        return self.unit if self.unit else ""
+
+    @property
+    def get_step(self):
+        return self.step
+
+    @property
+    def get_unit_price(self):
+        return self.unit_price
+
+    @property
+    def get_is_display_price_per_step(self):
+        return self.is_display_price_per_step
+
+    @property
+    def get_in_stock(self):
+
+        return self.in_stock if self.in_stock else 0
+
+    @property
+    def get_estimated_delivery(self):
+        return self.estimated_delivery if self.estimated_delivery else ""
+
+    def get_price(self, request):
+        return self.unit_price
+
 
     def get_detail_url(self, data_mart=None):
         if data_mart is None:
@@ -114,8 +219,19 @@ class Product(BaseProduct):
     def get_summary_extra(self, context):
         data_mart = context['data_mart']
         extra = {
-            'url': self.get_detail_url(data_mart)
+            'url': self.get_detail_url(data_mart),
+            'slug': self.slug,
+            'sid':  self.get_sid,
+            'sku': self.get_sku,
+            'product_code': self.get_product_code,
+            'unit': self.get_unit,
+            'step': self.get_step,
+            'unit_price': self.get_unit_price,
+            'is_display_price_per_step': self.get_is_display_price_per_step,
+            'in_stock': self.get_in_stock,
+            'estimated_delivery': self.get_estimated_delivery
         }
+
         return extra
 
     def get_price(self, request):
