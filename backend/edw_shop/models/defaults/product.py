@@ -117,15 +117,13 @@ class Product(BaseProduct):
 
         @staticmethod
         def _update_entity(self, instance, validated_data):
-            print "___UPDDAAAte"
 
             # если есть текстовый контент заменяем все содержание публикации
             html_content = validated_data.pop('html_content', None)
 
 
         def create(self, validated_data):
-            print "create product rest"
-            print validated_data
+
             origin_validated_data = validated_data.copy()
 
             for key in ('transition', 'html_content'):
@@ -139,9 +137,7 @@ class Product(BaseProduct):
             return instance
 
         def update(self, instance, validated_data):
-            print "update product rest"
-            print validated_data
-            print instance
+
             self.Meta.model.RESTMeta._update_entity(self, instance, validated_data)
             return super(self.__class__, self).update(instance, validated_data)
 
