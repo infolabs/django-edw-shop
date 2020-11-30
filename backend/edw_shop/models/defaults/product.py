@@ -44,7 +44,7 @@ class Product(BaseProduct):
         (VIEW_COMPONENT_LIST, _('List')),
     )
 
-    LAYOUT_TERM_SLUG = get_layout_slug_by_model_name('publication')
+    LAYOUT_TERM_SLUG = get_layout_slug_by_model_name('product')
 
     # common product fields
     product_name = models.CharField(_("Product name"), max_length=255, blank=False, null=False)
