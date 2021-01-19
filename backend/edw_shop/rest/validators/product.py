@@ -26,31 +26,34 @@ from edw.rest.serializers.entity import EntityValidator
 class ProductValidator(EntityValidator):
 
     def __call__(self, attrs):
+        print("CALLL ProductValidator", attrs)
         model = self.serializer.Meta.model
         # Determine the existing instance, if this is an update operation.
         instance = getattr(self.serializer, 'instance', None)
-        validated_data = dict(attrs)
-        # отключаем проверку `slug` на уровне модели
-        #validated_data.setdefault('slug', '__dummy__')
 
+        validated_data = dict(attrs)
         request_method = self.serializer.request_method
 
         available_terms_ids = set(self.serializer.data_mart_available_terms_ids)
         attr_errors = {}
-        dmart = self.serializer.data_mart_from_request
 
         # check update for POST method
         if request_method == 'POST':
             for id_attr in self.serializer.get_id_attrs():
                 id_value = validated_data.get(id_attr, empty)
+                print("id_attr", id_attr, id_value)
                 if id_value != empty:
+                    print("not_empty")
                     try:
                         instance = model.objects.get(**{id_attr: id_value})
                     except ObjectDoesNotExist:
+                        print("not exist")
                         pass
                     except MultipleObjectsReturned as e:
+                        print("MultipleObjectsReturned")
                         attr_errors[id_attr] = _("{} `{}`='{}'").format(str(e), id_attr, id_value)
                     else:
+                        print("instance", instance)
                         # try check data mart permissions
                         if (self.serializer.data_mart_from_request is not None and
                                 not self.serializer.data_mart_permissions_from_request['can_change']):
@@ -58,6 +61,8 @@ class ProductValidator(EntityValidator):
 
                         # try check object permissions, see the CheckPermissionsSerializerMixin
                         self.serializer.check_object_permissions(instance)
+                        if not validated_data.get('slug', None):
+                            validated_data['slug'] = instance.slug
                     break
 
         # characteristics, marks
@@ -91,7 +96,6 @@ class ProductValidator(EntityValidator):
 
         # terms_paths
         terms_paths = validated_data.pop('terms_paths', None)
-
         if terms_paths is not None:
             errors = []
             terms = TermModel.objects.active().no_external_tagging_restriction()
@@ -99,7 +103,7 @@ class ProductValidator(EntityValidator):
                 # Try find Term by `slug` or `path`
                 field = 'slug' if path.find('/') == -1 else 'path'
                 try:
-                    t1 = terms.get(**{field: path, 'id__in': available_terms_ids})
+                    terms.get(**{field: path, 'id__in': available_terms_ids})
                 except (ObjectDoesNotExist, MultipleObjectsReturned) as e:
                     errors.append(_("{} `{}`='{}'").format(str(e), field, path))
             if errors:
@@ -107,7 +111,6 @@ class ProductValidator(EntityValidator):
 
         # terms_ids
         terms_ids = validated_data.pop('active_terms_ids', None)
-
         if terms_ids is not None:
             not_found_ids = list(set(terms_ids) - available_terms_ids)
             if not_found_ids:
@@ -186,5 +189,4 @@ class ProductValidator(EntityValidator):
         except (ObjectDoesNotExist, ValidationError) as e:
             raise serializers.ValidationError(str(e))
         # side effect, return instance
-
         return instance

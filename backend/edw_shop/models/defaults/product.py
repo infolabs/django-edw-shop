@@ -8,12 +8,14 @@ from django.utils.translation import ugettext_lazy as _
 from django.utils.functional import cached_property
 
 from edw.models.term import TermModel
+from edw import deferred
 
 from edw_shop.conf import app_settings
 from edw_shop.models.product import BaseProduct
 from edw_shop.money.fields import MoneyField
 
 from edw_shop.rest.validators.product import ProductValidator
+from edw_shop.rest.serializers.product import ProductUnitSerializer
 
 from edw_fluent.models.page_layout import (
     get_views_layouts,
@@ -90,10 +92,11 @@ class Product(BaseProduct):
         verbose_name_plural = _("Products")
 
     class RESTMeta:
-        lookup_fields = ('id', 'slug')
+        lookup_fields = ('id', 'slug',)
 
         validators = [ProductValidator()]
 
+        #exclude = ['sid']
 
         include = {
             'detail_url': ('rest_framework.serializers.CharField', {
@@ -112,26 +115,38 @@ class Product(BaseProduct):
                 'read_only': True,
                 'many': True
             }),
-            'product_code': ('rest_framework.serializers.CharField', {'required': False})
+            'product_code': ('rest_framework.serializers.CharField', {'required': False}),
+            'sid': ('rest_framework.serializers.CharField', {'required': False}),
+            'slug': ('rest_framework.serializers.CharField', {'required': False}), # 'write_only': True})
+            'extra_units': ('rest_framework.serializers.ListField', {
+                'child': ProductUnitSerializer(),
+                'required': False,
+                'write_only': True
+            })
         }
 
         @staticmethod
         def _update_entity(self, instance, validated_data):
-
             # если есть текстовый контент заменяем все содержание публикации
             html_content = validated_data.pop('html_content', None)
+            # экстра единицы измерения
+            units = validated_data.pop("extra_units", None)
+            if units is not None:
+                for unit in units:
+                    instance.units.update_or_create(uuid=unit.get("uuid"),
+                                                    defaults={"value": unit.get("value"), "name": unit.get("name")})
+
 
 
         def create(self, validated_data):
 
             origin_validated_data = validated_data.copy()
 
-            for key in ('transition', 'html_content'):
+            for key in ('transition', 'html_content', 'extra_units'):
                 validated_data.pop(key, None)
 
             instance = super(self.__class__, self).create(validated_data)
 
-            #self.Meta.model.RESTMeta._get_or_create_placeholder(self, instance)
             self.Meta.model.RESTMeta._update_entity(self, instance, origin_validated_data)
 
             return instance
@@ -139,6 +154,7 @@ class Product(BaseProduct):
         def update(self, instance, validated_data):
 
             self.Meta.model.RESTMeta._update_entity(self, instance, validated_data)
+
             return super(self.__class__, self).update(instance, validated_data)
 
 
@@ -305,3 +321,24 @@ class Product(BaseProduct):
                 self.terms.add(to_add)
 
         super(Product, self).validate_terms(origin, **kwargs)
+
+
+@python_2_unicode_compatible
+class ProductUnit(models.Model):
+    product = models.ForeignKey(
+        'Product',
+        verbose_name=_("Product"),
+        related_name='units',
+    )
+
+    name = models.CharField(verbose_name=_('measurment unit'), max_length=50, null=False, blank=False, default='',
+                            help_text=_("Additional measurement unit of product"))
+    value = models.DecimalField(verbose_name=_('addition step'), default=1, max_digits=10, decimal_places=3,
+                               help_text=_("conversion factor from base unit: 1 base unit * k"))
+    uuid = models.CharField(verbose_name=_('measurment unit code'), max_length=50, null=False, blank=False)
+
+    class Meta:
+        app_label = app_settings.APP_LABEL
+        verbose_name = _("Unit")
+        verbose_name_plural = _("Units")
+        unique_together = ("product", "uuid")
