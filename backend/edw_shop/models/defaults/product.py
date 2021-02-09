@@ -134,7 +134,9 @@ class Product(BaseProduct):
             if units is not None:
                 for unit in units:
                     instance.units.update_or_create(uuid=unit.get("uuid"),
-                                                    defaults={"value": unit.get("value"), "name": unit.get("name")})
+                                                    defaults={"value": unit.get("value", 1.0),
+                                                              "name": unit.get("name"),
+                                                              "discount": unit.get("discount", 1.0)})
 
 
 
@@ -336,6 +338,8 @@ class ProductUnit(models.Model):
     value = models.DecimalField(verbose_name=_('addition step'), default=1, max_digits=10, decimal_places=3,
                                help_text=_("conversion factor from base unit: 1 base unit * k"))
     uuid = models.CharField(verbose_name=_('measurment unit code'), max_length=50, null=False, blank=False)
+    discount = models.DecimalField(verbose_name=_('discount'), default=1, max_digits=10, decimal_places=3,
+                                help_text=_("discount factor from base unit: 1 base unit * k"))
 
     class Meta:
         app_label = app_settings.APP_LABEL

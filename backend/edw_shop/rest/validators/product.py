@@ -26,7 +26,7 @@ from edw.rest.serializers.entity import EntityValidator
 class ProductValidator(EntityValidator):
 
     def __call__(self, attrs):
-        print("CALLL ProductValidator", attrs)
+
         model = self.serializer.Meta.model
         # Determine the existing instance, if this is an update operation.
         instance = getattr(self.serializer, 'instance', None)
@@ -41,19 +41,15 @@ class ProductValidator(EntityValidator):
         if request_method == 'POST':
             for id_attr in self.serializer.get_id_attrs():
                 id_value = validated_data.get(id_attr, empty)
-                print("id_attr", id_attr, id_value)
                 if id_value != empty:
-                    print("not_empty")
+
                     try:
                         instance = model.objects.get(**{id_attr: id_value})
                     except ObjectDoesNotExist:
-                        print("not exist")
                         pass
                     except MultipleObjectsReturned as e:
-                        print("MultipleObjectsReturned")
                         attr_errors[id_attr] = _("{} `{}`='{}'").format(str(e), id_attr, id_value)
                     else:
-                        print("instance", instance)
                         # try check data mart permissions
                         if (self.serializer.data_mart_from_request is not None and
                                 not self.serializer.data_mart_permissions_from_request['can_change']):
@@ -80,6 +76,7 @@ class ProductValidator(EntityValidator):
                     if path is not None:
                         # Try find Term by `slug` or `path`
                         field = 'slug' if path.find('/') == -1 else 'path'
+
                         try:
                             terms.get(**{field: path, 'id__in': available_terms_ids})
                         except (ObjectDoesNotExist, MultipleObjectsReturned) as e:
