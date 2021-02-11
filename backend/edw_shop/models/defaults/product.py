@@ -122,7 +122,17 @@ class Product(BaseProduct):
                 'child': ProductUnitSerializer(),
                 'required': False,
                 'write_only': True
-            })
+            }),
+            'price': ('rest_framework.serializers.DecimalField', {
+                'max_digits':10,
+                'decimal_places': 3,
+                'source': 'get_unit_price',
+                'read_only': True
+            }),
+            'units':('rest_framework.serializers.ListField', {
+                'source': 'get_units',
+                'read_only': True
+            }),
         }
 
         @staticmethod
@@ -137,8 +147,6 @@ class Product(BaseProduct):
                                                     defaults={"value": unit.get("value", 1.0),
                                                               "name": unit.get("name"),
                                                               "discount": unit.get("discount", 1.0)})
-
-
 
         def create(self, validated_data):
 
@@ -191,7 +199,22 @@ class Product(BaseProduct):
 
     @property
     def get_unit_price(self):
+        #TODO%
         return self.unit_price
+
+    @property
+    def get_units(self):
+        units = self.units.all().order_by('value')
+        res = []
+        for unit in units:
+            discount =  unit.discount if unit.discount else 1.0
+            res.append({
+                "name": unit.name,
+                "step": float(unit.value),
+                "discount": float(discount),
+                "price": float(self.unit_price * discount)
+            })
+        return res
 
     @property
     def get_is_display_price_per_step(self):
