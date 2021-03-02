@@ -207,12 +207,12 @@ class Product(BaseProduct):
         units = self.units.all().order_by('value')
         res = []
         for unit in units:
-            discount =  unit.discount if unit.discount else 1.0
+            discount = unit.discount if unit.discount else 0.0
             res.append({
                 "name": unit.name,
                 "step": float(unit.value),
                 "discount": float(discount),
-                "price": float(self.unit_price * discount)
+                "price": float(self.unit_price - discount)
             })
         return res
 
