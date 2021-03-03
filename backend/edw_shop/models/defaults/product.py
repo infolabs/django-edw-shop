@@ -212,7 +212,7 @@ class Product(BaseProduct):
                 "name": unit.name,
                 "step": float(unit.value),
                 "discount": float(discount),
-                "price": float(self.unit_price - discount)
+                "price": float(self.unit_price) - float(discount)
             })
         return res
 
