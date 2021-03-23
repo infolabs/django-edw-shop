@@ -10,8 +10,8 @@ from rest_framework import serializers
 
 from edw_shop.conf import app_settings
 from edw_shop.models.cart import CartModel, CartItemModel, BaseCartItem
-from edw_shop.money import Money
-from edw_shop.rest.money import MoneyField
+#from edw_shop.money import Money
+#from edw_shop.rest.money import MoneyField
 
 
 class ExtraCartRow(serializers.Serializer):
@@ -24,7 +24,9 @@ class ExtraCartRow(serializers.Serializer):
         help_text="A short description of this row in a natural language.",
     )
 
-    amount = MoneyField(
+    amount = serializers.DecimalField(
+        max_digits=10,
+        decimal_places=3,
         help_text="The price difference, if applied.",
     )
 
@@ -77,11 +79,11 @@ class ItemModelSerializer(serializers.ModelSerializer):
 
 
 class BaseItemSerializer(ItemModelSerializer):
-    url = serializers.HyperlinkedIdentityField(lookup_field='pk', view_name='shop:cart-detail')
-    unit_price = MoneyField()
-    line_total = MoneyField()
+    url = serializers.HyperlinkedIdentityField(lookup_field='pk', view_name='edw_shop:cart-detail')
+    unit_price = serializers.DecimalField(max_digits=10, decimal_places=3, read_only=True)
+    line_total = serializers.DecimalField(max_digits=10, decimal_places=3, read_only=True)
     summary = serializers.SerializerMethodField(
-        help_text="Sub-serializer for fields to be shown in the product's summary.")
+        help_text="Sub-serializer for fields to be shown in the product's summary.", read_only=True)
     extra_rows = ExtraCartRowList(read_only=True)
 
     def validate_product(self, product):
@@ -124,7 +126,7 @@ class CartIconCaptionSerializer(serializers.ModelSerializer):
     located on the top right of e-commerce sites.
     """
     num_items = serializers.IntegerField(read_only=True, default=0)
-    total = MoneyField(default=Money())
+    total = serializers.DecimalField(max_digits=10, decimal_places=3, default=0.0)
 
     class Meta:
         model = CartModel
@@ -132,8 +134,8 @@ class CartIconCaptionSerializer(serializers.ModelSerializer):
 
 
 class BaseCartSerializer(serializers.ModelSerializer):
-    subtotal = MoneyField()
-    total = MoneyField()
+    subtotal = serializers.DecimalField(max_digits=10, decimal_places=3)
+    total = serializers.DecimalField(max_digits=10, decimal_places=3)
     extra_rows = ExtraCartRowList(read_only=True)
 
     class Meta:

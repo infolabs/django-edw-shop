@@ -204,6 +204,7 @@ class Product(BaseProduct):
 
     @property
     def get_units(self):
+        #TODO: cache
         units = self.units.all().order_by('value')
         res = []
         for unit in units:
@@ -215,6 +216,18 @@ class Product(BaseProduct):
                 "price": float(self.unit_price) - float(discount)
             })
         return res
+
+    def get_unit_by_quantity(self, quantity):
+        current_unit = None
+
+        if self.get_units:
+            for unit in self.get_units:
+                if unit["step"] <= quantity:
+                    current_unit = unit
+                else:
+                    break
+
+        return current_unit
 
     @property
     def get_is_display_price_per_step(self):

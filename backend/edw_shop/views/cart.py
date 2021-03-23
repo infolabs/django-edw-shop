@@ -8,7 +8,7 @@ from django.db.models.query import QuerySet
 from django.utils.cache import add_never_cache_headers
 
 from rest_framework import status, viewsets
-from rest_framework.decorators import list_route
+from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from edw_shop.conf import app_settings
@@ -84,7 +84,7 @@ class CartViewSet(BaseViewSet):
     item_serializer_class = CartItemSerializer
     caption_serializer_class = app_settings.SHOP_CART_ICON_CAPTION_SERIALIZER
 
-    @list_route(methods=['get'])
+    @action(detail=False, methods=['get'])
     def update_caption(self, request):
         # deprecated
         cart = self.get_queryset()
@@ -95,7 +95,7 @@ class CartViewSet(BaseViewSet):
             caption = CartModel.get_default_caption_data()
         return Response(caption)
 
-    @list_route(methods=['get'], url_path='fetch-caption')
+    @action(detail=False, methods=['get'], url_path='fetch-caption')
     def fetch_caption(self, request):
         cart = self.get_queryset()
         if cart:
