@@ -38,7 +38,7 @@ class Product(BaseProduct):
     Generic Product Commodity to be used whenever the merchant does not require product specific
     attributes.
     """
-    VIEW_COMPONENT_TILE = 'tile'
+    VIEW_COMPONENT_TILE = 'product_tile'
     VIEW_COMPONENT_LIST = 'list'
 
     VIEW_COMPONENTS = (
