@@ -35,7 +35,7 @@ class QuantityCartModifier(BaseCartModifier):
             amount = decimal.Decimal(cart_item.quantity * product_unit["price"]) - cart_item.line_total
             cart_item.line_total = cart_item.line_total + amount
             instance = {
-                'label': "{}: {:.2}".format(self.label, amount),
+                'label': "{}: {:.2f}".format(self.label, amount),
                 'amount': amount,
             }
             cart_item.extra_rows[self.identifier] = ExtraCartRow(instance)

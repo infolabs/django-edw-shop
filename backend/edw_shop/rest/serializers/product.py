@@ -12,6 +12,7 @@ from django.utils.translation import get_language_from_request
 from edw_shop.models.product import ProductModel
 from edw_shop.conf import app_settings
 
+from edw.rest.serializers.entity import EntitySummarySerializer
 
 class ProductUnitSerializer(serializers.Serializer):
     """
@@ -33,7 +34,9 @@ class ProductSerializer(serializers.ModelSerializer):
     product_type = serializers.CharField(read_only=True)
     product_model = serializers.CharField(read_only=True)
     product_url = serializers.URLField(source='get_absolute_url', read_only=True)
+    detail_url = serializers.CharField(read_only=True, source='get_detail_url')
     units = serializers.ListField(source='get_units', read_only=True)
+    media = serializers.SerializerMethodField()
 
     class Meta:
         model = ProductModel
@@ -53,6 +56,9 @@ class ProductSerializer(serializers.ModelSerializer):
 
     def get_availability(self, product):
         return product.get_availability(self.context['request'])
+
+    def get_media(self, entity):
+        return self.render_html(entity, 'media')
 
     def render_html(self, product, postfix):
         """
