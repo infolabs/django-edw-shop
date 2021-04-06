@@ -39,7 +39,7 @@ class Product(BaseProduct):
     attributes.
     """
     VIEW_COMPONENT_TILE = 'product_tile'
-    VIEW_COMPONENT_LIST = 'list'
+    VIEW_COMPONENT_LIST = 'product_list'
 
     VIEW_COMPONENTS = (
         (VIEW_COMPONENT_TILE, _('Tile')),
