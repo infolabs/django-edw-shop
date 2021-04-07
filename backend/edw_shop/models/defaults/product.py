@@ -6,7 +6,9 @@ from django.core.urlresolvers import reverse
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 from django.utils.functional import cached_property
+from django.utils.encoding import force_text
 
+from edw.models.mixins.entity import get_or_create_model_class_wrapper_term, ENTITY_CLASS_WRAPPER_TERM_SLUG_PATTERN
 from edw.models.term import TermModel
 from edw import deferred
 
@@ -25,12 +27,20 @@ from edw_fluent.models.page_layout import (
 
 from sid.models.entity import EntityImage, EntityFile
 
-_publication_root_terms_system_flags_restriction = (
+_default_root_terms_system_flags_restriction = (
     TermModel.system_flags.delete_restriction
     | TermModel.system_flags.change_parent_restriction
     | TermModel.system_flags.change_slug_restriction
 )
 
+_full_root_terms_system_flags_restriction = (
+    TermModel.system_flags.delete_restriction
+    | TermModel.system_flags.change_parent_restriction
+    | TermModel.system_flags.change_slug_restriction
+    | TermModel.system_flags.change_semantic_rule_restriction
+    | TermModel.system_flags.has_child_restriction
+    | TermModel.system_flags.external_tagging_restriction
+)
 
 @python_2_unicode_compatible
 class Product(BaseProduct):
@@ -47,6 +57,14 @@ class Product(BaseProduct):
     )
 
     LAYOUT_TERM_SLUG = get_layout_slug_by_model_name('product')
+
+
+    IN_STOCK_ROOT_TERM = ('stock_choice', _('stock'))
+    IN_STOCK_CHOICES_TERMS = (
+        ('in_stock', _('in stock')),
+        ('out_of_stock', _('out of stock'))
+    )
+
 
     # common product fields
     product_name = models.CharField(_("Product name"), max_length=255, blank=False, null=False)
@@ -324,23 +342,55 @@ class Product(BaseProduct):
 
     @classmethod
     def validate_term_model(cls):
-        view_root = get_or_create_view_layouts_root()
-        try:  # product root
-            TermModel.objects.get(slug=cls.LAYOUT_TERM_SLUG, parent=view_root)
-        except TermModel.DoesNotExist:
-            publication_root = TermModel(
-                slug=cls.LAYOUT_TERM_SLUG,
-                parent=view_root,
-                name=_('Product'),
-                semantic_rule=TermModel.XOR_RULE,
-                system_flags=_publication_root_terms_system_flags_restriction
+
+        if not cls._meta.abstract:
+            # in stock terms validation
+            model_root_term = get_or_create_model_class_wrapper_term(cls)
+
+            in_stock_parent_term, in_stock_parent_created = TermModel.objects.get_or_create(
+                slug=cls.IN_STOCK_ROOT_TERM[0],
+                parent=model_root_term,
+                defaults={
+                    'name': force_text(cls.IN_STOCK_ROOT_TERM[1]),
+                    'semantic_rule': TermModel.XOR_RULE,
+                    'system_flags': _default_root_terms_system_flags_restriction
+                }
             )
-            publication_root.save()
+
+            stock_choices = cls.IN_STOCK_CHOICES_TERMS
+            for stock_key, stock_name in stock_choices:
+
+                in_stock_choice_term, in_stock_choice_created = in_stock_parent_term.get_descendants(
+                    include_self=False
+                ).get_or_create(
+                    slug=stock_key,
+                    defaults={
+                        'name': force_text(stock_name),
+                        'parent_id': in_stock_parent_term.id,
+                        'semantic_rule': TermModel.OR_RULE,
+                        'system_flags': _full_root_terms_system_flags_restriction
+                    }
+                )
+            # product root layout
+            view_root = get_or_create_view_layouts_root()
+            layout_term, layout_term_created = TermModel.objects.get_or_create(
+               slug=cls.LAYOUT_TERM_SLUG,
+               parent=view_root,
+               defaults={
+                'parent':view_root,
+                'name': force_text(_('Product')),
+                'semantic_rule': TermModel.XOR_RULE,
+                'system_flags': _default_root_terms_system_flags_restriction
+               }
+            )
 
         super(Product, cls).validate_term_model()
 
     def need_terms_validation_after_save(self, origin, **kwargs):
         do_validate_layout = kwargs["context"]["validate_view_layout"] = True
+
+        if origin is None or origin.in_stock != self.in_stock:
+            kwargs["context"]["validate_in_stock"] = True
 
         return super(Product, self).need_terms_validation_after_save(
             origin, **kwargs) or do_validate_layout
@@ -355,6 +405,32 @@ class Product(BaseProduct):
             to_remove = [v for k, v in views_layouts.items() if k != Product.LAYOUT_TERM_SLUG]
             self.terms.remove(*to_remove)
             to_add = views_layouts.get(Product.LAYOUT_TERM_SLUG, None)
+            if to_add is not None:
+                self.terms.add(to_add)
+
+        if force_validate_terms or context.get("validate_in_stock", False):
+
+            current_stock_choice = Product.IN_STOCK_CHOICES_TERMS[0] if self.in_stock and self.in_stock > 0 else Product.IN_STOCK_CHOICES_TERMS[1]
+
+            in_stock_root_choices = getattr(Product, '_in_stock_root_choices', None)
+            if in_stock_root_choices is None:
+                in_stock_root_choices = {}
+                try:
+                    parent_wraper = get_or_create_model_class_wrapper_term(Product)
+                    root = TermModel.objects.get(
+                            slug=self.IN_STOCK_ROOT_TERM[0],
+                            parent=parent_wraper
+                        )
+                    for term in root.get_descendants(include_self=True):
+                        in_stock_root_choices[term.slug] = term
+                except TermModel.DoesNotExist:
+                    pass
+
+                    setattr(Product, '_in_stock_root_choices', in_stock_root_choices)
+
+            to_remove = [v for k, v in in_stock_root_choices.items() if k != current_stock_choice[0]]
+            self.terms.remove(*to_remove)
+            to_add = in_stock_root_choices.get(current_stock_choice[0], None)
             if to_add is not None:
                 self.terms.add(to_add)
 
