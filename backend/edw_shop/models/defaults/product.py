@@ -24,7 +24,7 @@ from edw_fluent.models.page_layout import (
     get_layout_slug_by_model_name,
     get_or_create_view_layouts_root
 )
-
+from decimal import Decimal
 from sid.models.entity import EntityImage, EntityFile
 
 _default_root_terms_system_flags_restriction = (
@@ -56,8 +56,14 @@ class Product(BaseProduct):
         (VIEW_COMPONENT_LIST, _('List')),
     )
 
-    LAYOUT_TERM_SLUG = get_layout_slug_by_model_name('product')
+    ORDER_BY_IN_STOCK = 'in_stock'
 
+    ORDERING_MODES = (
+        #(ORDER_BY_IN_STOCK, _('In stock')),
+        (BaseProduct.ORDER_BY_CREATED_AT_DESC, _('Created at: new first')),
+    )
+
+    LAYOUT_TERM_SLUG = get_layout_slug_by_model_name('product')
 
     IN_STOCK_ROOT_TERM = ('stock_choice', _('stock'))
     IN_STOCK_CHOICES_TERMS = (
@@ -217,8 +223,10 @@ class Product(BaseProduct):
 
     @property
     def get_unit_price(self):
-        #TODO%
-        return self.unit_price
+        if self.unit_price:
+            return Decimal(self.unit_price)
+
+        return 0.0
 
     @property
     def get_units(self):
