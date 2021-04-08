@@ -56,10 +56,14 @@ class Product(BaseProduct):
         (VIEW_COMPONENT_LIST, _('List')),
     )
 
-    ORDER_BY_IN_STOCK = 'in_stock'
+    ORDER_BY_IN_STOCK = '-product__in_stock'
+    ORDER_BY_NAME_DESC = '-product__product_name'
+    ORDER_BY_NAME_ASC = 'product__product_name'
 
     ORDERING_MODES = (
-        #(ORDER_BY_IN_STOCK, _('In stock')),
+        (ORDER_BY_IN_STOCK, _('In stock first')),
+        (ORDER_BY_NAME_ASC, _('By name: Alphabetical')),
+        (ORDER_BY_NAME_DESC, _('By name: Alphabetical desc')),
         (BaseProduct.ORDER_BY_CREATED_AT_DESC, _('Created at: new first')),
     )
 
@@ -458,8 +462,7 @@ class ProductUnit(models.Model):
     value = models.DecimalField(verbose_name=_('addition step'), default=1, max_digits=10, decimal_places=3,
                                help_text=_("conversion factor from base unit: 1 base unit * k"))
     uuid = models.CharField(verbose_name=_('measurment unit code'), max_length=50, null=False, blank=False)
-    discount = models.DecimalField(verbose_name=_('discount'), default=1, max_digits=10, decimal_places=3,
-                                help_text=_("discount factor from base unit: 1 base unit * k"))
+    discount = models.DecimalField(verbose_name=_('discount'), default=1, max_digits=10, decimal_places=3)
 
     class Meta:
         app_label = app_settings.APP_LABEL
