@@ -161,6 +161,10 @@ class Product(BaseProduct):
                 'source': 'get_units',
                 'read_only': True
             }),
+            'default_data_mart': ('edw.rest.serializers.entity.RelatedDataMartSerializer', {
+                'source': 'data_mart',
+                'read_only': True
+            }),
         }
 
         @staticmethod
