@@ -308,7 +308,7 @@ class Product(BaseProduct):
             'step': self.get_step,
             'unit_price': self.get_unit_price,
             'is_display_price_per_step': self.get_is_display_price_per_step,
-            'in_stock': self.get_in_stock,
+            'in_stock': self.in_stock,
             'estimated_delivery': self.get_estimated_delivery
         }
 
