@@ -80,7 +80,7 @@ class Product(BaseProduct):
     product_name = models.CharField(_("Product name"), max_length=255, blank=False, null=False)
     slug = models.SlugField(_("Slug"), help_text=_("Used for URLs, auto-generated from name if blank."))
 
-    sid = models.CharField(verbose_name=_('SID'), max_length=255, unique=True, null=True, blank=True,
+    sid = models.CharField(verbose_name=_('Secondary ID'), max_length=255, unique=True, null=True, blank=True,
                            help_text=_("Secondary ID needed for purposes of external exchange system."))
 
     sku = models.CharField(verbose_name=_('SKU'), max_length=255, null=True, blank=True, default='',
