@@ -25,6 +25,8 @@ class CartItemManager(models.Manager):
     """
     Customized model manager for our CartItem model.
     """
+    def active(self, **kwargs):
+        return self.filter(active=True)
 
     def get_or_create(self, **kwargs):
         """
@@ -58,6 +60,7 @@ class CartItemManager(models.Manager):
         for modifier in cart_modifiers_pool.get_all_modifiers():
             cart_items = modifier.arrange_cart_items(cart_items, request)
         return cart_items
+
 
     def filter_watch_items(self, cart, request):
         """

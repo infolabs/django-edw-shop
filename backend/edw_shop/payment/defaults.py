@@ -22,10 +22,10 @@ class ForwardFundPayment(PaymentProvider):
     def get_payment_request(self, cart, request):
         order = OrderModel.objects.create_from_cart(cart, request)
         order.populate_from_cart(cart, request)
-        if order.total == 0:
-            order.no_payment_required()
-        else:
-            order.awaiting_payment()
+        #if order.total == 0:
+        #    order.no_payment_required()
+        #else:
+        #    order.awaiting_payment()
         order.save()
         thank_you_url = OrderModel.objects.get_latest_url()
         return 'window.location.href="{}";'.format(thank_you_url)

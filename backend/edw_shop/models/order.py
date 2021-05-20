@@ -23,12 +23,11 @@ from rest_framework.exceptions import PermissionDenied
 
 from django_fsm import FSMField, transition
 from ipware.ip import get_ip
-#from cms.models import Page
 
 from edw import deferred
 from edw.models.entity import EntityModel
 from edw.models.mixins.entity.fsm import FSMMixin
-#from edw.models.mixins.entity.notification import NotificationMixin
+
 
 from edw_shop.conf import app_settings
 from edw_shop.models.cart import CartItemModel
@@ -98,7 +97,7 @@ class OrderManager(models.Manager):
             raise PermissionDenied(detail=detail)
         return self.get_queryset().filter(customer=request.customer).order_by('-updated_at', )
 
-    # def get_summary_url(self):
+    def get_summary_url(self):
         # """
         # Returns the URL of the page with the list view for all orders related to the current customer
         # """
@@ -116,72 +115,37 @@ class OrderManager(models.Manager):
             # except NoReverseMatch:
                 # self._summary_url = 'cms-page_or_view_with_reverse_id=shop-order_does_not_exist/'
         # return self._summary_url
+        return "/"
 
     def get_latest_url(self):
         """
         Returns the URL of the page with the detail view for the latest order related to the
         current customer. This normally is the thank-you view.
         """
-        try:
-            return Page.objects.public().get(reverse_id='shop-order-last').get_absolute_url()
-        except Page.DoesNotExist:
-            try:
-                return reverse('shop-order-last')
-            except NoReverseMatch:
-                return '/cms-page_or_view_with_reverse_id=shop-order-last_does_not_exist/'
+        return "/"
 
 
-class WorkflowMixinMetaclass(deferred.ForeignKeyBuilder):
-    """
-    Add configured Workflow mixin classes to `OrderModel` and `OrderPayment` to customize
-    all kinds of state transitions in a pluggable manner.
-    """
 
-    def __new__(cls, name, bases, attrs):
-        if 'BaseOrder' in (b.__name__ for b in bases):
-            bases = tuple(app_settings.ORDER_WORKFLOWS) + bases
-            # merge the dicts of TRANSITION_TARGETS
-            attrs.update(_transition_targets={}, _auto_transitions={})
-            for b in reversed(bases):
-                TRANSITION_TARGETS = getattr(b, 'TRANSITION_TARGETS', {})
-                delattr(b, 'TRANSITION_TARGETS')
-                if set(TRANSITION_TARGETS.keys()).intersection(attrs['_transition_targets']):
-                    msg = "Mixin class {} already contains a transition named '{}'"
-                    raise ImproperlyConfigured(msg.format(b.__name__, ', '.join(TRANSITION_TARGETS.keys())))
-                attrs['_transition_targets'].update(TRANSITION_TARGETS)
-                attrs['_auto_transitions'].update(cls.add_to_auto_transitions(b))
-        Model = super(WorkflowMixinMetaclass, cls).__new__(cls, name, bases, attrs)
-        return Model
-
-    @classmethod
-    def add_to_auto_transitions(cls, base):
-        result = {}
-        for name, method in base.__dict__.items():
-            if callable(method) and hasattr(method, '_django_fsm'):
-                for name, transition in method._django_fsm.transitions.items():
-                    if transition.custom.get('auto'):
-                        result.update({name: method})
-        return result
-
-
-#class BaseOrder(with_metaclass(WorkflowMixinMetaclass, models.Model)):
 @python_2_unicode_compatible
-class BaseOrder(FSMMixin, EntityModel.materialized): #NotificationMixin
+class BaseOrder(FSMMixin, EntityModel.materialized):
     """
     An Order is the "in process" counterpart of the shopping cart, which freezes the state of the
     cart on the moment of purchase. It also holds stuff like the shipping and billing addresses,
     and keeps all the additional entities, as determined by the cart modifiers.
     """
     TRANSITION_TARGETS = {
-        'new': _("New order without content"),
-        'created': _("Order freshly created"),
-        'payment_confirmed': _("Payment confirmed"),
-        'payment_declined': _("Payment declined"),
+        'new': _("New order"),
+        'processed': _("Processed by manager"),
+        'in_work': _("In work"),
+        'completed': _("Completed"),
+        'canceled': _("Canceled"),
     }
+
     decimalfield_kwargs = {
         'max_digits': 30,
         'decimal_places': 2,
     }
+
     decimal_exp = Decimal('.' + '0' * decimalfield_kwargs['decimal_places'])
 
     customer = deferred.ForeignKey(
@@ -212,24 +176,15 @@ class BaseOrder(FSMMixin, EntityModel.materialized): #NotificationMixin
         **decimalfield_kwargs
     )
 
-    # created_at = models.DateTimeField(
-        # _("Created at"),
-        # auto_now_add=True,
-    # )
-
-    # updated_at = models.DateTimeField(
-        # _("Updated at"),
-        # auto_now=True,
-    # )
-
     extra = JSONField(
         verbose_name=_("Extra fields"),
         help_text=_("Arbitrary information for this order object on the moment of purchase."),
     )
 
-    # stored_request = JSONField(
-        # help_text=_("Parts of the Request objects on the moment of purchase."),
-    # )
+    stored_request = JSONField(
+        verbose_name=_("Stored request"),
+        help_text=_("Parts of the Request objects on the moment of purchase."),
+    )
 
     #objects = OrderManager()
 
@@ -270,14 +225,16 @@ class BaseOrder(FSMMixin, EntityModel.materialized): #NotificationMixin
         """
         The summed up amount for all ordered items excluding extra order lines.
         """
-        return MoneyMaker(self.currency)(self._subtotal)
+        # MoneyMaker(self.currency)(self._subtotal)
+        return self._subtotal
 
     @property
     def total(self):
         """
         The final total to charge for this order.
         """
-        return MoneyMaker(self.currency)(self._total)
+        # MoneyMaker(self.currency)(self._total)
+        return self._total
 
     @classmethod
     def round_amount(cls, amount):
@@ -291,7 +248,6 @@ class BaseOrder(FSMMixin, EntityModel.materialized): #NotificationMixin
         return urljoin(OrderModel.objects.get_summary_url(), self.get_number())
 
     @transaction.atomic
-    @transition(field=status, source='new', target='created')
     def populate_from_cart(self, cart, request):
         """
         Populate the order object with the fields from the given cart.
@@ -301,7 +257,7 @@ class BaseOrder(FSMMixin, EntityModel.materialized): #NotificationMixin
         Override this method, in case a customized cart has some fields which have to be transfered
         to the cart.
         """
-        for cart_item in cart.items.all():
+        for cart_item in cart.items.active():
             cart_item.update(request)
             order_item = OrderItemModel(order=self)
             try:
@@ -310,11 +266,13 @@ class BaseOrder(FSMMixin, EntityModel.materialized): #NotificationMixin
                 cart_item.delete()
             except CartItemModel.DoesNotExist:
                 pass
+
         self._subtotal = Decimal(cart.subtotal)
         self._total = Decimal(cart.total)
         self.extra = dict(cart.extra)
         self.extra.update(rows=[(modifier, extra_row.data) for modifier, extra_row in cart.extra_rows.items()])
         self.save()
+
 
     @transaction.atomic
     def readd_to_cart(self, cart):
@@ -338,10 +296,6 @@ class BaseOrder(FSMMixin, EntityModel.materialized): #NotificationMixin
         """
         The status of an Order object may change, if auto transistions are specified.
         """
-        auto_transition = self._auto_transitions.get(self.status)
-        if callable(auto_transition):
-            auto_transition(self)
-
         # round the total to the given decimal_places
         self._subtotal = BaseOrder.round_amount(self._subtotal)
         self._total = BaseOrder.round_amount(self._total)
@@ -484,6 +438,8 @@ class BaseOrderItem(with_metaclass(deferred.ForeignKeyBuilder, models.Model)):
         verbose_name=_("Product"),
     )
 
+    step = models.DecimalField(verbose_name=_('addition step'), default=1, max_digits=10, decimal_places=3)
+
     _unit_price = models.DecimalField(
         _("Unit price"),
         null=True,  # may be NaN
@@ -525,11 +481,13 @@ class BaseOrderItem(with_metaclass(deferred.ForeignKeyBuilder, models.Model)):
 
     @property
     def unit_price(self):
-        return MoneyMaker(self.order.currency)(self._unit_price)
+        # MoneyMaker(self.order.currency)(self._unit_price)
+        return self._unit_price
 
     @property
     def line_total(self):
-        return MoneyMaker(self.order.currency)(self._line_total)
+        # MoneyMaker(self.order.currency)(self._line_total)
+        return self._line_total
 
     def populate_from_cart_item(self, cart_item, request):
         """
@@ -539,13 +497,14 @@ class BaseOrderItem(with_metaclass(deferred.ForeignKeyBuilder, models.Model)):
         """
         if cart_item.quantity == 0:
             raise CartItemModel.DoesNotExist("Cart Item is on the Wish List")
+
         self.product = cart_item.product
-        # for historical integrity, store the product's name and price at the moment of purchase
         self.product_name = cart_item.product.product_name
         self.product_code = cart_item.product_code
         self._unit_price = Decimal(cart_item.unit_price)
         self._line_total = Decimal(cart_item.line_total)
         self.quantity = cart_item.quantity
+        self.step = cart_item.product.get_step
         self.extra = dict(cart_item.extra)
         extra_rows = [(modifier, extra_row.data) for modifier, extra_row in cart_item.extra_rows.items()]
         self.extra.update(rows=extra_rows)
@@ -557,5 +516,6 @@ class BaseOrderItem(with_metaclass(deferred.ForeignKeyBuilder, models.Model)):
         self._unit_price = BaseOrder.round_amount(self._unit_price)
         self._line_total = BaseOrder.round_amount(self._line_total)
         super(BaseOrderItem, self).save(*args, **kwargs)
+
 
 OrderItemModel = deferred.MaterializedModel(BaseOrderItem)

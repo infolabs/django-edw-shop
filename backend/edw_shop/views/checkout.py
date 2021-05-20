@@ -3,23 +3,21 @@
 Source: https://github.com/awesto/django-shop/blob/d9c1f3d4327fa23826611a57ee14fa38ec9ef51d/shop/views/checkout.py
 """
 from __future__ import unicode_literals
+import json
 
-from django.core.exceptions import ImproperlyConfigured
 from django.db import transaction
 from django.utils.module_loading import import_string
 
 from rest_framework import status
-from rest_framework.decorators import list_route
+from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
 
-#from cms.plugin_pool import plugin_pool
-
 from edw_shop.conf import app_settings
 from edw_shop.models.cart import CartModel
-from edw_shop.serializers.checkout import CheckoutSerializer
-from edw_shop.serializers.cart import CartSummarySerializer
 from edw_shop.modifiers.pool import cart_modifiers_pool
+from edw_shop.serializers.cart import CartSummarySerializer
+#from edw_shop.serializers.checkout import CheckoutSerializer
 
 
 class CheckoutViewSet(GenericViewSet):
@@ -27,27 +25,15 @@ class CheckoutViewSet(GenericViewSet):
     View for our REST endpoint to communicate with the various forms used during the checkout.
     """
     serializer_label = 'checkout'
-    serializer_class = CheckoutSerializer
+    serializer_class = CartSummarySerializer #TODO:
     cart_serializer_class = CartSummarySerializer
 
-    # def __init__(self, **kwargs):
-        # super(CheckoutViewSet, self).__init__(**kwargs)
-        # self.dialog_forms = set([import_string(fc) for fc in app_settings.SHOP_DIALOG_FORMS])
-        # try:
-            # from edw_shop.cascade.plugin_base import DialogFormPluginBase
-        # except ImproperlyConfigured:
-            # # cmsplugins_cascade has not been installed
-            # pass
-        # else:
-            # # gather form classes from Cascade plugins for our checkout views
-            # for p in plugin_pool.get_all_plugins():
-                # if issubclass(p, DialogFormPluginBase):
-                    # if hasattr(p, 'form_classes'):
-                        # self.dialog_forms.update([import_string(fc) for fc in p.form_classes])
-                    # if hasattr(p, 'form_class'):
-                        # self.dialog_forms.add(import_string(p.form_class))
+    def __init__(self, **kwargs):
+        super(CheckoutViewSet, self).__init__(**kwargs)
+        self.dialog_forms = set([import_string(fc) for fc in app_settings.DIALOG_FORMS])
 
-    @list_route(methods=['put'], url_path='upload')
+
+    @action(detail=False, methods=['put'], url_path='upload')
     def upload(self, request):
         """
         Use this REST endpoint to upload the payload of all forms used to setup the checkout
@@ -55,62 +41,75 @@ class CheckoutViewSet(GenericViewSet):
         form.
         """
         # sort posted form data by plugin order
+        print("upload", request.data)
+        print(request.data.keys())
+        #print(json.loads(request.data))
         cart = CartModel.objects.get_from_request(request)
+        print("---init cart.extra", cart.extra)
         dialog_data = []
         for form_class in self.dialog_forms:
-            if form_class.scope_prefix in request.data:
-                if 'plugin_order' in request.data[form_class.scope_prefix]:
-                    dialog_data.append((form_class, request.data[form_class.scope_prefix]))
-                else:
-                    for data in request.data[form_class.scope_prefix].values():
-                        dialog_data.append((form_class, data))
-        dialog_data = sorted(dialog_data, key=lambda tpl: int(tpl[1]['plugin_order']))
+            print("form_class.scope_prefix", form_class.scope_prefix)
+            if form_class.scope_prefix in request.data.keys():
+                print("has", form_class.scope_prefix, request.data[form_class.scope_prefix])
+                dialog_data.append((form_class, request.data[form_class.scope_prefix]))
+                #for data in request.data[form_class.scope_prefix].values():
+                #   dialog_data.append((form_class, data))
+        #dialog_data = sorted(dialog_data, key=lambda tpl: int(tpl[1]['plugin_order']))
 
         # save data, get text representation and collect potential errors
         errors, response_data, set_is_valid = {}, {}, True
+        print("dialog_data", dialog_data)
         with transaction.atomic():
             for form_class, data in dialog_data:
                 form = form_class.form_factory(request, data, cart)
                 if form.is_valid():
+                    print("valid", form.cleaned_data)
                     # empty error dict forces revalidation by the client side validation
                     errors[form_class.form_name] = {}
                 else:
+                    print("not valid", form.errors)
                     errors[form_class.form_name] = form.errors
                     set_is_valid = False
 
                 # by updating the response data, we can override the form's content
                 update_data = form.get_response_data()
                 if isinstance(update_data, dict):
-                    response_data[form_class.form_name] = update_data
+                    response_data[form.form_name] = update_data
 
             # persist changes in cart
             if set_is_valid:
                 cart.save()
+                print("CART SAVED")
 
+        print("response_data", response_data)
+        print("===end cart.extra", cart.extra)
         # add possible form errors for giving feedback to the customer
         if set_is_valid:
             return Response(response_data)
         else:
             return Response(errors, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
 
-    @list_route(methods=['get'], url_path='digest')
+    @action(detail=False, methods=['get'], url_path='digest')
     def digest(self, request):
+        #TODO:
         """
         Returns the summaries of the cart and various checkout forms to be rendered in non-editable fields.
         """
         cart = CartModel.objects.get_from_request(request)
         cart.update(request)
         context = self.get_serializer_context()
-        checkout_serializer = self.serializer_class(cart, context=context, label=self.serializer_label)
+        #checkout_serializer = self.serializer_class(cart, context=context, label=self.serializer_label)
         cart_serializer = self.cart_serializer_class(cart, context=context, label='cart')
         response_data = {
-            'checkout_digest': checkout_serializer.data,
+            #'checkout_digest': checkout_serializer.data,
             'cart_summary': cart_serializer.data,
         }
         return Response(data=response_data)
 
-    @list_route(methods=['post'], url_path='purchase')
+
+    @action(detail=False, methods=['post'], url_path='purchase')
     def purchase(self, request):
+        # TODO:
         """
         This is the final step on converting a cart into an order object. It normally is used in
         combination with the plugin :class:`shop.cascade.checkout.ProceedButtonPlugin` to render
