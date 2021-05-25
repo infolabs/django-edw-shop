@@ -210,6 +210,16 @@ class BaseCart(with_metaclass(deferred.ForeignKeyBuilder, models.Model)):
             super(BaseCart, self).save(force_update=force_update, *args, **kwargs)
         self._dirty = True
 
+    def activate_all_items(self, request):
+        CartItemModel.objects.filter_cart_items(self, request).update(active=True)
+        self._cached_cart_items = None
+        self._dirty = True
+
+    def disactivate_all_items(self, request):
+        CartItemModel.objects.filter_cart_items(self, request).update(active=False)
+        self._cached_cart_items = None
+        self._dirty = True
+
     def update(self, request):
         """
         This should be called after a cart item changed quantity, has been added or removed.

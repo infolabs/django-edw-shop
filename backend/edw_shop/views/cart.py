@@ -84,6 +84,26 @@ class CartViewSet(BaseViewSet):
     item_serializer_class = CartItemSerializer
     caption_serializer_class = app_settings.SHOP_CART_ICON_CAPTION_SERIALIZER
 
+    @action(detail=False, methods=['post'], url_path='activate-all')
+    def activate_all(self, request):
+
+        cart = self.get_queryset()
+        if cart:
+            cart.activate_all_items(request)
+            cart.update(request)
+
+        return self.list(request)
+
+    @action(detail=False, methods=['post'], url_path='disactivate-all')
+    def disactivate_all(self, request):
+
+        cart = self.get_queryset()
+        if cart:
+            cart.disactivate_all_items(request)
+            cart.update(request)
+
+        return self.list(request)
+
     @action(detail=False, methods=['get'])
     def update_caption(self, request):
         # deprecated
