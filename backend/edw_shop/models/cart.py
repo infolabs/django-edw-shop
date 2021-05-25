@@ -243,7 +243,8 @@ class BaseCart(with_metaclass(deferred.ForeignKeyBuilder, models.Model)):
         for item in items:
             # item.update iterates over all cart modifiers and invokes method `process_cart_item`
             item.update(request)
-            self.subtotal += item.line_total
+            if item.active:
+                self.subtotal += item.line_total
 
         # Iterate over the registered modifiers, to process the cart's summary
         for modifier in cart_modifiers_pool.get_all_modifiers():
@@ -299,14 +300,24 @@ class BaseCart(with_metaclass(deferred.ForeignKeyBuilder, models.Model)):
         return self.items.filter(quantity__gt=0).count()
 
     @property
+    def active_num_items(self):
+        """
+        Returns the number of items in the cart.
+        """
+        return self.items.active().filter(quantity__gt=0).count()
+
+    @property
     def total_quantity(self):
         """
         Returns the total quantity of all items in the cart.
         """
         aggr = self.items.aggregate(quantity=models.Sum('quantity'))
         return aggr['quantity'] or 0
-        # if we would know, that self.items is already evaluated, then this might be faster:
-        # return sum([ci.quantity for ci in self.items.all()])
+
+    @property
+    def active_quantity(self):
+        aggr = self.items.active().aggregate(quantity=models.Sum('quantity'))
+        return aggr['quantity'] or 0
 
     @property
     def is_empty(self):

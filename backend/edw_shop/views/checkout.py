@@ -109,6 +109,7 @@ class CheckoutViewSet(GenericViewSet):
 
     @action(detail=False, methods=['post'], url_path='purchase')
     def purchase(self, request):
+        print("purchase")
         # TODO:
         """
         This is the final step on converting a cart into an order object. It normally is used in

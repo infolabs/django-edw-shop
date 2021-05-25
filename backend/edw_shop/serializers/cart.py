@@ -150,10 +150,12 @@ class BaseCartSerializer(serializers.ModelSerializer):
 
 class CartSummarySerializer(BaseCartSerializer):
     total_quantity = serializers.IntegerField()
+    active_quantity = serializers.IntegerField()
     num_items = serializers.IntegerField()
+    active_num_items = serializers.IntegerField()
 
     class Meta(BaseCartSerializer.Meta):
-        fields = ['total_quantity', 'num_items'] + BaseCartSerializer.Meta.fields
+        fields = ['total_quantity', 'active_quantity', 'num_items', 'active_num_items'] + BaseCartSerializer.Meta.fields
 
 
 class CartSerializer(CartSummarySerializer):

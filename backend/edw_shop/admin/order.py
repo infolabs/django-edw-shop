@@ -23,9 +23,9 @@ from edw.admin.entity import (
     EntityRelationInline,
     EntityRelatedDataMartInline,
     EntityChildModelAdmin,
+    TermsTreeFilter,
+    EntityRelationFilter,
 )
-from edw.admin.entity.entity_image import EntityImageInline
-from edw.admin.entity.entity_file import EntityFileInline
 
 from edw_shop.conf import app_settings
 from edw_shop.models.order import OrderItemModel, OrderPayment
@@ -73,6 +73,7 @@ class OrderItemInline(admin.StackedInline):
         return self.model.objects.filter(order=obj).count()
 
     def render_as_html_extra(self, obj):
+        #print("render_as_html_extra", obj)
         item_extra_template = select_template([
             '{0}/admin/orderitem-{1}-extra.html'.format(app_settings.APP_LABEL, obj.product.product_model),
             '{0}/admin/orderitem-product-extra.html'.format(app_settings.APP_LABEL),
@@ -82,25 +83,25 @@ class OrderItemInline(admin.StackedInline):
     render_as_html_extra.short_description = pgettext_lazy('admin', "Extra data")
 
 
-# class StatusListFilter(admin.SimpleListFilter):
-    # title = pgettext_lazy('admin', "Status")
-    # parameter_name = 'status'
+class StatusListFilter(admin.SimpleListFilter):
+    title = pgettext_lazy('admin', "Status")
+    parameter_name = 'status'
 
-    # def lookups(self, request, model_admin):
-        # lookups = dict(model_admin.model._transition_targets)
-        # lookups.pop('new')
-        # lookups.pop('created')
-        # return lookups.items()
+    def lookups(self, request, model_admin):
+        lookups = dict(model_admin.model.TRANSITION_TARGETS)
 
-    # def queryset(self, request, queryset):
-        # if self.value():
-            # return queryset.filter(status=self.value())
-        # return queryset
+        return lookups.items()
+
+    def queryset(self, request, queryset):
+        if self.value():
+            return queryset.filter(status=self.value())
+
+        return queryset
 
 
 class BaseOrderAdmin(FSMTransitionMixin, EntityChildModelAdmin):
-    list_display = ['get_number', 'customer', 'status_name', 'get_total']#, 'created_at']
-    #list_filter = [StatusListFilter]
+    list_display = ['get_number', 'customer', 'status_name', 'get_total', 'created_at']
+    list_filter = (StatusListFilter, TermsTreeFilter, 'active', ('forward_relations__to_entity', EntityRelationFilter))
     fsm_field = ['status']
     #date_hierarchy = 'created_at'
     inlines = [
@@ -109,14 +110,13 @@ class BaseOrderAdmin(FSMTransitionMixin, EntityChildModelAdmin):
         EntityCharacteristicOrMarkInline,
         EntityRelationInline,
         EntityRelatedDataMartInline,
-        EntityImageInline,
-        EntityFileInline
     ]
     readonly_fields = ['get_number', 'status_name', 'get_total', 'get_subtotal',
-                       'get_customer_link', 'get_outstanding_amount'] #, 'created_at', 'updated_at',
-                       #'render_as_html_extra', 'stored_request']
+                       'get_customer_link', 'get_outstanding_amount', 'created_at', 'updated_at',
+                       'render_as_html_extra', 'stored_request']
+
     fields = ['get_number', 'status_name',
-              #('created_at', 'updated_at'),
+              ('created_at', 'updated_at'),
               'get_customer_link',
               ('get_subtotal', 'get_total', 'get_outstanding_amount'),
               'render_as_html_extra', 'stored_request']

@@ -25,7 +25,7 @@ from django_fsm import FSMField, transition
 from ipware.ip import get_ip
 
 from edw import deferred
-from edw.models.entity import EntityModel
+from edw.models.entity import EntityModel, BaseEntityManager
 from edw.models.mixins.entity.fsm import FSMMixin
 
 
@@ -57,8 +57,8 @@ class OrderQuerySet(models.QuerySet):
         return super(OrderQuerySet, self)._filter_or_exclude(negate, *args, **lookup_kwargs)
 
 
-class OrderManager(models.Manager):
-    _queryset_class = OrderQuerySet
+class OrderManager(BaseEntityManager):
+    #_queryset_class = OrderQuerySet
 
     def create_from_cart(self, cart, request):
         """
@@ -69,8 +69,7 @@ class OrderManager(models.Manager):
         """
         cart.update(request)
         cart.customer.get_or_assign_number()
-        order = self.model(customer=cart.customer, currency=cart.total.currency,
-                           _subtotal=Decimal(0), _total=Decimal(0), stored_request=self.stored_request(request))
+        order = self.model(customer=cart.customer, _subtotal=Decimal(0), _total=Decimal(0), stored_request=self.stored_request(request))
         order.get_or_assign_number()
         order.save()
         return order
@@ -87,6 +86,7 @@ class OrderManager(models.Manager):
             'user_agent': request.META.get('HTTP_USER_AGENT'),
         }
 
+    #todo: delete
     def filter_from_request(self, request):
         """
         Return a queryset containing the orders for the customer associated with the given
@@ -186,7 +186,7 @@ class BaseOrder(FSMMixin, EntityModel.materialized):
         help_text=_("Parts of the Request objects on the moment of purchase."),
     )
 
-    #objects = OrderManager()
+    objects = OrderManager()
 
     class Meta:
         abstract = True
@@ -308,7 +308,7 @@ class BaseOrder(FSMMixin, EntityModel.materialized):
         """
         amount = self.orderpayment_set.aggregate(amount=Sum('amount'))['amount']
         if amount is None:
-            amount = MoneyMaker(self.currency)()
+            amount = Decimal(0.0)#MoneyMaker(self.currency)()
         return amount
 
     @property
@@ -352,11 +352,11 @@ class BaseOrder(FSMMixin, EntityModel.materialized):
     @classmethod
     def get_transition_name(cls, target):
         """Return the human readable name for a given transition target"""
-        return cls._transition_targets.get(target, target)
+        return cls.TRANSITION_TARGETS.get(target, target)
 
     def status_name(self):
         """Return the human readable name for the current transition state"""
-        return self._transition_targets.get(self.status, self.status)
+        return self.TRANSITION_TARGETS.get(self.status, self.status)
 
     status_name.short_description = pgettext_lazy('order_models', "State")
 

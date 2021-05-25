@@ -16,7 +16,7 @@ Source: https://github.com/awesto/django-shop/blob/139161562e148aec3c85f42896d32
   </h3>
   {% if inline_admin_form.form.non_field_errors %}{{ inline_admin_form.form.non_field_errors }}{% endif %}
   {% for fieldset in inline_admin_form %}
-    {% include "shop/admin/includes/fieldset.html" %}
+    {% include "edw_shop/admin/includes/fieldset.html" %}
   {% endfor %}
   {% if inline_admin_form.needs_explicit_pk_field %}{{ inline_admin_form.pk_field.field }}{% endif %}
   {{ inline_admin_form.fk_field.field }}
