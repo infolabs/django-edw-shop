@@ -224,7 +224,44 @@ class BaseOrder(FSMMixin, EntityModel.materialized):
 
         #validators = []
 
-        #exclude = ['sid']
+        exclude = ['_subtotal', '_total', 'stored_request', 'images', 'files']
+
+        include = {
+            'subtotal': ('rest_framework.serializers.DecimalField', {
+                    'max_digits': 10,
+                    'decimal_places': 2,
+                    'read_only': True
+                }),
+            'total': ('rest_framework.serializers.DecimalField', {
+                'max_digits': 10,
+                'decimal_places': 2,
+                'read_only': True
+            }),
+            'amount_paid': ('rest_framework.serializers.DecimalField', {
+                'max_digits': 10,
+                'decimal_places': 2,
+                'read_only': True
+            }),
+            'outstanding_amount': ('rest_framework.serializers.DecimalField', {
+                'max_digits': 10,
+                'decimal_places': 2,
+                'read_only': True
+            }), #app_settings.ORDER_ITEM_SERIALIZER
+            'items': ('edw_shop.serializers.defaults.OrderItemSerializer', {
+                'read_only': True,
+                'many': True
+            }),
+
+            'cancelable': ('rest_framework.serializers.BooleanField', {
+                'read_only': True,
+            }),
+            'cancel': ('rest_framework.serializers.BooleanField', {
+                'write_only': True,
+                'default':False,
+            })
+
+        }
+
 
     def get_summary_extra(self, context):
         data_mart = context['data_mart']
@@ -232,6 +269,7 @@ class BaseOrder(FSMMixin, EntityModel.materialized):
             #'url': self.get_detail_url(data_mart),
             'number': self.get_number(),
             'status': self.status_name(),
+            'cancelable': self.cancelable(),
             'subtotal': self.subtotal,
             'total': self.total,
             'created_at': self.created_at,
@@ -313,11 +351,11 @@ class BaseOrder(FSMMixin, EntityModel.materialized):
         if amount.is_finite():
             return Decimal(amount).quantize(cls.decimal_exp)
 
-    def get_absolute_url(self, request=None, format=None):
-        """
-        Returns the URL for the detail view of this order.
-        """
-        return urljoin(OrderModel.objects.get_summary_url(), self.get_number())
+    #def get_absolute_url(self, request=None, format=None):
+    #    """
+    #    Returns the URL for the detail view of this order.
+    #    """
+    #    return urljoin(OrderModel.objects.get_summary_url(), self.get_number())
 
     def populate_dialog_forms(self, cart, request):
         dialog_forms = set([import_string(fc) for fc in app_settings.DIALOG_FORMS])
@@ -352,8 +390,6 @@ class BaseOrder(FSMMixin, EntityModel.materialized):
         self.save()
 
         self.populate_dialog_forms(cart, request)
-
-
 
 
     @transaction.atomic
