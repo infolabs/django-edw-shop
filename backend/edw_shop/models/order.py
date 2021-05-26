@@ -264,9 +264,9 @@ class BaseOrder(FSMMixin, EntityModel.materialized):
 
 
     def get_summary_extra(self, context):
-        data_mart = context['data_mart']
+
         extra = {
-            #'url': self.get_detail_url(data_mart),
+            'url': self.get_detail_url(),
             'number': self.get_number(),
             'status': self.status_name(),
             'cancelable': self.cancelable(),
@@ -350,6 +350,10 @@ class BaseOrder(FSMMixin, EntityModel.materialized):
     def round_amount(cls, amount):
         if amount.is_finite():
             return Decimal(amount).quantize(cls.decimal_exp)
+
+    def get_detail_url(self, data_mart=None):
+
+        return reverse('order_detail', args=[self.pk])
 
     #def get_absolute_url(self, request=None, format=None):
     #    """
