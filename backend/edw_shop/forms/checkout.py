@@ -26,6 +26,10 @@ class BaseDialogForm(Form):
 
         return form
 
+    @classmethod
+    def populate_from_cart(cls, request, cart, order):
+        pass
+
     @property
     def form_name(self):
         return self.scope_prefix
@@ -33,3 +37,4 @@ class BaseDialogForm(Form):
     def get_response_data(self):
         #TODO: base response
         return {}
+

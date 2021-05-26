@@ -19,6 +19,9 @@ from django.utils.encoding import python_2_unicode_compatible
 from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _, pgettext_lazy, get_language_from_request
 from django.utils.six.moves.urllib.parse import urljoin
+from django.utils.encoding import force_text
+from django.utils.module_loading import import_string
+
 from rest_framework.exceptions import PermissionDenied
 
 from django_fsm import FSMField, transition
@@ -27,6 +30,8 @@ from ipware.ip import get_ip
 from edw import deferred
 from edw.models.entity import EntityModel, BaseEntityManager
 from edw.models.mixins.entity.fsm import FSMMixin
+from edw.models.data_mart import DataMartModel
+from edw.models.term import TermModel
 
 
 from edw_shop.conf import app_settings
@@ -35,6 +40,21 @@ from edw_shop.models.fields import JSONField
 from edw_shop.money.fields import MoneyField, MoneyMaker
 from .product import BaseProduct, ProductModel
 
+_shared_system_flags_term_restriction = (
+    TermModel.system_flags.delete_restriction
+    | TermModel.system_flags.change_parent_restriction
+    | TermModel.system_flags.change_slug_restriction
+    | TermModel.system_flags.change_semantic_rule_restriction
+    | TermModel.system_flags.has_child_restriction
+)
+
+
+_shared_system_flags_datamart_restriction = (
+    DataMartModel.system_flags.delete_restriction
+    | DataMartModel.system_flags.change_parent_restriction
+    | DataMartModel.system_flags.change_slug_restriction
+    | DataMartModel.system_flags.change_terms_restriction
+)
 
 class OrderQuerySet(models.QuerySet):
     def _filter_or_exclude(self, negate, *args, **kwargs):
@@ -133,6 +153,8 @@ class BaseOrder(FSMMixin, EntityModel.materialized):
     cart on the moment of purchase. It also holds stuff like the shipping and billing addresses,
     and keeps all the additional entities, as determined by the cart modifiers.
     """
+    DATA_MART_NAME_PATTERN = '{}-dm'
+
     TRANSITION_TARGETS = {
         'new': _("New order"),
         'processed': _("Processed by manager"),
@@ -197,6 +219,56 @@ class BaseOrder(FSMMixin, EntityModel.materialized):
     def __repr__(self):
         return "<{}(pk={})>".format(self.__class__.__name__, self.pk)
 
+    class RESTMeta:
+        lookup_fields = ('id',)
+
+        #validators = []
+
+        #exclude = ['sid']
+
+    def get_summary_extra(self, context):
+        data_mart = context['data_mart']
+        extra = {
+            #'url': self.get_detail_url(data_mart),
+            'number': self.get_number(),
+            'status': self.status_name(),
+            'subtotal': self.subtotal,
+            'total': self.total,
+            'created_at': self.created_at,
+            'updated_at': self.updated_at
+        }
+
+        return extra
+
+
+    @classmethod
+    def validate_data_mart_model(cls):
+        '''
+        Создаем структуру витрин данных соответствующих тематической модели объектов. Модели потомки также используют
+        этот метод для создания иерархии витрин данных
+        :return:
+        '''
+        class_name = 'order'
+        with transaction.atomic():
+            root_cls_dm, is_created = DataMartModel.objects.get_or_create(
+                slug=cls.DATA_MART_NAME_PATTERN.format(class_name),
+                parent=None,
+                defaults={
+                    'name': force_text(cls._meta.verbose_name_plural)
+                }
+            )
+
+        cls_dm = root_cls_dm
+
+        if is_created:
+            try:
+                dm_term = cls.get_entities_types()[class_name]
+            except KeyError:
+                dm_term = cls.get_entities_types(from_cache=False)[class_name]
+            cls_dm.terms.add(dm_term.id)
+            cls_dm.system_flags = _shared_system_flags_datamart_restriction
+            cls_dm.save()
+
     def get_or_assign_number(self):
         """
         Hook to get or to assign the order number. It shall be invoked, every time an Order
@@ -241,11 +313,17 @@ class BaseOrder(FSMMixin, EntityModel.materialized):
         if amount.is_finite():
             return Decimal(amount).quantize(cls.decimal_exp)
 
-    def get_absolute_url(self):
+    def get_absolute_url(self, request=None, format=None):
         """
         Returns the URL for the detail view of this order.
         """
         return urljoin(OrderModel.objects.get_summary_url(), self.get_number())
+
+    def populate_dialog_forms(self, cart, request):
+        dialog_forms = set([import_string(fc) for fc in app_settings.DIALOG_FORMS])
+        if dialog_forms:
+            for form_class in dialog_forms:
+                form_class.populate_from_cart(request, cart, self)
 
     @transaction.atomic
     def populate_from_cart(self, cart, request):
@@ -272,6 +350,10 @@ class BaseOrder(FSMMixin, EntityModel.materialized):
         self.extra = dict(cart.extra)
         self.extra.update(rows=[(modifier, extra_row.data) for modifier, extra_row in cart.extra_rows.items()])
         self.save()
+
+        self.populate_dialog_forms(cart, request)
+
+
 
 
     @transaction.atomic
