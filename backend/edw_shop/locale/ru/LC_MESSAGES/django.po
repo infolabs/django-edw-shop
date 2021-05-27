@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: django-shop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-04-27 15:28+0000\n"
-"PO-Revision-Date: 2021-04-27 18:30+0300\n"
+"POT-Creation-Date: 2021-05-26 12:57+0000\n"
+"PO-Revision-Date: 2021-05-26 15:58+0300\n"
 "Last-Translator: chrisglass <tribaal@gmail.com>\n"
 "Language-Team: \n"
 "Language: ru\n"
@@ -18,1806 +18,1876 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Poedit 2.4.1\n"
+"X-Generator: Poedit 2.2.4\n"
 
-#: __init__.py:7
+#: backend/edw_shop/__init__.py:7
 msgid "edw_shop"
 msgstr "Система интернет дистрибьюции"
 
-#: admin/defaults/forms/__init__.py:15 models/defaults/product.py:91
+#: backend/edw_shop/admin/defaults/forms/__init__.py:15
+#: backend/edw_shop/models/defaults/product.py:91
 msgid "Description"
 msgstr "Описание"
 
-#: admin/defaults/product.py:41
+#: backend/edw_shop/admin/defaults/product.py:41
 msgid "Main params"
 msgstr "Основные параметры"
 
-#: admin/delivery.py:59
+#: backend/edw_shop/admin/delivery.py:59
 msgid "Only a positive number of items can be delivered"
 msgstr "Может быть доставлено только положительное число элементов"
 
-#: admin/delivery.py:61
+#: backend/edw_shop/admin/delivery.py:61
 msgid "The number of items to deliver exceeds the ordered quantity"
 msgstr "Количество элементов для доставки превышает заказанное количество"
 
-#: admin/delivery.py:90
+#: backend/edw_shop/admin/delivery.py:90
 msgid "Deliver quantity"
 msgstr "Количество в доставке"
 
-#: admin/delivery.py:99
+#: backend/edw_shop/admin/delivery.py:99
 msgid "Cancel this item"
 msgstr "Отменить этот элемент"
 
-#: admin/delivery.py:106 models/defaults/delivery.py:18
+#: backend/edw_shop/admin/delivery.py:106
+#: backend/edw_shop/models/defaults/delivery.py:18
 msgid "Delivered quantity"
 msgstr "Доставленное количество"
 
-#: admin/delivery.py:111
+#: backend/edw_shop/admin/delivery.py:111
 msgid "Ready for delivery"
 msgstr "Готово к доставке"
 
-#: admin/delivery.py:143
+#: backend/edw_shop/admin/delivery.py:143
 msgid "Quantity/Items"
 msgstr "Количество/Элементы"
 
-#: admin/delivery.py:148 templates/edw_shop/print/delivery-note.html:13
-#: templates/edw_shop/print/order-confirmation.html:13
+#: backend/edw_shop/admin/delivery.py:148
+#: backend/edw_shop/templates/edw_shop/print/delivery-note.html:13
+#: backend/edw_shop/templates/edw_shop/print/order-confirmation.html:13
 msgid "Delivery Note"
 msgstr "Дополнительная информация о доставке"
 
-#: admin/delivery.py:150
+#: backend/edw_shop/admin/delivery.py:150
 msgid "Print out"
 msgstr "Вывод на печать"
 
-#: admin/delivery.py:155
+#: backend/edw_shop/admin/delivery.py:155
 msgid "Pending"
 msgstr "В ожидании"
 
-#: admin/delivery.py:156 models/delivery.py:34
+#: backend/edw_shop/admin/delivery.py:156
+#: backend/edw_shop/models/delivery.py:34
 msgid "Fulfilled at"
 msgstr "Выполненные в"
 
-#: admin/order.py:82 admin/order.py:157
+#: backend/edw_shop/admin/order.py:83 backend/edw_shop/admin/order.py:157
 msgctxt "admin"
 msgid "Extra data"
 msgstr "Дополнительные данные"
 
-#: admin/order.py:135
+#: backend/edw_shop/admin/order.py:87
+msgctxt "admin"
+msgid "Status"
+msgstr "Статус"
+
+#: backend/edw_shop/admin/order.py:135
 msgctxt "admin"
 msgid "Order number"
 msgstr "Номер заказа"
 
-#: admin/order.py:139
+#: backend/edw_shop/admin/order.py:139
 msgctxt "admin"
 msgid "Total"
 msgstr "Итого"
 
-#: admin/order.py:143
+#: backend/edw_shop/admin/order.py:143
 msgctxt "admin"
 msgid "Subtotal"
 msgstr "Подитог"
 
-#: admin/order.py:147
+#: backend/edw_shop/admin/order.py:147
 msgctxt "admin"
 msgid "Outstanding amount"
 msgstr "Осталось оплатить"
 
-#: admin/order.py:165
+#: backend/edw_shop/admin/order.py:165
 msgctxt "admin"
 msgid "Customer"
 msgstr "Покупатель"
 
-#: admin/order.py:231
+#: backend/edw_shop/admin/order.py:231
 msgctxt "admin"
 msgid "Order Confirmation"
 msgstr "Подтверждение заказа"
 
-#: admin/order.py:233
+#: backend/edw_shop/admin/order.py:233
 msgctxt "admin"
 msgid "Invoice"
 msgstr "Счёт"
 
-#: admin/order.py:241
+#: backend/edw_shop/admin/order.py:241
 msgctxt "admin"
 msgid "Print out"
 msgstr "Вывод на печать"
 
-#: apps.py:13
+#: backend/edw_shop/apps.py:13
 msgid "Shop"
 msgstr "Магазин"
 
-#: models/address.py:36
+#: backend/edw_shop/forms/checkout.py:9
+msgid "Dialog Form Base"
+msgstr ""
+
+#: backend/edw_shop/models/address.py:36
 msgid "Priority for using this address"
 msgstr "Приоритет использования этого адреса."
 
-#: models/address.py:56
+#: backend/edw_shop/models/address.py:56
 msgid "Address"
 msgstr "Адрес"
 
-#: models/address.py:79
+#: backend/edw_shop/models/address.py:79
 msgid "Afghanistan"
 msgstr "Афганистан"
 
-#: models/address.py:80
+#: backend/edw_shop/models/address.py:80
 msgid "Aland Islands"
 msgstr "Аландские острова"
 
-#: models/address.py:81
+#: backend/edw_shop/models/address.py:81
 msgid "Albania"
 msgstr "Албания"
 
-#: models/address.py:82
+#: backend/edw_shop/models/address.py:82
 msgid "Algeria"
 msgstr "Алжир"
 
-#: models/address.py:83
+#: backend/edw_shop/models/address.py:83
 msgid "American Samoa"
 msgstr "Американское Самоа"
 
-#: models/address.py:84
+#: backend/edw_shop/models/address.py:84
 msgid "Andorra"
 msgstr "Андорра"
 
-#: models/address.py:85
+#: backend/edw_shop/models/address.py:85
 msgid "Angola"
 msgstr "Ангола"
 
-#: models/address.py:86
+#: backend/edw_shop/models/address.py:86
 msgid "Anguilla"
 msgstr "Ангилья"
 
-#: models/address.py:87
+#: backend/edw_shop/models/address.py:87
 msgid "Antarctica"
 msgstr "Антарктида"
 
-#: models/address.py:88
+#: backend/edw_shop/models/address.py:88
 msgid "Antigua And Barbuda"
 msgstr "Антигуа и Барбуда"
 
-#: models/address.py:89
+#: backend/edw_shop/models/address.py:89
 msgid "Argentina"
 msgstr "Аргентина"
 
-#: models/address.py:90
+#: backend/edw_shop/models/address.py:90
 msgid "Armenia"
 msgstr "Армения"
 
-#: models/address.py:91
+#: backend/edw_shop/models/address.py:91
 msgid "Aruba"
 msgstr "Аруба"
 
-#: models/address.py:92
+#: backend/edw_shop/models/address.py:92
 msgid "Australia"
 msgstr "Австралия"
 
-#: models/address.py:93
+#: backend/edw_shop/models/address.py:93
 msgid "Austria"
 msgstr "Австрия"
 
-#: models/address.py:94
+#: backend/edw_shop/models/address.py:94
 msgid "Azerbaijan"
 msgstr "Азербайджан"
 
-#: models/address.py:95
+#: backend/edw_shop/models/address.py:95
 msgid "Bahamas"
 msgstr "Багамские острова"
 
-#: models/address.py:96
+#: backend/edw_shop/models/address.py:96
 msgid "Bahrain"
 msgstr "Бахрейн"
 
-#: models/address.py:97
+#: backend/edw_shop/models/address.py:97
 msgid "Bangladesh"
 msgstr "Бангладеш"
 
-#: models/address.py:98
+#: backend/edw_shop/models/address.py:98
 msgid "Barbados"
 msgstr "Барбадос"
 
-#: models/address.py:99
+#: backend/edw_shop/models/address.py:99
 msgid "Belarus"
 msgstr "Беларусь"
 
-#: models/address.py:100
+#: backend/edw_shop/models/address.py:100
 msgid "Belgium"
 msgstr "Бельгия"
 
-#: models/address.py:101
+#: backend/edw_shop/models/address.py:101
 msgid "Belize"
 msgstr "Белиз"
 
-#: models/address.py:102
+#: backend/edw_shop/models/address.py:102
 msgid "Benin"
 msgstr "Бенин"
 
-#: models/address.py:103
+#: backend/edw_shop/models/address.py:103
 msgid "Bermuda"
 msgstr "Бермудские острова"
 
-#: models/address.py:104
+#: backend/edw_shop/models/address.py:104
 msgid "Bhutan"
 msgstr "Бутан"
 
-#: models/address.py:105
+#: backend/edw_shop/models/address.py:105
 msgid "Bolivia, Plurinational State Of"
 msgstr "Боливия, Многонациональное Государство"
 
-#: models/address.py:106
+#: backend/edw_shop/models/address.py:106
 msgid "Bonaire, Saint Eustatius And Saba"
 msgstr "Бонайре, Синт-Эстатиус и Саба"
 
-#: models/address.py:107
+#: backend/edw_shop/models/address.py:107
 msgid "Bosnia And Herzegovina"
 msgstr "Босния и Герцеговина"
 
-#: models/address.py:108
+#: backend/edw_shop/models/address.py:108
 msgid "Botswana"
 msgstr "Ботсвана"
 
-#: models/address.py:109
+#: backend/edw_shop/models/address.py:109
 msgid "Bouvet Island"
 msgstr "Остров Буве"
 
-#: models/address.py:110
+#: backend/edw_shop/models/address.py:110
 msgid "Brazil"
 msgstr "Бразилия"
 
-#: models/address.py:111
+#: backend/edw_shop/models/address.py:111
 msgid "British Indian Ocean Territory"
 msgstr "Британская территория Индийского океана"
 
-#: models/address.py:112
+#: backend/edw_shop/models/address.py:112
 msgid "Brunei Darussalam"
 msgstr "Бруней-Даруссалам"
 
-#: models/address.py:113
+#: backend/edw_shop/models/address.py:113
 msgid "Bulgaria"
 msgstr "Болгария"
 
-#: models/address.py:114
+#: backend/edw_shop/models/address.py:114
 msgid "Burkina Faso"
 msgstr "Буркина-Фасо"
 
-#: models/address.py:115
+#: backend/edw_shop/models/address.py:115
 msgid "Burundi"
 msgstr "Бурунди"
 
-#: models/address.py:116
+#: backend/edw_shop/models/address.py:116
 msgid "Cambodia"
 msgstr "Камбоджа"
 
-#: models/address.py:117
+#: backend/edw_shop/models/address.py:117
 msgid "Cameroon"
 msgstr "Камерун"
 
-#: models/address.py:118
+#: backend/edw_shop/models/address.py:118
 msgid "Canada"
 msgstr "Канада"
 
-#: models/address.py:119
+#: backend/edw_shop/models/address.py:119
 msgid "Cape Verde"
 msgstr "Кабо-Верде"
 
-#: models/address.py:120
+#: backend/edw_shop/models/address.py:120
 msgid "Cayman Islands"
 msgstr "Каймановы острова"
 
-#: models/address.py:121
+#: backend/edw_shop/models/address.py:121
 msgid "Central African Republic"
 msgstr "Центрально-Африканская Республика"
 
-#: models/address.py:122
+#: backend/edw_shop/models/address.py:122
 msgid "Chad"
 msgstr "Чад"
 
-#: models/address.py:123
+#: backend/edw_shop/models/address.py:123
 msgid "Chile"
 msgstr "Чили"
 
-#: models/address.py:124
+#: backend/edw_shop/models/address.py:124
 msgid "China"
 msgstr "Китай"
 
-#: models/address.py:125
+#: backend/edw_shop/models/address.py:125
 msgid "Christmas Island"
 msgstr "Остров Рождества"
 
-#: models/address.py:126
+#: backend/edw_shop/models/address.py:126
 msgid "Cocos (Keeling) Islands"
 msgstr "Кокосовые (Килинг) острова"
 
-#: models/address.py:127
+#: backend/edw_shop/models/address.py:127
 msgid "Colombia"
 msgstr "Колумбия"
 
-#: models/address.py:128
+#: backend/edw_shop/models/address.py:128
 msgid "Comoros"
 msgstr "Коморские острова"
 
-#: models/address.py:129
+#: backend/edw_shop/models/address.py:129
 msgid "Congo"
 msgstr "Конго"
 
-#: models/address.py:130
+#: backend/edw_shop/models/address.py:130
 msgid "Congo, The Democratic Republic Of The"
 msgstr "Конго, Демократическая Республика"
 
-#: models/address.py:131
+#: backend/edw_shop/models/address.py:131
 msgid "Cook Islands"
 msgstr "Острова Кука"
 
-#: models/address.py:132
+#: backend/edw_shop/models/address.py:132
 msgid "Costa Rica"
 msgstr "Коста-Рика"
 
-#: models/address.py:133
+#: backend/edw_shop/models/address.py:133
 msgid "Croatia"
 msgstr "Хорватия"
 
-#: models/address.py:134
+#: backend/edw_shop/models/address.py:134
 msgid "Cuba"
 msgstr "Куба"
 
-#: models/address.py:135
+#: backend/edw_shop/models/address.py:135
 msgid "Curacao"
 msgstr "Куракао"
 
-#: models/address.py:136
+#: backend/edw_shop/models/address.py:136
 msgid "Cyprus"
 msgstr "Кипр"
 
-#: models/address.py:137
+#: backend/edw_shop/models/address.py:137
 msgid "Czech Republic"
 msgstr "Чешская Республика"
 
-#: models/address.py:138
+#: backend/edw_shop/models/address.py:138
 msgid "Denmark"
 msgstr "Дания"
 
-#: models/address.py:139
+#: backend/edw_shop/models/address.py:139
 msgid "Djibouti"
 msgstr "Джибути"
 
-#: models/address.py:140
+#: backend/edw_shop/models/address.py:140
 msgid "Dominica"
 msgstr "Доминика"
 
-#: models/address.py:141
+#: backend/edw_shop/models/address.py:141
 msgid "Dominican Republic"
 msgstr "Доминиканская Республика"
 
-#: models/address.py:142
+#: backend/edw_shop/models/address.py:142
 msgid "Ecuador"
 msgstr "Эквадор"
 
-#: models/address.py:143
+#: backend/edw_shop/models/address.py:143
 msgid "Egypt"
 msgstr "Египет"
 
-#: models/address.py:144
+#: backend/edw_shop/models/address.py:144
 msgid "El Salvador"
 msgstr "Сальвадор"
 
-#: models/address.py:145
+#: backend/edw_shop/models/address.py:145
 msgid "Equatorial Guinea"
 msgstr "Экваториальная Гвинея"
 
-#: models/address.py:146
+#: backend/edw_shop/models/address.py:146
 msgid "Eritrea"
 msgstr "Эритрея"
 
-#: models/address.py:147
+#: backend/edw_shop/models/address.py:147
 msgid "Estonia"
 msgstr "Эстония"
 
-#: models/address.py:148
+#: backend/edw_shop/models/address.py:148
 msgid "Ethiopia"
 msgstr "Эфиопия"
 
-#: models/address.py:149
+#: backend/edw_shop/models/address.py:149
 msgid "Falkland Islands (Malvinas)"
 msgstr "Фолклендские (Мальвинские)"
 
-#: models/address.py:150
+#: backend/edw_shop/models/address.py:150
 msgid "Faroe Islands"
 msgstr "Фарерские острова"
 
-#: models/address.py:151
+#: backend/edw_shop/models/address.py:151
 msgid "Fiji"
 msgstr "Фиджи"
 
-#: models/address.py:152
+#: backend/edw_shop/models/address.py:152
 msgid "Finland"
 msgstr "Финляндия"
 
-#: models/address.py:153
+#: backend/edw_shop/models/address.py:153
 msgid "France"
 msgstr "Франция"
 
-#: models/address.py:154
+#: backend/edw_shop/models/address.py:154
 msgid "French Guiana"
 msgstr "Французская Гвиана"
 
-#: models/address.py:155
+#: backend/edw_shop/models/address.py:155
 msgid "French Polynesia"
 msgstr "Французская Полинезия"
 
-#: models/address.py:156
+#: backend/edw_shop/models/address.py:156
 msgid "French Southern Territories"
 msgstr "Южные Французские Территории"
 
-#: models/address.py:157
+#: backend/edw_shop/models/address.py:157
 msgid "Gabon"
 msgstr "Габон"
 
-#: models/address.py:158
+#: backend/edw_shop/models/address.py:158
 msgid "Gambia"
 msgstr "Гамбия"
 
-#: models/address.py:159
+#: backend/edw_shop/models/address.py:159
 msgid "Germany"
 msgstr "Германия"
 
-#: models/address.py:160
+#: backend/edw_shop/models/address.py:160
 msgid "Ghana"
 msgstr "Гана"
 
-#: models/address.py:161
+#: backend/edw_shop/models/address.py:161
 msgid "Gibraltar"
 msgstr "Гибралтар"
 
-#: models/address.py:162
+#: backend/edw_shop/models/address.py:162
 msgid "Greece"
 msgstr "Греция"
 
-#: models/address.py:163
+#: backend/edw_shop/models/address.py:163
 msgid "Greenland"
 msgstr "Гренландия"
 
-#: models/address.py:164
+#: backend/edw_shop/models/address.py:164
 msgid "Grenada"
 msgstr "Гренада"
 
-#: models/address.py:165
+#: backend/edw_shop/models/address.py:165
 msgid "Guadeloupe"
 msgstr "Гваделупа"
 
-#: models/address.py:166
+#: backend/edw_shop/models/address.py:166
 msgid "Guam"
 msgstr "Гуам"
 
-#: models/address.py:167
+#: backend/edw_shop/models/address.py:167
 msgid "Guatemala"
 msgstr "Гватемала"
 
-#: models/address.py:168
+#: backend/edw_shop/models/address.py:168
 msgid "Guernsey"
 msgstr "Гернси"
 
-#: models/address.py:169
+#: backend/edw_shop/models/address.py:169
 msgid "Guinea"
 msgstr "Гвинея"
 
-#: models/address.py:170
+#: backend/edw_shop/models/address.py:170
 msgid "Guinea-Bissau"
 msgstr "Гвинея-Бисау"
 
-#: models/address.py:171
+#: backend/edw_shop/models/address.py:171
 msgid "Guyana"
 msgstr "Гайана"
 
-#: models/address.py:172
+#: backend/edw_shop/models/address.py:172
 msgid "Haiti"
 msgstr "Гаити"
 
-#: models/address.py:173
+#: backend/edw_shop/models/address.py:173
 msgid "Heard Island and McDonald Islands"
 msgstr "Остров Херд и острова Макдональд"
 
-#: models/address.py:174
+#: backend/edw_shop/models/address.py:174
 msgid "Holy See (Vatican City State)"
 msgstr "Святейший Престол (Ватикан)"
 
-#: models/address.py:175
+#: backend/edw_shop/models/address.py:175
 msgid "Honduras"
 msgstr "Гондурас"
 
-#: models/address.py:176
+#: backend/edw_shop/models/address.py:176
 msgid "Hong Kong"
 msgstr "Гонконг"
 
-#: models/address.py:177
+#: backend/edw_shop/models/address.py:177
 msgid "Hungary"
 msgstr "Венгрия"
 
-#: models/address.py:178
+#: backend/edw_shop/models/address.py:178
 msgid "Iceland"
 msgstr "Исландия"
 
-#: models/address.py:179
+#: backend/edw_shop/models/address.py:179
 msgid "India"
 msgstr "Индия"
 
-#: models/address.py:180
+#: backend/edw_shop/models/address.py:180
 msgid "Indonesia"
 msgstr "Индонезия"
 
-#: models/address.py:181
+#: backend/edw_shop/models/address.py:181
 msgid "Iran, Islamic Republic Of"
 msgstr "Иран, Исламская Республика"
 
-#: models/address.py:182
+#: backend/edw_shop/models/address.py:182
 msgid "Iraq"
 msgstr "Ирак"
 
-#: models/address.py:183
+#: backend/edw_shop/models/address.py:183
 msgid "Ireland"
 msgstr "Ирландия"
 
-#: models/address.py:184
+#: backend/edw_shop/models/address.py:184
 msgid "Israel"
 msgstr "Израиль"
 
-#: models/address.py:185
+#: backend/edw_shop/models/address.py:185
 msgid "Italy"
 msgstr "Италия"
 
-#: models/address.py:186
+#: backend/edw_shop/models/address.py:186
 msgid "Ivory Coast"
 msgstr "Кот-д’Ивуар"
 
-#: models/address.py:187
+#: backend/edw_shop/models/address.py:187
 msgid "Jamaica"
 msgstr "Ямайка"
 
-#: models/address.py:188
+#: backend/edw_shop/models/address.py:188
 msgid "Japan"
 msgstr "Япония"
 
-#: models/address.py:189
+#: backend/edw_shop/models/address.py:189
 msgid "Jersey"
 msgstr "Джерси"
 
-#: models/address.py:190
+#: backend/edw_shop/models/address.py:190
 msgid "Jordan"
 msgstr "Иордания"
 
-#: models/address.py:191
+#: backend/edw_shop/models/address.py:191
 msgid "Kazakhstan"
 msgstr "Казахстан"
 
-#: models/address.py:192
+#: backend/edw_shop/models/address.py:192
 msgid "Kenya"
 msgstr "Кения"
 
-#: models/address.py:193
+#: backend/edw_shop/models/address.py:193
 msgid "Kiribati"
 msgstr "Кирибати"
 
-#: models/address.py:194
+#: backend/edw_shop/models/address.py:194
 msgid "Korea, Democratic People's Republic Of"
 msgstr "Корея, Корейская Народно-Демократическая Республика"
 
-#: models/address.py:195
+#: backend/edw_shop/models/address.py:195
 msgid "Korea, Republic Of"
 msgstr "Корея, Республика"
 
-#: models/address.py:196
+#: backend/edw_shop/models/address.py:196
 msgid "Kosovo"
 msgstr "Косово"
 
-#: models/address.py:197
+#: backend/edw_shop/models/address.py:197
 msgid "Kuwait"
 msgstr "Кувейт"
 
-#: models/address.py:198
+#: backend/edw_shop/models/address.py:198
 msgid "Kyrgyzstan"
 msgstr "Киргизия"
 
-#: models/address.py:199
+#: backend/edw_shop/models/address.py:199
 msgid "Lao People's Democratic Republic"
 msgstr "Лаосская Народно-Демократическая Республика"
 
-#: models/address.py:200
+#: backend/edw_shop/models/address.py:200
 msgid "Latvia"
 msgstr "Латвия"
 
-#: models/address.py:201
+#: backend/edw_shop/models/address.py:201
 msgid "Lebanon"
 msgstr "Ливан"
 
-#: models/address.py:202
+#: backend/edw_shop/models/address.py:202
 msgid "Lesotho"
 msgstr "Лесото"
 
-#: models/address.py:203
+#: backend/edw_shop/models/address.py:203
 msgid "Liberia"
 msgstr "Либерия"
 
-#: models/address.py:204
+#: backend/edw_shop/models/address.py:204
 msgid "Libyan Arab Jamahiriya"
 msgstr "Ливийская арабская джамахирия"
 
-#: models/address.py:205
+#: backend/edw_shop/models/address.py:205
 msgid "Liechtenstein"
 msgstr "Лихтенштейн"
 
-#: models/address.py:206
+#: backend/edw_shop/models/address.py:206
 msgid "Lithuania"
 msgstr "Литва"
 
-#: models/address.py:207
+#: backend/edw_shop/models/address.py:207
 msgid "Luxembourg"
 msgstr "Люксембург"
 
-#: models/address.py:208
+#: backend/edw_shop/models/address.py:208
 msgid "Macao"
 msgstr "Macao"
 
-#: models/address.py:209
+#: backend/edw_shop/models/address.py:209
 msgid "Macedonia"
 msgstr "Македония"
 
-#: models/address.py:210
+#: backend/edw_shop/models/address.py:210
 msgid "Madagascar"
 msgstr "Мадагаскар"
 
-#: models/address.py:211
+#: backend/edw_shop/models/address.py:211
 msgid "Malawi"
 msgstr "Малави"
 
-#: models/address.py:212
+#: backend/edw_shop/models/address.py:212
 msgid "Malaysia"
 msgstr "Малайзия"
 
-#: models/address.py:213
+#: backend/edw_shop/models/address.py:213
 msgid "Maldives"
 msgstr "Мальдивы"
 
-#: models/address.py:214
+#: backend/edw_shop/models/address.py:214
 msgid "Mali"
 msgstr "Мали"
 
-#: models/address.py:215
+#: backend/edw_shop/models/address.py:215
 msgid "Malta"
 msgstr "Мальта"
 
-#: models/address.py:216
+#: backend/edw_shop/models/address.py:216
 msgid "Marshall Islands"
 msgstr "Маршалловы острова"
 
-#: models/address.py:217
+#: backend/edw_shop/models/address.py:217
 msgid "Martinique"
 msgstr "Мартиника"
 
-#: models/address.py:218
+#: backend/edw_shop/models/address.py:218
 msgid "Mauritania"
 msgstr "Мавритания"
 
-#: models/address.py:219
+#: backend/edw_shop/models/address.py:219
 msgid "Mauritius"
 msgstr "Маврикий"
 
-#: models/address.py:220
+#: backend/edw_shop/models/address.py:220
 msgid "Mayotte"
 msgstr "Майотта"
 
-#: models/address.py:221
+#: backend/edw_shop/models/address.py:221
 msgid "Mexico"
 msgstr "Мексика"
 
-#: models/address.py:222
+#: backend/edw_shop/models/address.py:222
 msgid "Micronesia"
 msgstr "Микронезия"
 
-#: models/address.py:223
+#: backend/edw_shop/models/address.py:223
 msgid "Moldova"
 msgstr "Молдова"
 
-#: models/address.py:224
+#: backend/edw_shop/models/address.py:224
 msgid "Monaco"
 msgstr "Монако"
 
-#: models/address.py:225
+#: backend/edw_shop/models/address.py:225
 msgid "Mongolia"
 msgstr "Монголия"
 
-#: models/address.py:226
+#: backend/edw_shop/models/address.py:226
 msgid "Montenegro"
 msgstr "Черногория"
 
-#: models/address.py:227
+#: backend/edw_shop/models/address.py:227
 msgid "Montserrat"
 msgstr "Монсеррат"
 
-#: models/address.py:228
+#: backend/edw_shop/models/address.py:228
 msgid "Morocco"
 msgstr "Марокко"
 
-#: models/address.py:229
+#: backend/edw_shop/models/address.py:229
 msgid "Mozambique"
 msgstr "Мозамбик"
 
-#: models/address.py:230
+#: backend/edw_shop/models/address.py:230
 msgid "Myanmar"
 msgstr "Мьянма"
 
-#: models/address.py:231
+#: backend/edw_shop/models/address.py:231
 msgid "Namibia"
 msgstr "Намибия"
 
-#: models/address.py:232
+#: backend/edw_shop/models/address.py:232
 msgid "Nauru"
 msgstr "Науру"
 
-#: models/address.py:233
+#: backend/edw_shop/models/address.py:233
 msgid "Nepal"
 msgstr "Непал"
 
-#: models/address.py:234
+#: backend/edw_shop/models/address.py:234
 msgid "Netherlands"
 msgstr "Нидерланды"
 
-#: models/address.py:235
+#: backend/edw_shop/models/address.py:235
 msgid "Netherlands Antilles"
 msgstr "Нидерландские Антильские острова"
 
-#: models/address.py:236
+#: backend/edw_shop/models/address.py:236
 msgid "New Caledonia"
 msgstr "Новая Каледония"
 
-#: models/address.py:237
+#: backend/edw_shop/models/address.py:237
 msgid "New Zealand"
 msgstr "Новая Зеландия"
 
-#: models/address.py:238
+#: backend/edw_shop/models/address.py:238
 msgid "Nicaragua"
 msgstr "Никарагуа"
 
-#: models/address.py:239
+#: backend/edw_shop/models/address.py:239
 msgid "Niger"
 msgstr "Нигер"
 
-#: models/address.py:240
+#: backend/edw_shop/models/address.py:240
 msgid "Nigeria"
 msgstr "Нигерия"
 
-#: models/address.py:241
+#: backend/edw_shop/models/address.py:241
 msgid "Niue"
 msgstr "Ниуэ"
 
-#: models/address.py:242
+#: backend/edw_shop/models/address.py:242
 msgid "Norfolk Island"
 msgstr "Остров Норфолк"
 
-#: models/address.py:243
+#: backend/edw_shop/models/address.py:243
 msgid "Northern Mariana Islands"
 msgstr "Северные Марианские острова"
 
-#: models/address.py:244
+#: backend/edw_shop/models/address.py:244
 msgid "Norway"
 msgstr "Норвегия"
 
-#: models/address.py:245
+#: backend/edw_shop/models/address.py:245
 msgid "Oman"
 msgstr "Оман"
 
-#: models/address.py:246
+#: backend/edw_shop/models/address.py:246
 msgid "Pakistan"
 msgstr "Пакистан"
 
-#: models/address.py:247
+#: backend/edw_shop/models/address.py:247
 msgid "Palau"
 msgstr "Палау"
 
-#: models/address.py:248
+#: backend/edw_shop/models/address.py:248
 msgid "Palestinian Territory, Occupied"
 msgstr "Палестинская территория, оккупированная"
 
-#: models/address.py:249
+#: backend/edw_shop/models/address.py:249
 msgid "Panama"
 msgstr "Панама"
 
-#: models/address.py:250
+#: backend/edw_shop/models/address.py:250
 msgid "Papua New Guinea"
 msgstr "Папуа - Новая Гвинея"
 
-#: models/address.py:251
+#: backend/edw_shop/models/address.py:251
 msgid "Paraguay"
 msgstr "Парагвай"
 
-#: models/address.py:252
+#: backend/edw_shop/models/address.py:252
 msgid "Peru"
 msgstr "Перу"
 
-#: models/address.py:253
+#: backend/edw_shop/models/address.py:253
 msgid "Philippines"
 msgstr "Филиппины"
 
-#: models/address.py:254
+#: backend/edw_shop/models/address.py:254
 msgid "Pitcairn"
 msgstr "Питкэрн"
 
-#: models/address.py:255
+#: backend/edw_shop/models/address.py:255
 msgid "Poland"
 msgstr "Польша"
 
-#: models/address.py:256
+#: backend/edw_shop/models/address.py:256
 msgid "Portugal"
 msgstr "Португалия"
 
-#: models/address.py:257
+#: backend/edw_shop/models/address.py:257
 msgid "Puerto Rico"
 msgstr "Пуэрто-Рико"
 
-#: models/address.py:258
+#: backend/edw_shop/models/address.py:258
 msgid "Qatar"
 msgstr "Катар"
 
-#: models/address.py:259
+#: backend/edw_shop/models/address.py:259
 msgid "Reunion"
 msgstr "Реюньон"
 
-#: models/address.py:260
+#: backend/edw_shop/models/address.py:260
 msgid "Romania"
 msgstr "Румыния"
 
-#: models/address.py:261
+#: backend/edw_shop/models/address.py:261
 msgid "Russian Federation"
 msgstr "Российская Федерация"
 
-#: models/address.py:262
+#: backend/edw_shop/models/address.py:262
 msgid "Rwanda"
 msgstr "Руанда"
 
-#: models/address.py:263
+#: backend/edw_shop/models/address.py:263
 msgid "Saint Barthelemy"
 msgstr "Сен-Бартельми"
 
-#: models/address.py:264
+#: backend/edw_shop/models/address.py:264
 msgid "Saint Helena, Ascension & Tristan Da Cunha"
 msgstr "Острова Святой Елены, Вознесения и Тристан-да-Кунья"
 
-#: models/address.py:265
+#: backend/edw_shop/models/address.py:265
 msgid "Saint Kitts and Nevis"
 msgstr "Сент-Китс и Невис"
 
-#: models/address.py:266
+#: backend/edw_shop/models/address.py:266
 msgid "Saint Lucia"
 msgstr "Санкт-Люсия"
 
-#: models/address.py:267
+#: backend/edw_shop/models/address.py:267
 msgid "Saint Martin (French Part)"
 msgstr "Сен-Мартен (французская часть)"
 
-#: models/address.py:268
+#: backend/edw_shop/models/address.py:268
 msgid "Saint Pierre and Miquelon"
 msgstr "Сен-Пьер и Микелон"
 
-#: models/address.py:269
+#: backend/edw_shop/models/address.py:269
 msgid "Saint Vincent And The Grenadines"
 msgstr "Святой Винсент и Гренадины"
 
-#: models/address.py:270
+#: backend/edw_shop/models/address.py:270
 msgid "Samoa"
 msgstr "Самоа"
 
-#: models/address.py:271
+#: backend/edw_shop/models/address.py:271
 msgid "San Marino"
 msgstr "Сан-Марино"
 
-#: models/address.py:272
+#: backend/edw_shop/models/address.py:272
 msgid "Sao Tome And Principe"
 msgstr "Сан-Томе и Принсипи"
 
-#: models/address.py:273
+#: backend/edw_shop/models/address.py:273
 msgid "Saudi Arabia"
 msgstr "Саудовская Аравия"
 
-#: models/address.py:274
+#: backend/edw_shop/models/address.py:274
 msgid "Senegal"
 msgstr "Сенегал"
 
-#: models/address.py:275
+#: backend/edw_shop/models/address.py:275
 msgid "Serbia"
 msgstr "Сербия"
 
-#: models/address.py:276
+#: backend/edw_shop/models/address.py:276
 msgid "Seychelles"
 msgstr "Сейшельские острова"
 
-#: models/address.py:277
+#: backend/edw_shop/models/address.py:277
 msgid "Sierra Leone"
 msgstr "Сьерра-Леоне"
 
-#: models/address.py:278
+#: backend/edw_shop/models/address.py:278
 msgid "Singapore"
 msgstr "Сингапур"
 
-#: models/address.py:279
+#: backend/edw_shop/models/address.py:279
 msgid "Sint Maarten (Dutch Part)"
 msgstr "Синт-Маартен (Голландская часть)"
 
-#: models/address.py:280
+#: backend/edw_shop/models/address.py:280
 msgid "Slovakia"
 msgstr "Словакия"
 
-#: models/address.py:281
+#: backend/edw_shop/models/address.py:281
 msgid "Slovenia"
 msgstr "Словения"
 
-#: models/address.py:282
+#: backend/edw_shop/models/address.py:282
 msgid "Solomon Islands"
 msgstr "Соломоновы острова"
 
-#: models/address.py:283
+#: backend/edw_shop/models/address.py:283
 msgid "Somalia"
 msgstr "Сомали"
 
-#: models/address.py:284
+#: backend/edw_shop/models/address.py:284
 msgid "South Africa"
 msgstr "Южная Африка"
 
-#: models/address.py:285
+#: backend/edw_shop/models/address.py:285
 msgid "South Georgia And The South Sandwich Islands"
 msgstr "Южная Джорджия и Южные Сандвичевы острова"
 
-#: models/address.py:286
+#: backend/edw_shop/models/address.py:286
 msgid "Spain"
 msgstr "Испания"
 
-#: models/address.py:287
+#: backend/edw_shop/models/address.py:287
 msgid "Sri Lanka"
 msgstr "Шри Ланка"
 
-#: models/address.py:288
+#: backend/edw_shop/models/address.py:288
 msgid "Sudan"
 msgstr "Судан"
 
-#: models/address.py:289
+#: backend/edw_shop/models/address.py:289
 msgid "Suriname"
 msgstr "Суринам"
 
-#: models/address.py:290
+#: backend/edw_shop/models/address.py:290
 msgid "Svalbard And Jan Mayen"
 msgstr "Шпицберген и Ян-Майен"
 
-#: models/address.py:291
+#: backend/edw_shop/models/address.py:291
 msgid "Swaziland"
 msgstr "Свазиленд"
 
-#: models/address.py:292
+#: backend/edw_shop/models/address.py:292
 msgid "Sweden"
 msgstr "Швеция"
 
-#: models/address.py:293
+#: backend/edw_shop/models/address.py:293
 msgid "Switzerland"
 msgstr "Швейцария"
 
-#: models/address.py:294
+#: backend/edw_shop/models/address.py:294
 msgid "Syrian Arab Republic"
 msgstr "Сирийская Арабская Республика"
 
-#: models/address.py:295
+#: backend/edw_shop/models/address.py:295
 msgid "Taiwan"
 msgstr "Тайвань"
 
-#: models/address.py:296
+#: backend/edw_shop/models/address.py:296
 msgid "Tajikistan"
 msgstr "Таджикистан"
 
-#: models/address.py:297
+#: backend/edw_shop/models/address.py:297
 msgid "Tanzania"
 msgstr "Танзания"
 
-#: models/address.py:298
+#: backend/edw_shop/models/address.py:298
 msgid "Thailand"
 msgstr "Таиланд"
 
-#: models/address.py:299
+#: backend/edw_shop/models/address.py:299
 msgid "Timor-Leste"
 msgstr "Тимор-Лешти"
 
-#: models/address.py:300
+#: backend/edw_shop/models/address.py:300
 msgid "Togo"
 msgstr "Того"
 
-#: models/address.py:301
+#: backend/edw_shop/models/address.py:301
 msgid "Tokelau"
 msgstr "Токелау"
 
-#: models/address.py:302
+#: backend/edw_shop/models/address.py:302
 msgid "Tonga"
 msgstr "Тонга"
 
-#: models/address.py:303
+#: backend/edw_shop/models/address.py:303
 msgid "Trinidad and Tobago"
 msgstr "Тринидад и Тобаго"
 
-#: models/address.py:304
+#: backend/edw_shop/models/address.py:304
 msgid "Tunisia"
 msgstr "Тунис"
 
-#: models/address.py:305
+#: backend/edw_shop/models/address.py:305
 msgid "Turkey"
 msgstr "Турция"
 
-#: models/address.py:306
+#: backend/edw_shop/models/address.py:306
 msgid "Turkmenistan"
 msgstr "Туркменистан"
 
-#: models/address.py:307
+#: backend/edw_shop/models/address.py:307
 msgid "Turks And Caicos Islands"
 msgstr "Теркс и Кайкос"
 
-#: models/address.py:308
+#: backend/edw_shop/models/address.py:308
 msgid "Tuvalu"
 msgstr "Тувалу"
 
-#: models/address.py:309
+#: backend/edw_shop/models/address.py:309
 msgid "Uganda"
 msgstr "Уганда"
 
-#: models/address.py:310
+#: backend/edw_shop/models/address.py:310
 msgid "Ukraine"
 msgstr "Украина"
 
-#: models/address.py:311
+#: backend/edw_shop/models/address.py:311
 msgid "United Arab Emirates"
 msgstr "Объединенные Арабские Эмираты"
 
-#: models/address.py:312
+#: backend/edw_shop/models/address.py:312
 msgid "United Kingdom"
 msgstr "Великобритания"
 
-#: models/address.py:313
+#: backend/edw_shop/models/address.py:313
 msgid "United States"
 msgstr "Соединенные Штаты"
 
-#: models/address.py:314
+#: backend/edw_shop/models/address.py:314
 msgid "United States Minor Outlying Islands"
 msgstr "США Внешние малые острова"
 
-#: models/address.py:315
+#: backend/edw_shop/models/address.py:315
 msgid "Uruguay"
 msgstr "Уругвай"
 
-#: models/address.py:316
+#: backend/edw_shop/models/address.py:316
 msgid "Uzbekistan"
 msgstr "Узбекистан"
 
-#: models/address.py:317
+#: backend/edw_shop/models/address.py:317
 msgid "Vanuatu"
 msgstr "Вануату"
 
-#: models/address.py:318
+#: backend/edw_shop/models/address.py:318
 msgid "Venezuela, Bolivarian Republic Of"
 msgstr "Венесуэла, Боливарианская Республика"
 
-#: models/address.py:319
+#: backend/edw_shop/models/address.py:319
 msgid "Viet Nam"
 msgstr "Вьетнам"
 
-#: models/address.py:320
+#: backend/edw_shop/models/address.py:320
 msgid "Virgin Islands, British"
 msgstr "Виргинские острова, Британские"
 
-#: models/address.py:321
+#: backend/edw_shop/models/address.py:321
 msgid "Virgin Islands, U.S."
 msgstr "Виргинские острова, США"
 
-#: models/address.py:322
+#: backend/edw_shop/models/address.py:322
 msgid "Wallis and Futuna"
 msgstr "Уоллис и Футуна"
 
-#: models/address.py:323
+#: backend/edw_shop/models/address.py:323
 msgid "Western Sahara"
 msgstr "Западная Сахара"
 
-#: models/address.py:324
+#: backend/edw_shop/models/address.py:324
 msgid "Yemen"
 msgstr "Йемен"
 
-#: models/address.py:325
+#: backend/edw_shop/models/address.py:325
 msgid "Zambia"
 msgstr "Замбия"
 
-#: models/address.py:326
+#: backend/edw_shop/models/address.py:326
 msgid "Zimbabwe"
 msgstr "Зимбабве"
 
-#: models/cart.py:86 models/defaults/product.py:89 models/order.py:472
+#: backend/edw_shop/models/cart.py:89
+#: backend/edw_shop/models/defaults/product.py:89
+#: backend/edw_shop/models/order.py:550
 msgid "Product code"
 msgstr "Код товара"
 
-#: models/cart.py:90
+#: backend/edw_shop/models/cart.py:93
 msgid "Product code of added item."
 msgstr "Код товара на момент добавления"
 
-#: models/cart.py:93
+#: backend/edw_shop/models/cart.py:96
 msgid "Arbitrary information for this cart item"
 msgstr "Дополнительная информация об элементе корзины"
 
-#: models/cart.py:99
+#: backend/edw_shop/models/cart.py:102
 msgid "Cart item"
 msgstr "Элемент заказа"
 
-#: models/cart.py:100
+#: backend/edw_shop/models/cart.py:103
 msgid "Cart items"
 msgstr "Элементы заказа"
 
-#: models/cart.py:174 models/order.py:189
+#: backend/edw_shop/models/cart.py:177 backend/edw_shop/models/order.py:181
 msgid "Customer"
 msgstr "Покупатель"
 
-#: models/cart.py:179
+#: backend/edw_shop/models/cart.py:182
 msgid "Created at"
 msgstr "Дата создания"
 
-#: models/cart.py:184
+#: backend/edw_shop/models/cart.py:187
 msgid "Updated at"
 msgstr "Обновлено"
 
-#: models/cart.py:188
+#: backend/edw_shop/models/cart.py:191
 msgid "Arbitrary information for this cart"
 msgstr "Дополнительная информация к этой корзине"
 
-#: models/cart.py:195
+#: backend/edw_shop/models/cart.py:198
 msgid "Shopping Cart"
 msgstr "Корзина"
 
-#: models/cart.py:196
+#: backend/edw_shop/models/cart.py:199
 msgid "Shopping Carts"
 msgstr "Корзины"
 
-#: models/defaults/address.py:14
+#: backend/edw_shop/models/defaults/address.py:14
 msgid "Full name"
 msgstr "Полное имя"
 
-#: models/defaults/address.py:15
+#: backend/edw_shop/models/defaults/address.py:15
 msgid "Address line 1"
 msgstr "Адрес (первая строка)"
 
-#: models/defaults/address.py:16
+#: backend/edw_shop/models/defaults/address.py:16
 msgid "Address line 2"
 msgstr "Адрес (вторая строка)"
 
-#: models/defaults/address.py:17
+#: backend/edw_shop/models/defaults/address.py:17
 msgid "ZIP / Postal code"
 msgstr "Почтовый индекс"
 
-#: models/defaults/address.py:18
+#: backend/edw_shop/models/defaults/address.py:18
 msgid "City"
 msgstr "Город"
 
-#: models/defaults/address.py:19
+#: backend/edw_shop/models/defaults/address.py:19
 msgid "Country"
 msgstr "Страна"
 
-#: models/defaults/address.py:27 models/defaults/order.py:26
+#: backend/edw_shop/models/defaults/address.py:27
+#: backend/edw_shop/models/defaults/order.py:26
 msgid "Shipping Address"
 msgstr "Адрес доставки"
 
-#: models/defaults/address.py:28
+#: backend/edw_shop/models/defaults/address.py:28
 msgid "Shipping Addresses"
 msgstr "Адрес доставки"
 
-#: models/defaults/address.py:33 models/defaults/order.py:33
+#: backend/edw_shop/models/defaults/address.py:33
+#: backend/edw_shop/models/defaults/order.py:33
 msgid "Billing Address"
 msgstr "Адрес плательщика"
 
-#: models/defaults/address.py:34
+#: backend/edw_shop/models/defaults/address.py:34
 msgid "Billing Addresses"
 msgstr "Адреса плательщиков"
 
-#: models/defaults/order.py:19
+#: backend/edw_shop/models/defaults/cart_item.py:17
+msgid "Active"
+msgstr "Активен"
+
+#: backend/edw_shop/models/defaults/cart_item.py:19
+msgid "Is this product publicly visible."
+msgstr "Определяет будет ли показан товар на сайте"
+
+#: backend/edw_shop/models/defaults/cart_item.py:21
+#: backend/edw_shop/templates/edw_shop/print/order.html:13
+msgid "Quantity"
+msgstr "Количество"
+
+#: backend/edw_shop/models/defaults/order.py:19
 msgid "Order Number"
 msgstr "Номер заказа"
 
-#: models/defaults/order.py:29
+#: backend/edw_shop/models/defaults/order.py:29
 msgid "Shipping address at the moment of purchase."
 msgstr "Адрес доставки на момент покупки."
 
-#: models/defaults/order.py:36
+#: backend/edw_shop/models/defaults/order.py:36
 msgid "Billing address at the moment of purchase."
 msgstr "Адрес плательцика на момент покупки."
 
-#: models/defaults/order.py:40
+#: backend/edw_shop/models/defaults/order.py:40
 msgctxt "order_models"
 msgid "Order"
 msgstr "Заказ"
 
-#: models/defaults/order.py:41
+#: backend/edw_shop/models/defaults/order.py:41
 msgctxt "order_models"
 msgid "Orders"
 msgstr "Заказы"
 
-#: models/defaults/order_item.py:15
+#: backend/edw_shop/models/defaults/order_item.py:15
 msgid "Ordered quantity"
 msgstr "Заказанное количество"
 
-#: models/defaults/product.py:55
+#: backend/edw_shop/models/defaults/product.py:55
 msgid "Tile"
 msgstr "Плитка"
 
-#: models/defaults/product.py:56
+#: backend/edw_shop/models/defaults/product.py:56
+#: backend/edw_shop/models/order.py:169
 msgid "List"
 msgstr "Список"
 
-#: models/defaults/product.py:64
+#: backend/edw_shop/models/defaults/product.py:64
 msgid "In stock first"
 msgstr "По наличию"
 
-#: models/defaults/product.py:65
+#: backend/edw_shop/models/defaults/product.py:65
 msgid "By name: Alphabetical"
 msgstr "По наименованию: А↓"
 
-#: models/defaults/product.py:66
+#: backend/edw_shop/models/defaults/product.py:66
 msgid "By name: Alphabetical desc"
 msgstr "По наименованию: Я↑"
 
-#: models/defaults/product.py:67
+#: backend/edw_shop/models/defaults/product.py:67
 #, fuzzy
 #| msgid "Created at"
 msgid "Created at: new first"
 msgstr "Дата создания"
 
-#: models/defaults/product.py:72
+#: backend/edw_shop/models/defaults/product.py:72
 msgid "stock"
 msgstr "Наличие на складе"
 
-#: models/defaults/product.py:74
+#: backend/edw_shop/models/defaults/product.py:74
 msgid "in stock"
 msgstr "В наличии"
 
-#: models/defaults/product.py:75
+#: backend/edw_shop/models/defaults/product.py:75
 msgid "out of stock"
 msgstr "Под заказ"
 
-#: models/defaults/product.py:80 models/order.py:464
+#: backend/edw_shop/models/defaults/product.py:80
+#: backend/edw_shop/models/order.py:542
 msgid "Product name"
 msgstr "Название товара"
 
-#: models/defaults/product.py:81
+#: backend/edw_shop/models/defaults/product.py:81
 msgid "Slug"
 msgstr "Путь"
 
-#: models/defaults/product.py:81
+#: backend/edw_shop/models/defaults/product.py:81
 msgid "Used for URLs, auto-generated from name if blank."
 msgstr "Используется авто-генерация URL, если это поле пустое."
 
-#: models/defaults/product.py:83
+#: backend/edw_shop/models/defaults/product.py:83
 msgid "Secondary ID"
 msgstr "Вторичный ключ"
 
-#: models/defaults/product.py:84
+#: backend/edw_shop/models/defaults/product.py:84
 msgid "Secondary ID needed for purposes of external exchange system."
 msgstr ""
 
-#: models/defaults/product.py:86
+#: backend/edw_shop/models/defaults/product.py:86
 msgid "SKU"
 msgstr "АРТ"
 
-#: models/defaults/product.py:87
+#: backend/edw_shop/models/defaults/product.py:87
 msgid "Show in product detail description"
 msgstr "Показывать в описании товара"
 
-#: models/defaults/product.py:93 models/defaults/product.py:464
+#: backend/edw_shop/models/defaults/product.py:93
+#: backend/edw_shop/models/defaults/product.py:464
 msgid "measurment unit"
 msgstr "единица измерения"
 
-#: models/defaults/product.py:94
+#: backend/edw_shop/models/defaults/product.py:94
 msgid "Basic measurement unit of product"
 msgstr "Базовая единица измерения"
 
-#: models/defaults/product.py:96 models/order.py:488
+#: backend/edw_shop/models/defaults/product.py:96
+#: backend/edw_shop/models/order.py:568
 msgid "Unit price"
 msgstr "Стоимость единицы"
 
-#: models/defaults/product.py:97
+#: backend/edw_shop/models/defaults/product.py:97
 msgid "Net price for this product"
 msgstr "Стоимость товара в этом магазине"
 
-#: models/defaults/product.py:99 models/defaults/product.py:466
+#: backend/edw_shop/models/defaults/product.py:99
+#: backend/edw_shop/models/defaults/product.py:466
+#: backend/edw_shop/models/order.py:565
 msgid "addition step"
 msgstr ""
 
-#: models/defaults/product.py:101
+#: backend/edw_shop/models/defaults/product.py:101
 msgid ""
 "Step for sale product. For example: You set price is per linear meter, but "
 "the product is only sold by the piece, the length of one piece 1.49 meters. "
 "Set step as 1.49"
 msgstr ""
 
-#: models/defaults/product.py:104
+#: backend/edw_shop/models/defaults/product.py:104
 msgid "Display price per step instead one unit price"
 msgstr ""
 
-#: models/defaults/product.py:106
+#: backend/edw_shop/models/defaults/product.py:106
 msgid "quantity in stock"
 msgstr "количество в наличии"
 
-#: models/defaults/product.py:107
+#: backend/edw_shop/models/defaults/product.py:107
 msgid "\"\" - out of stock; \"0\" - sold out; \"N\" - N quantity in stock"
 msgstr ""
 
-#: models/defaults/product.py:109
+#: backend/edw_shop/models/defaults/product.py:109
 #, fuzzy
 #| msgid "Ready for delivery"
 msgid "estimated delivery"
 msgstr "Готово к доставке"
 
-#: models/defaults/product.py:110
+#: backend/edw_shop/models/defaults/product.py:110
 msgid "If not empty then show this instead \"in stock\" or \"out of stock\" "
 msgstr ""
 
-#: models/defaults/product.py:119 models/defaults/product.py:397
-#: models/defaults/product.py:460 models/order.py:484 models/product.py:110
-#: templates/edw_shop/print/order.html:12
+#: backend/edw_shop/models/defaults/product.py:119
+#: backend/edw_shop/models/defaults/product.py:397
+#: backend/edw_shop/models/defaults/product.py:460
+#: backend/edw_shop/models/order.py:562 backend/edw_shop/models/product.py:110
+#: backend/edw_shop/templates/edw_shop/print/order.html:12
 msgid "Product"
 msgstr "Товар"
 
-#: models/defaults/product.py:120 models/product.py:111
+#: backend/edw_shop/models/defaults/product.py:120
+#: backend/edw_shop/models/product.py:111
 msgid "Products"
 msgstr "Товары"
 
-#: models/defaults/product.py:465
+#: backend/edw_shop/models/defaults/product.py:465
 msgid "Additional measurement unit of product"
 msgstr "Дополнительные единицы измерения"
 
-#: models/defaults/product.py:467
+#: backend/edw_shop/models/defaults/product.py:467
 msgid "conversion factor from base unit: 1 base unit * k"
 msgstr "Коэффициент перевода из базовой единицы измерения: 1 base unit * k"
 
-#: models/defaults/product.py:468
+#: backend/edw_shop/models/defaults/product.py:468
 msgid "measurment unit code"
 msgstr "код"
 
-#: models/defaults/product.py:469
+#: backend/edw_shop/models/defaults/product.py:469
 msgid "discount"
 msgstr "скидка"
 
-#: models/defaults/product.py:473
+#: backend/edw_shop/models/defaults/product.py:473
 msgid "Unit"
 msgstr "Единица измерения"
 
-#: models/defaults/product.py:474
+#: backend/edw_shop/models/defaults/product.py:474
 msgid "Units"
 msgstr "Единицы измерения"
 
-#: models/delivery.py:26
+#: backend/edw_shop/models/delivery.py:26
 msgid "Shipping ID"
 msgstr "ID доставки"
 
-#: models/delivery.py:30 models/order.py:430
+#: backend/edw_shop/models/delivery.py:30 backend/edw_shop/models/order.py:508
 msgid "The transaction processor's reference"
 msgstr "Описание платежной системы, осуществляющей транзакции"
 
-#: models/delivery.py:40
+#: backend/edw_shop/models/delivery.py:40
 msgid "Shipped at"
 msgstr "Доставлен"
 
-#: models/delivery.py:46
+#: backend/edw_shop/models/delivery.py:46
 msgid "Shipping method"
 msgstr "Метод доставки"
 
-#: models/delivery.py:48
+#: backend/edw_shop/models/delivery.py:48
 msgid "The shipping backend used to deliver the items for this order"
 msgstr ""
 "Модуль доставки, через который производится доставка товаров для этого заказа"
 
-#: models/delivery.py:53 models/delivery.py:78
+#: backend/edw_shop/models/delivery.py:53
+#: backend/edw_shop/models/delivery.py:78
 msgid "Delivery"
 msgstr "Доставка"
 
-#: models/delivery.py:54
+#: backend/edw_shop/models/delivery.py:54
 msgid "Deliveries"
 msgstr "Доставки"
 
-#: models/delivery.py:57
+#: backend/edw_shop/models/delivery.py:57
 msgid "Delivery ID: {}"
 msgstr "Код доставки: {}"
 
-#: models/delivery.py:79
+#: backend/edw_shop/models/delivery.py:79
 msgid "Refer to the shipping provider used to ship this item"
 msgstr "Служба доставки, которая доставляет этот элемент"
 
-#: models/delivery.py:84
+#: backend/edw_shop/models/delivery.py:84
 msgid "Ordered item"
 msgstr "Элемент заказа"
 
-#: models/delivery.py:89
+#: backend/edw_shop/models/delivery.py:89
 msgid "Deliver item"
 msgstr "Элемент доставки"
 
-#: models/delivery.py:90
+#: backend/edw_shop/models/delivery.py:90
 msgid "Deliver items"
 msgstr "Элементы доставки"
 
-#: models/fields.py:55
+#: backend/edw_shop/models/fields.py:55
 msgid "."
 msgstr "."
 
-#: models/fields.py:71
+#: backend/edw_shop/models/fields.py:71
 msgid "Customer recognition state"
 msgstr "Статус распознавания покупателя"
 
-#: models/order.py:97
+#: backend/edw_shop/models/order.py:116
 msgid "Only signed in customers can view their orders"
 msgstr "Только авторизованные покупатели могут просматривать свои заказы"
 
-#: models/order.py:176
-msgid "New order without content"
-msgstr "Новый заказ без содержания"
+#: backend/edw_shop/models/order.py:159
+msgid "New order"
+msgstr "Новый заказ"
 
-#: models/order.py:177
-msgid "Order freshly created"
-msgstr "Заказ только что создан"
+#: backend/edw_shop/models/order.py:160
+#, fuzzy
+#| msgid "Process Bar"
+msgid "Processed by manager"
+msgstr "Индикатор выполнения"
 
-#: models/order.py:178
-msgid "Payment confirmed"
-msgstr "Оплата подтверждена"
+#: backend/edw_shop/models/order.py:161
+msgid "In work"
+msgstr "В работе"
 
-#: models/order.py:179
-msgid "Payment declined"
-msgstr "Оплата отклонена"
+#: backend/edw_shop/models/order.py:162
+msgid "Completed"
+msgstr "Выполнено"
 
-#: models/order.py:196
+#: backend/edw_shop/models/order.py:163
+msgid "Canceled"
+msgstr "Отменён"
+
+#: backend/edw_shop/models/order.py:188
 msgid "Status"
 msgstr "Статус"
 
-#: models/order.py:202
+#: backend/edw_shop/models/order.py:194
 msgid "Currency in which this order was concluded"
 msgstr "Валюта, в которой этот заказ был оформлен"
 
-#: models/order.py:206 templates/edw_shop/print/order.html:47
+#: backend/edw_shop/models/order.py:198
+#: backend/edw_shop/templates/edw_shop/print/order.html:47
 msgid "Subtotal"
 msgstr "Стоимость корзины"
 
-#: models/order.py:211 templates/edw_shop/print/order.html:15
-#: templates/edw_shop/print/order.html:61
+#: backend/edw_shop/models/order.py:203
+#: backend/edw_shop/templates/edw_shop/print/order.html:15
+#: backend/edw_shop/templates/edw_shop/print/order.html:61
 msgid "Total"
 msgstr "Всего к оплате за товары"
 
-#: models/order.py:226 models/order.py:502
+#: backend/edw_shop/models/order.py:208 backend/edw_shop/models/order.py:582
 msgid "Extra fields"
 msgstr "Дополнительные поля цены заказа"
 
-#: models/order.py:227
+#: backend/edw_shop/models/order.py:209
 msgid "Arbitrary information for this order object on the moment of purchase."
 msgstr "Дополнительная информация о заказе на момент покупки."
 
-#: models/order.py:407
+#: backend/edw_shop/models/order.py:213
+msgid "Stored request"
+msgstr ""
+
+#: backend/edw_shop/models/order.py:214
+msgid "Parts of the Request objects on the moment of purchase."
+msgstr "Данные запроса на момент покупки."
+
+#: backend/edw_shop/models/order.py:485
 msgctxt "order_models"
 msgid "State"
 msgstr "Статус"
 
-#: models/order.py:419 models/order.py:460
+#: backend/edw_shop/models/order.py:497 backend/edw_shop/models/order.py:538
 msgid "Order"
 msgstr "Заказ"
 
-#: models/order.py:423
+#: backend/edw_shop/models/order.py:501
 msgid "Amount paid"
 msgstr "Сумма"
 
-#: models/order.py:424
+#: backend/edw_shop/models/order.py:502
 msgid "How much was paid with this particular transfer."
 msgstr "Сумма транзакции"
 
-#: models/order.py:428
+#: backend/edw_shop/models/order.py:506
 msgid "Transaction ID"
 msgstr "ID транзакции"
 
-#: models/order.py:434
+#: backend/edw_shop/models/order.py:512
 msgid "Received at"
 msgstr "Получено в"
 
-#: models/order.py:439
+#: backend/edw_shop/models/order.py:517
 msgid "Payment method"
 msgstr "Метод оплаты"
 
-#: models/order.py:441
+#: backend/edw_shop/models/order.py:519
 msgid "The payment backend used to process the purchase"
 msgstr "Модуль оплаты, через который проведена оплата"
 
-#: models/order.py:445
+#: backend/edw_shop/models/order.py:523
 msgctxt "order_models"
 msgid "Order payment"
 msgstr "Оплата заказа"
 
-#: models/order.py:446
+#: backend/edw_shop/models/order.py:524
 msgctxt "order_models"
 msgid "Order payments"
 msgstr "Оплаты заказов"
 
-#: models/order.py:449
+#: backend/edw_shop/models/order.py:527
 msgid "Payment ID: {}"
 msgstr "Код оплаты: {}"
 
-#: models/order.py:468
+#: backend/edw_shop/models/order.py:546
 msgid "Product name at the moment of purchase."
 msgstr "Название товара на момент покупки"
 
-#: models/order.py:476
+#: backend/edw_shop/models/order.py:554
 msgid "Product code at the moment of purchase."
 msgstr "Код товара на момент покупки"
 
-#: models/order.py:490
+#: backend/edw_shop/models/order.py:570
 msgid "Products unit price at the moment of purchase."
 msgstr "Стоимость товара на момент покупки"
 
-#: models/order.py:495
+#: backend/edw_shop/models/order.py:575
 msgid "Line Total"
 msgstr "Всего к оплате за товары"
 
-#: models/order.py:497
+#: backend/edw_shop/models/order.py:577
 msgid "Line total on the invoice at the moment of purchase."
 msgstr "Всего к оплате за товары на счёте на момент покупки"
 
-#: models/order.py:503
+#: backend/edw_shop/models/order.py:583
 msgid "Arbitrary information for this order item"
 msgstr "Дополнительная информация об элементе заказа"
 
-#: models/order.py:508
+#: backend/edw_shop/models/order.py:588
 msgid "Order item"
 msgstr "Элемент заказа"
 
-#: models/order.py:509
+#: backend/edw_shop/models/order.py:589
 msgid "Order items"
 msgstr "Элементы заказа"
 
-#: models/product.py:118
+#: backend/edw_shop/models/product.py:118
 msgid "Product type"
 msgstr "Тип товара"
 
-#: modifiers/cart.py:23
+#: backend/edw_shop/modifiers/cart.py:23
 msgid "Discount for quantity"
 msgstr "Скидка за количество"
 
-#: modifiers/defaults.py:44
+#: backend/edw_shop/modifiers/defaults.py:44
 msgid "Pay in advance"
 msgstr "Оплата при получении"
 
-#: modifiers/defaults.py:56
+#: backend/edw_shop/modifiers/defaults.py:56
 msgid "Self collection"
 msgstr "Самовывоз"
 
-#: money/fields.py:74
+#: backend/edw_shop/money/fields.py:74
 #, python-format
 msgid "Money in %(currency_code)s"
 msgstr "Деньги в %(currency_code)s"
 
-#: money/iso4217.py:15
+#: backend/edw_shop/money/iso4217.py:15
 msgid "United Arab Emirates dirham"
 msgstr "Объединенные Арабские Эмираты Дирхам"
 
-#: money/iso4217.py:16
+#: backend/edw_shop/money/iso4217.py:16
 msgid "Australian Dollar"
 msgstr "Австралийский доллар"
 
-#: money/iso4217.py:17
+#: backend/edw_shop/money/iso4217.py:17
 msgid "Bahraini dinar"
 msgstr "Бахрейнский динар"
 
-#: money/iso4217.py:18
+#: backend/edw_shop/money/iso4217.py:18
 msgid "Brazilian Real"
 msgstr "Бразильский Реал"
 
-#: money/iso4217.py:19
+#: backend/edw_shop/money/iso4217.py:19
 msgid "Canadian Dollar"
 msgstr "Канадский доллар"
 
-#: money/iso4217.py:20
+#: backend/edw_shop/money/iso4217.py:20
 msgid "Swiss Franc"
 msgstr "Швейцарский франк"
 
-#: money/iso4217.py:21
+#: backend/edw_shop/money/iso4217.py:21
 msgid "Chinese Yuan"
 msgstr "Китайский юань"
 
-#: money/iso4217.py:22
+#: backend/edw_shop/money/iso4217.py:22
 msgid "Czech Koruna"
 msgstr "Чешская крона"
 
-#: money/iso4217.py:23
+#: backend/edw_shop/money/iso4217.py:23
 msgid "Euro"
 msgstr "Евро"
 
-#: money/iso4217.py:24
+#: backend/edw_shop/money/iso4217.py:24
 msgid "Pound Sterling"
 msgstr "Фунт стерлингов"
 
-#: money/iso4217.py:25
+#: backend/edw_shop/money/iso4217.py:25
 msgid "Croatian kuna"
 msgstr "Хорватская куна"
 
-#: money/iso4217.py:26
+#: backend/edw_shop/money/iso4217.py:26
 msgid "Hungarian Forint"
 msgstr "Венгерский форинт"
 
-#: money/iso4217.py:27
+#: backend/edw_shop/money/iso4217.py:27
 msgid "Israeli Sheqel"
 msgstr "Израильский шекель"
 
-#: money/iso4217.py:28
+#: backend/edw_shop/money/iso4217.py:28
 msgid "Indian Rupee"
 msgstr "Индийская рупия"
 
-#: money/iso4217.py:29
+#: backend/edw_shop/money/iso4217.py:29
 msgid "Japanese Yen"
 msgstr "Японская йена"
 
-#: money/iso4217.py:30
+#: backend/edw_shop/money/iso4217.py:30
 msgid "Kuwaiti Dinar"
 msgstr "Кувейтский динар"
 
-#: money/iso4217.py:31
+#: backend/edw_shop/money/iso4217.py:31
 msgid "Omani rial"
 msgstr "Оманский риал"
 
-#: money/iso4217.py:32
+#: backend/edw_shop/money/iso4217.py:32
 msgid "Qatari riyal"
 msgstr "Катарский риал"
 
-#: money/iso4217.py:33
+#: backend/edw_shop/money/iso4217.py:33
 msgid "Russian Ruble"
 msgstr "Русский рубль"
 
-#: money/iso4217.py:34
+#: backend/edw_shop/money/iso4217.py:34
 msgid "Saudi riyal"
 msgstr "Саудовский риал"
 
-#: money/iso4217.py:35
+#: backend/edw_shop/money/iso4217.py:35
 msgid "Tunisian Dinar"
 msgstr "Тунисский динар"
 
-#: money/iso4217.py:36
+#: backend/edw_shop/money/iso4217.py:36
 msgid "Ukrainian Hryvnia"
 msgstr "Украинская гривна"
 
-#: money/iso4217.py:37
+#: backend/edw_shop/money/iso4217.py:37
 msgid "US Dollar"
 msgstr "Доллар США"
 
-#: money/iso4217.py:38
+#: backend/edw_shop/money/iso4217.py:38
 msgid "Swedish Kronor"
 msgstr ""
 
-#: payment/defaults.py:41
+#: backend/edw_shop/payment/defaults.py:41
 msgid "Awaiting a forward fund payment"
 msgstr "Ожидается оплата"
 
-#: payment/defaults.py:42
+#: backend/edw_shop/payment/defaults.py:42
 msgid "Prepayment deposited"
 msgstr "Внесена предоплата"
 
-#: payment/defaults.py:43
+#: backend/edw_shop/payment/defaults.py:43
 msgid "No Payment Required"
 msgstr "Оплата не требуется"
 
-#: payment/defaults.py:74
+#: backend/edw_shop/payment/defaults.py:74
 msgid "Deposited too little"
 msgstr "Вложение слишком мало"
 
-#: payment/defaults.py:81
+#: backend/edw_shop/payment/defaults.py:81
 msgid "Mark as Paid"
 msgstr "Отметить как оплачено"
 
-#: payment/defaults.py:96
+#: backend/edw_shop/payment/defaults.py:96
 msgid "Mark as Refunded"
 msgstr "Отметить как возвращенный"
 
-#: payment/defaults.py:111
+#: backend/edw_shop/payment/defaults.py:111
 msgid "Refund payment"
 msgstr "Отклонить оплату"
 
-#: payment/defaults.py:112
+#: backend/edw_shop/payment/defaults.py:112
 msgid "Order Canceled"
 msgstr "Заказ отменён"
 
-#: payment/defaults.py:119
+#: backend/edw_shop/payment/defaults.py:119
 msgid "Cancel Order"
 msgstr "Отменить заказ"
 
-#: rest/validators/product.py:51 rest/validators/product.py:83
-#: rest/validators/product.py:105
+#: backend/edw_shop/rest/validators/product.py:51
+#: backend/edw_shop/rest/validators/product.py:83
+#: backend/edw_shop/rest/validators/product.py:105
 msgid "{} `{}`='{}'"
 msgstr ""
 
-#: rest/validators/product.py:114 rest/validators/product.py:129
+#: backend/edw_shop/rest/validators/product.py:114
+#: backend/edw_shop/rest/validators/product.py:129
 msgid "Terms with id`s [{}] not found."
 msgstr ""
 
-#: rest/validators/product.py:138
+#: backend/edw_shop/rest/validators/product.py:138
 msgid "Entities with id`s [{}] not found."
 msgstr ""
 
-#: rest/validators/product.py:146
+#: backend/edw_shop/rest/validators/product.py:146
 msgid "The relations [{}] are forbidden."
 msgstr ""
 
-#: rest/validators/product.py:154
+#: backend/edw_shop/rest/validators/product.py:154
 msgid "The subjects with id`s [{}] are forbidden."
 msgstr ""
 
-#: rest/validators/product.py:157
+#: backend/edw_shop/rest/validators/product.py:157
 msgid "The subjects cannot be the empty."
 msgstr ""
 
-#: rest/validators/product.py:163
+#: backend/edw_shop/rest/validators/product.py:163
 msgid "This field is required."
 msgstr "Это поле обязательное."
 
-#: shipping/defaults.py:27 shipping/delivery.py:23
+#: backend/edw_shop/shipping/defaults.py:27
+#: backend/edw_shop/shipping/delivery.py:23
 msgid "Picking goods"
 msgstr "Сбор товаров"
 
-#: shipping/defaults.py:28 shipping/delivery.py:24
+#: backend/edw_shop/shipping/defaults.py:28
+#: backend/edw_shop/shipping/delivery.py:24
 msgid "Packing goods"
 msgstr "Упаковка товаров"
 
-#: shipping/defaults.py:32 shipping/delivery.py:42
+#: backend/edw_shop/shipping/defaults.py:32
+#: backend/edw_shop/shipping/delivery.py:42
 msgid "Pick the goods"
 msgstr "Собрать товар"
 
-#: shipping/defaults.py:37 shipping/delivery.py:50
+#: backend/edw_shop/shipping/defaults.py:37
+#: backend/edw_shop/shipping/delivery.py:50
 msgid "Pack the goods"
 msgstr "Упаковать товар"
 
-#: shipping/delivery.py:25
+#: backend/edw_shop/shipping/delivery.py:25
 msgid "Ship goods"
 msgstr "Доставить товар"
 
-#: shipping/delivery.py:56
+#: backend/edw_shop/shipping/delivery.py:56
 msgid "Ship the goods"
 msgstr "Доставить товары"
 
-#: templates/edw_shop/admin/edit_inline/stacked-order.html:12
+#: backend/edw_shop/templates/edw_shop/admin/edit_inline/stacked-order.html:12
 msgid "Change"
 msgstr "Изменить"
 
-#: templates/edw_shop/admin/edit_inline/stacked-order.html:14
+#: backend/edw_shop/templates/edw_shop/admin/edit_inline/stacked-order.html:14
 msgid "View on site"
 msgstr "Смотреть на сайте"
 
-#: templates/edw_shop/admin/edit_inline/stacked-order.html:30
+#: backend/edw_shop/templates/edw_shop/admin/edit_inline/stacked-order.html:30
 msgid "Remove"
 msgstr "Удалить"
 
-#: templates/edw_shop/admin/edit_inline/stacked-order.html:31
+#: backend/edw_shop/templates/edw_shop/admin/edit_inline/stacked-order.html:31
 #, python-format
 msgid "Add another %(verbose_name)s"
 msgstr "Добавить ещё один %(verbose_name)s"
 
-#: templates/edw_shop/admin/order-extra.html:8
+#: backend/edw_shop/templates/edw_shop/admin/order-extra.html:8
 msgid "Shipping"
 msgstr "Доставка"
 
-#: templates/edw_shop/admin/order-extra.html:9
+#: backend/edw_shop/templates/edw_shop/admin/order-extra.html:9
 msgid "Payment"
 msgstr "Оплата"
 
-#: templates/edw_shop/admin/order-extra.html:10
+#: backend/edw_shop/templates/edw_shop/admin/order-extra.html:10
 msgid "Annotation"
 msgstr "Примечание"
 
-#: templates/edw_shop/print/delivery-note.html:9
-#: templates/edw_shop/print/order-confirmation.html:9
+#: backend/edw_shop/templates/edw_shop/print/delivery-note.html:9
+#: backend/edw_shop/templates/edw_shop/print/order-confirmation.html:9
 msgid "Order confirmation for"
 msgstr "Подтверждение заказа"
 
-#: templates/edw_shop/print/invoice.html:7
-#: templates/edw_shop/print/invoice.html:10
+#: backend/edw_shop/templates/edw_shop/print/invoice.html:7
+#: backend/edw_shop/templates/edw_shop/print/invoice.html:10
 msgid "Invoice"
 msgstr "Счёт"
 
-#: templates/edw_shop/print/order.html:13
-msgid "Quantity"
-msgstr "Количество"
-
-#: templates/edw_shop/print/order.html:14
+#: backend/edw_shop/templates/edw_shop/print/order.html:14
 msgid "Unit Price"
 msgstr "Стоимость единицы"
+
+#~ msgid "New order without content"
+#~ msgstr "Новый заказ без содержания"
+
+#~ msgid "Order freshly created"
+#~ msgstr "Заказ только что создан"
+
+#~ msgid "Payment confirmed"
+#~ msgstr "Оплата подтверждена"
+
+#~ msgid "Payment declined"
+#~ msgstr "Оплата отклонена"
 
 #~ msgctxt "customer"
 #~ msgid "Number"
@@ -1864,10 +1934,6 @@ msgstr "Стоимость единицы"
 
 #~ msgid "Attachments"
 #~ msgstr "Вложения"
-
-#~ msgctxt "admin"
-#~ msgid "Status"
-#~ msgstr "Статус"
 
 #~ msgid "Categories"
 #~ msgstr "Категории"
@@ -2077,9 +2143,6 @@ msgstr "Стоимость единицы"
 #~ msgid "Number of steps for this proceed bar."
 #~ msgstr "Количество шагов для этого индикатора выполнения"
 
-#~ msgid "Process Bar"
-#~ msgstr "Индикатор выполнения"
-
 #~ msgid "with {} page"
 #~ msgid_plural "with {} pages"
 #~ msgstr[0] "с {} страницей"
@@ -2260,15 +2323,6 @@ msgstr "Стоимость единицы"
 #~ msgid "Notifications"
 #~ msgstr "Оповещения"
 
-#~ msgid "Parts of the Request objects on the moment of purchase."
-#~ msgstr "Данные запроса на момент покупки."
-
-#~ msgid "Active"
-#~ msgstr "Активен"
-
-#~ msgid "Is this product publicly visible."
-#~ msgstr "Определяет будет ли показан товар на сайте"
-
 #~ msgid "Product Image"
 #~ msgstr "Изображение товара"
 
@@ -2283,9 +2337,6 @@ msgstr "Стоимость единицы"
 
 #~ msgid "Change Password"
 #~ msgstr "Изменить пароль"
-
-#~ msgid "New Password"
-#~ msgstr "Новый пароль"
 
 #~ msgid "Confirm Password"
 #~ msgstr "Подтвердите пароль"
@@ -2410,9 +2461,6 @@ msgstr "Стоимость единицы"
 
 #~ msgid "Continue Shopping"
 #~ msgstr "Продолжить покупки"
-
-#~ msgid "Cancel"
-#~ msgstr "Отменить"
 
 #~ msgid "Price"
 #~ msgstr "Цена"
