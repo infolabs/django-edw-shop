@@ -218,6 +218,8 @@ class BaseOrder(FSMMixin, EntityModel.materialized):
 
     class Meta:
         abstract = True
+        verbose_name = pgettext_lazy('order_models', "Order")
+        verbose_name_plural = pgettext_lazy('order_models', "Orders")
 
     def __str__(self):
         return self.get_number()
