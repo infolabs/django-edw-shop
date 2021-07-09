@@ -67,7 +67,7 @@ class OrderItemInline(admin.StackedInline):
         return False
 
     def has_delete_permission(self, request, obj=None):
-        return False
+        return True
 
     def get_max_num(self, request, obj=None, **kwargs):
         return self.model.objects.filter(order=obj).count()
@@ -100,7 +100,7 @@ class StatusListFilter(admin.SimpleListFilter):
 
 
 class BaseOrderAdmin(FSMTransitionMixin, EntityChildModelAdmin):
-    list_display = ['get_number', 'customer', 'status_name', 'get_total', 'created_at']
+    list_display = ['get_number', 'uuid', 'customer', 'status_name', 'get_total', 'created_at']
     list_filter = (StatusListFilter, TermsTreeFilter, 'active', ('forward_relations__to_entity', EntityRelationFilter))
     fsm_field = ['status']
     #date_hierarchy = 'created_at'
@@ -115,12 +115,12 @@ class BaseOrderAdmin(FSMTransitionMixin, EntityChildModelAdmin):
                        'get_customer_link', 'get_outstanding_amount', 'created_at', 'updated_at',
                        'render_as_html_extra', 'stored_request']
 
-    fields = ['get_number', 'status_name',
+    fields = ['get_number', 'uuid', 'status_name',
               ('created_at', 'updated_at'),
               'get_customer_link',
               ('get_subtotal', 'get_total', 'get_outstanding_amount'),
               'render_as_html_extra', 'stored_request']
-    actions = None
+    #actions = None
     change_form_template = 'edw_shop/admin/change_form.html'
 
     def __init__(self, *args, **kwargs):

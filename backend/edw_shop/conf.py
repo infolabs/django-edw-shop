@@ -120,7 +120,7 @@ class DefaultSettings(object):
                 Fallback serializer for the summary of our Product model.
                 """
                 class Meta(ProductSerializer.Meta):
-                    fields = ['id', 'product_name', 'slug', 'product_url', 'detail_url', 'product_model', 'price',
+                    fields = ['id', 'sid', 'product_name', 'slug', 'product_url', 'detail_url', 'product_model', 'price',
                               'sku', 'unit', 'step', 'is_display_price_per_step', 'in_stock',
                               'estimated_delivery', 'units', 'media']
         return ProductSummarySerializer

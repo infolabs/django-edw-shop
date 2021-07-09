@@ -119,6 +119,10 @@ class Product(BaseProduct):
         verbose_name = _("Product")
         verbose_name_plural = _("Products")
 
+    def has_additional_units(self):
+        return True if self.units.all().count() > 0 else False
+    has_additional_units.short_description = _('has units')
+
     class RESTMeta:
         lookup_fields = ('id', 'slug',)
 

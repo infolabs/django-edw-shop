@@ -40,6 +40,8 @@ from edw_shop.models.fields import JSONField
 from edw_shop.money.fields import MoneyField, MoneyMaker
 from .product import BaseProduct, ProductModel
 
+from sid.rest.serializers.relation import ObjRelationSerializer
+
 _shared_system_flags_term_restriction = (
     TermModel.system_flags.delete_restriction
     | TermModel.system_flags.change_parent_restriction
@@ -108,6 +110,7 @@ class OrderManager(BaseEntityManager):
 
     #todo: delete
     def filter_from_request(self, request):
+        print("filter_from_request")
         """
         Return a queryset containing the orders for the customer associated with the given
         request object.
@@ -158,7 +161,8 @@ class BaseOrder(FSMMixin, EntityModel.materialized):
     TRANSITION_TARGETS = {
         'new': _("New order"),
         'processed': _("Processed by manager"),
-        'in_work': _("In work"),
+        'in_work': _("In work"), # Проведен
+        'shipped': _("Shipped"), # Отгружен
         'completed': _("Completed"),
         'canceled': _("Canceled"),
     }
@@ -201,6 +205,8 @@ class BaseOrder(FSMMixin, EntityModel.materialized):
     extra = JSONField(
         verbose_name=_("Extra fields"),
         help_text=_("Arbitrary information for this order object on the moment of purchase."),
+        blank=True,
+        null=True
     )
 
     stored_request = JSONField(
@@ -224,18 +230,28 @@ class BaseOrder(FSMMixin, EntityModel.materialized):
 
         #validators = []
 
-        exclude = ['_subtotal', '_total', 'stored_request', 'images', 'files']
+        exclude = ['_subtotal', '_total', 'stored_request', 'images', 'files', 'status'] # todo: 'status readonly
 
         include = {
+            'transition': ('rest_framework.serializers.CharField', {
+                'write_only': True,
+                'required': False
+            }),
+            'state': ('rest_framework.serializers.CharField', {
+                'source': 'get_state',
+                'read_only': True
+            }),
             'subtotal': ('rest_framework.serializers.DecimalField', {
                     'max_digits': 10,
                     'decimal_places': 2,
-                    'read_only': True
+                    'required': False
+                    #'read_only': True
                 }),
             'total': ('rest_framework.serializers.DecimalField', {
                 'max_digits': 10,
                 'decimal_places': 2,
-                'read_only': True
+                'required': False
+                # 'read_only': True
             }),
             'amount_paid': ('rest_framework.serializers.DecimalField', {
                 'max_digits': 10,
@@ -251,17 +267,79 @@ class BaseOrder(FSMMixin, EntityModel.materialized):
                 'read_only': True,
                 'many': True
             }),
-
             'cancelable': ('rest_framework.serializers.BooleanField', {
                 'read_only': True,
             }),
-            'cancel': ('rest_framework.serializers.BooleanField', {
-                'write_only': True,
-                'default':False,
-            })
-
+            'rels': ('rest_framework.serializers.ListField', {
+                'child': ObjRelationSerializer(),
+                'required': False,
+                'write_only': True
+            }),
+            #todo: delete
+            #'cancel': ('rest_framework.serializers.BooleanField', {
+            #    'write_only': True,
+            #    'default':False,
+            #})
         }
 
+    """
+    'shipped': _("Shipped"), # Отгружен
+            'completed': _("Completed"),
+            'canceled': _("Canceled"),
+    """
+
+    def do_transition(self, transition_name):
+        trans_func = getattr(self, transition_name)
+        return trans_func()
+
+    @transition(
+        field=status, source='new', target='processed',
+        custom=dict(admin=True, button_name=_("New to processed"))
+    )
+    def new_to_processed(self):
+        pass
+
+    @transition(
+        field=status, source='new', target='in_work',
+        custom=dict(admin=True, button_name=_("New to in work"))
+    )
+    def new_to_in_work(self):
+        pass
+
+    @transition(
+        field=status, source='new', target='shipped',
+        custom=dict(admin=True, button_name=_("New to shipped"))
+    )
+    def new_to_shipped(self):
+        pass
+
+    @transition(
+        field=status, source='new', target='canceled',
+        custom=dict(admin=True, button_name=_("New to canceled"))
+    )
+    def new_to_canceled(self):
+        pass
+
+    @transition(
+        field=status, source='in_work', target='shipped',
+        custom=dict(admin=True, button_name=_("In work to shipped"))
+    )
+    def in_work_to_shipped(self):
+        pass
+
+    @transition(
+        field=status, source='in_work', target='canceled',
+        custom=dict(admin=True, button_name=_("In work to canceled"))
+    )
+    def in_work_to_canceled(self):
+        pass
+
+    @transition(
+        field=status, source='canceled', target='new',
+        custom=dict(admin=True, button_name=_("Canceled to new"))
+    )
+    def canceled_to_new(self):
+        pass
 
     def get_summary_extra(self, context):
 
@@ -278,6 +356,10 @@ class BaseOrder(FSMMixin, EntityModel.materialized):
 
         return extra
 
+
+    def get_state(self):
+
+        return self.status
 
     @classmethod
     def validate_data_mart_model(cls):
@@ -348,8 +430,9 @@ class BaseOrder(FSMMixin, EntityModel.materialized):
 
     @classmethod
     def round_amount(cls, amount):
-        if amount.is_finite():
+        if amount and amount.is_finite():
             return Decimal(amount).quantize(cls.decimal_exp)
+        return Decimal('0').quantize(cls.decimal_exp)
 
     def get_detail_url(self, data_mart=None):
 
@@ -517,7 +600,7 @@ class OrderPayment(with_metaclass(deferred.ForeignKeyBuilder, models.Model)):
         help_text=_("The payment backend used to process the purchase"),
     )
 
-    class Meta:
+    class Meta(EntityModel.RESTMeta):
         verbose_name = pgettext_lazy('order_models', "Order payment")
         verbose_name_plural = pgettext_lazy('order_models', "Order payments")
 
@@ -610,6 +693,12 @@ class BaseOrderItem(with_metaclass(deferred.ForeignKeyBuilder, models.Model)):
     def line_total(self):
         # MoneyMaker(self.order.currency)(self._line_total)
         return self._line_total
+
+    @property
+    def absolute_quantity(self):
+        if self.step:
+            return self.quantity * self.step
+        return self.quantity
 
     def populate_from_cart_item(self, cart_item, request):
         """
