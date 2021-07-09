@@ -18,6 +18,7 @@ class ForwardFundPayment(PaymentProvider):
     Provides a simple prepayment payment provider.
     """
     namespace = 'forward-fund-payment'
+    REDIRECT_URL = "/cabinet/orders/"
 
     def get_payment_request(self, cart, request):
         order = OrderModel.objects.create_from_cart(cart, request)
@@ -27,8 +28,7 @@ class ForwardFundPayment(PaymentProvider):
         #else:
         #    order.awaiting_payment()
         order.save()
-        thank_you_url = OrderModel.objects.get_latest_url()
-        return 'window.location.href="{}";'.format(thank_you_url)
+        return 'window.location.href="{}";'.format(self.REDIRECT_URL)
 
 
 class ManualPaymentWorkflowMixin(object):

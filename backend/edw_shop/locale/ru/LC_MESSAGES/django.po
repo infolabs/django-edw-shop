@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: django-shop\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-04-27 15:28+0000\n"
-"PO-Revision-Date: 2021-04-27 18:30+0300\n"
+"POT-Creation-Date: 2021-06-30 12:16+0000\n"
+"PO-Revision-Date: 2021-06-30 15:27+0300\n"
 "Last-Translator: chrisglass <tribaal@gmail.com>\n"
 "Language-Team: \n"
 "Language: ru\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Poedit 2.4.1\n"
+"X-Generator: Poedit 2.4.3\n"
 
 #: __init__.py:7
 msgid "edw_shop"
@@ -77,10 +77,15 @@ msgstr "В ожидании"
 msgid "Fulfilled at"
 msgstr "Выполненные в"
 
-#: admin/order.py:82 admin/order.py:157
+#: admin/order.py:83 admin/order.py:157
 msgctxt "admin"
 msgid "Extra data"
 msgstr "Дополнительные данные"
+
+#: admin/order.py:87
+msgctxt "admin"
+msgid "Status"
+msgstr "Статус"
 
 #: admin/order.py:135
 msgctxt "admin"
@@ -125,6 +130,10 @@ msgstr "Вывод на печать"
 #: apps.py:13
 msgid "Shop"
 msgstr "Магазин"
+
+#: forms/checkout.py:9
+msgid "Dialog Form Base"
+msgstr ""
 
 #: models/address.py:36
 msgid "Priority for using this address"
@@ -1126,47 +1135,47 @@ msgstr "Замбия"
 msgid "Zimbabwe"
 msgstr "Зимбабве"
 
-#: models/cart.py:86 models/defaults/product.py:89 models/order.py:472
+#: models/cart.py:89 models/defaults/product.py:89 models/order.py:556
 msgid "Product code"
 msgstr "Код товара"
 
-#: models/cart.py:90
+#: models/cart.py:93
 msgid "Product code of added item."
 msgstr "Код товара на момент добавления"
 
-#: models/cart.py:93
+#: models/cart.py:96
 msgid "Arbitrary information for this cart item"
 msgstr "Дополнительная информация об элементе корзины"
 
-#: models/cart.py:99
+#: models/cart.py:102
 msgid "Cart item"
 msgstr "Элемент заказа"
 
-#: models/cart.py:100
+#: models/cart.py:103
 msgid "Cart items"
 msgstr "Элементы заказа"
 
-#: models/cart.py:174 models/order.py:189
+#: models/cart.py:177 models/order.py:181
 msgid "Customer"
 msgstr "Покупатель"
 
-#: models/cart.py:179
+#: models/cart.py:182
 msgid "Created at"
 msgstr "Дата создания"
 
-#: models/cart.py:184
+#: models/cart.py:187
 msgid "Updated at"
 msgstr "Обновлено"
 
-#: models/cart.py:188
+#: models/cart.py:191
 msgid "Arbitrary information for this cart"
 msgstr "Дополнительная информация к этой корзине"
 
-#: models/cart.py:195
+#: models/cart.py:198
 msgid "Shopping Cart"
 msgstr "Корзина"
 
-#: models/cart.py:196
+#: models/cart.py:199
 msgid "Shopping Carts"
 msgstr "Корзины"
 
@@ -1210,6 +1219,18 @@ msgstr "Адрес плательщика"
 msgid "Billing Addresses"
 msgstr "Адреса плательщиков"
 
+#: models/defaults/cart_item.py:17
+msgid "Active"
+msgstr "Активен"
+
+#: models/defaults/cart_item.py:19
+msgid "Is this product publicly visible."
+msgstr "Определяет будет ли показан товар на сайте"
+
+#: models/defaults/cart_item.py:21 templates/edw_shop/print/order.html:13
+msgid "Quantity"
+msgstr "Количество"
+
 #: models/defaults/order.py:19
 msgid "Order Number"
 msgstr "Номер заказа"
@@ -1240,7 +1261,7 @@ msgstr "Заказанное количество"
 msgid "Tile"
 msgstr "Плитка"
 
-#: models/defaults/product.py:56
+#: models/defaults/product.py:56 models/order.py:169
 msgid "List"
 msgstr "Список"
 
@@ -1257,10 +1278,8 @@ msgid "By name: Alphabetical desc"
 msgstr "По наименованию: Я↑"
 
 #: models/defaults/product.py:67
-#, fuzzy
-#| msgid "Created at"
 msgid "Created at: new first"
-msgstr "Дата создания"
+msgstr "По дате добавления: ↓"
 
 #: models/defaults/product.py:72
 msgid "stock"
@@ -1274,7 +1293,7 @@ msgstr "В наличии"
 msgid "out of stock"
 msgstr "Под заказ"
 
-#: models/defaults/product.py:80 models/order.py:464
+#: models/defaults/product.py:80 models/order.py:548
 msgid "Product name"
 msgstr "Название товара"
 
@@ -1292,7 +1311,7 @@ msgstr "Вторичный ключ"
 
 #: models/defaults/product.py:84
 msgid "Secondary ID needed for purposes of external exchange system."
-msgstr ""
+msgstr "Вторичный ключ для внешней системы обмена"
 
 #: models/defaults/product.py:86
 msgid "SKU"
@@ -1310,7 +1329,7 @@ msgstr "единица измерения"
 msgid "Basic measurement unit of product"
 msgstr "Базовая единица измерения"
 
-#: models/defaults/product.py:96 models/order.py:488
+#: models/defaults/product.py:96 models/order.py:574
 msgid "Unit price"
 msgstr "Стоимость единицы"
 
@@ -1319,8 +1338,9 @@ msgid "Net price for this product"
 msgstr "Стоимость товара в этом магазине"
 
 #: models/defaults/product.py:99 models/defaults/product.py:466
+#: models/order.py:571
 msgid "addition step"
-msgstr ""
+msgstr "Шаг изменения"
 
 #: models/defaults/product.py:101
 msgid ""
@@ -1328,10 +1348,12 @@ msgid ""
 "the product is only sold by the piece, the length of one piece 1.49 meters. "
 "Set step as 1.49"
 msgstr ""
+"Шаг для продажи товара. Например, Вы установили стоимость за линейный метр, "
+"однако товар продаётся длиной 1.49 метра. В таком случае, шаг составит 1.49"
 
 #: models/defaults/product.py:104
 msgid "Display price per step instead one unit price"
-msgstr ""
+msgstr "Отображать цену пошагово вместо цены за единицу товара"
 
 #: models/defaults/product.py:106
 msgid "quantity in stock"
@@ -1339,20 +1361,20 @@ msgstr "количество в наличии"
 
 #: models/defaults/product.py:107
 msgid "\"\" - out of stock; \"0\" - sold out; \"N\" - N quantity in stock"
-msgstr ""
+msgstr "«» - нет в наличии; «0» - распродано; «N» - N количество на складе"
 
 #: models/defaults/product.py:109
-#, fuzzy
-#| msgid "Ready for delivery"
 msgid "estimated delivery"
 msgstr "Готово к доставке"
 
 #: models/defaults/product.py:110
 msgid "If not empty then show this instead \"in stock\" or \"out of stock\" "
 msgstr ""
+"Если заполнено, будет отображаться количество вместо «в наличии» или «нет в "
+"наличии»"
 
 #: models/defaults/product.py:119 models/defaults/product.py:397
-#: models/defaults/product.py:460 models/order.py:484 models/product.py:110
+#: models/defaults/product.py:460 models/order.py:568 models/product.py:110
 #: templates/edw_shop/print/order.html:12
 msgid "Product"
 msgstr "Товар"
@@ -1389,7 +1411,7 @@ msgstr "Единицы измерения"
 msgid "Shipping ID"
 msgstr "ID доставки"
 
-#: models/delivery.py:30 models/order.py:430
+#: models/delivery.py:30 models/order.py:514
 msgid "The transaction processor's reference"
 msgstr "Описание платежной системы, осуществляющей транзакции"
 
@@ -1442,127 +1464,143 @@ msgstr "."
 msgid "Customer recognition state"
 msgstr "Статус распознавания покупателя"
 
-#: models/order.py:97
+#: models/order.py:116
 msgid "Only signed in customers can view their orders"
 msgstr "Только авторизованные покупатели могут просматривать свои заказы"
 
-#: models/order.py:176
-msgid "New order without content"
-msgstr "Новый заказ без содержания"
+#: models/order.py:159
+msgid "New order"
+msgstr "Новый заказ"
 
-#: models/order.py:177
-msgid "Order freshly created"
-msgstr "Заказ только что создан"
+#: models/order.py:160
+msgid "Processed by manager"
+msgstr "Обрабатывается менеджером"
 
-#: models/order.py:178
-msgid "Payment confirmed"
-msgstr "Оплата подтверждена"
+#: models/order.py:161
+msgid "In work"
+msgstr "В работе"
 
-#: models/order.py:179
-msgid "Payment declined"
-msgstr "Оплата отклонена"
+#: models/order.py:162
+msgid "Completed"
+msgstr "Выполнено"
 
-#: models/order.py:196
+#: models/order.py:163
+msgid "Canceled"
+msgstr "Отменён"
+
+#: models/order.py:188
 msgid "Status"
 msgstr "Статус"
 
-#: models/order.py:202
+#: models/order.py:194
 msgid "Currency in which this order was concluded"
 msgstr "Валюта, в которой этот заказ был оформлен"
 
-#: models/order.py:206 templates/edw_shop/print/order.html:47
+#: models/order.py:198 templates/edw_shop/print/order.html:47
 msgid "Subtotal"
 msgstr "Стоимость корзины"
 
-#: models/order.py:211 templates/edw_shop/print/order.html:15
+#: models/order.py:203 templates/edw_shop/print/order.html:15
 #: templates/edw_shop/print/order.html:61
 msgid "Total"
 msgstr "Всего к оплате за товары"
 
-#: models/order.py:226 models/order.py:502
+#: models/order.py:208 models/order.py:588
 msgid "Extra fields"
 msgstr "Дополнительные поля цены заказа"
 
-#: models/order.py:227
+#: models/order.py:209
 msgid "Arbitrary information for this order object on the moment of purchase."
 msgstr "Дополнительная информация о заказе на момент покупки."
 
-#: models/order.py:407
+#: models/order.py:213
+msgid "Stored request"
+msgstr "Сохранённый запрос"
+
+#: models/order.py:214
+msgid "Parts of the Request objects on the moment of purchase."
+msgstr "Данные запроса на момент покупки."
+
+#: models/order.py:221 models/order.py:503 models/order.py:544
+msgid "Order"
+msgstr "Заказ"
+
+#: models/order.py:222
+msgid "Orders"
+msgstr "Заказы"
+
+#: models/order.py:491
 msgctxt "order_models"
 msgid "State"
 msgstr "Статус"
 
-#: models/order.py:419 models/order.py:460
-msgid "Order"
-msgstr "Заказ"
-
-#: models/order.py:423
+#: models/order.py:507
 msgid "Amount paid"
 msgstr "Сумма"
 
-#: models/order.py:424
+#: models/order.py:508
 msgid "How much was paid with this particular transfer."
 msgstr "Сумма транзакции"
 
-#: models/order.py:428
+#: models/order.py:512
 msgid "Transaction ID"
 msgstr "ID транзакции"
 
-#: models/order.py:434
+#: models/order.py:518
 msgid "Received at"
 msgstr "Получено в"
 
-#: models/order.py:439
+#: models/order.py:523
 msgid "Payment method"
 msgstr "Метод оплаты"
 
-#: models/order.py:441
+#: models/order.py:525
 msgid "The payment backend used to process the purchase"
 msgstr "Модуль оплаты, через который проведена оплата"
 
-#: models/order.py:445
+#: models/order.py:529
 msgctxt "order_models"
 msgid "Order payment"
 msgstr "Оплата заказа"
 
-#: models/order.py:446
+#: models/order.py:530
 msgctxt "order_models"
 msgid "Order payments"
 msgstr "Оплаты заказов"
 
-#: models/order.py:449
+#: models/order.py:533
 msgid "Payment ID: {}"
 msgstr "Код оплаты: {}"
 
-#: models/order.py:468
+#: models/order.py:552
 msgid "Product name at the moment of purchase."
 msgstr "Название товара на момент покупки"
 
-#: models/order.py:476
+#: models/order.py:560
 msgid "Product code at the moment of purchase."
 msgstr "Код товара на момент покупки"
 
-#: models/order.py:490
+#: models/order.py:576
 msgid "Products unit price at the moment of purchase."
 msgstr "Стоимость товара на момент покупки"
 
-#: models/order.py:495
+#: models/order.py:581
 msgid "Line Total"
 msgstr "Всего к оплате за товары"
 
-#: models/order.py:497
+#: models/order.py:583
 msgid "Line total on the invoice at the moment of purchase."
 msgstr "Всего к оплате за товары на счёте на момент покупки"
 
-#: models/order.py:503
+#: models/order.py:589
 msgid "Arbitrary information for this order item"
 msgstr "Дополнительная информация об элементе заказа"
 
-#: models/order.py:508
+#: models/order.py:594
 msgid "Order item"
 msgstr "Элемент заказа"
 
-#: models/order.py:509
+#: models/order.py:595
 msgid "Order items"
 msgstr "Элементы заказа"
 
@@ -1681,7 +1719,7 @@ msgstr "Доллар США"
 
 #: money/iso4217.py:38
 msgid "Swedish Kronor"
-msgstr ""
+msgstr "Шведская крона"
 
 #: payment/defaults.py:41
 msgid "Awaiting a forward fund payment"
@@ -1722,27 +1760,27 @@ msgstr "Отменить заказ"
 #: rest/validators/product.py:51 rest/validators/product.py:83
 #: rest/validators/product.py:105
 msgid "{} `{}`='{}'"
-msgstr ""
+msgstr "{} `{}`=‘{}’"
 
 #: rest/validators/product.py:114 rest/validators/product.py:129
 msgid "Terms with id`s [{}] not found."
-msgstr ""
+msgstr "Не найдены термины со следующими id: [{}]."
 
 #: rest/validators/product.py:138
 msgid "Entities with id`s [{}] not found."
-msgstr ""
+msgstr "Не найдены сущности со следующими id: [{}]."
 
 #: rest/validators/product.py:146
 msgid "The relations [{}] are forbidden."
-msgstr ""
+msgstr "Нельзя внести отношения [{}]."
 
 #: rest/validators/product.py:154
 msgid "The subjects with id`s [{}] are forbidden."
-msgstr ""
+msgstr "Нельзя внести субъекты со следующими id: [{}]."
 
 #: rest/validators/product.py:157
 msgid "The subjects cannot be the empty."
-msgstr ""
+msgstr "Субъекты не могут быть пустыми."
 
 #: rest/validators/product.py:163
 msgid "This field is required."
@@ -1811,13 +1849,21 @@ msgstr "Подтверждение заказа"
 msgid "Invoice"
 msgstr "Счёт"
 
-#: templates/edw_shop/print/order.html:13
-msgid "Quantity"
-msgstr "Количество"
-
 #: templates/edw_shop/print/order.html:14
 msgid "Unit Price"
 msgstr "Стоимость единицы"
+
+#~ msgid "New order without content"
+#~ msgstr "Новый заказ без содержания"
+
+#~ msgid "Order freshly created"
+#~ msgstr "Заказ только что создан"
+
+#~ msgid "Payment confirmed"
+#~ msgstr "Оплата подтверждена"
+
+#~ msgid "Payment declined"
+#~ msgstr "Оплата отклонена"
 
 #~ msgctxt "customer"
 #~ msgid "Number"
@@ -1864,10 +1910,6 @@ msgstr "Стоимость единицы"
 
 #~ msgid "Attachments"
 #~ msgstr "Вложения"
-
-#~ msgctxt "admin"
-#~ msgid "Status"
-#~ msgstr "Статус"
 
 #~ msgid "Categories"
 #~ msgstr "Категории"
@@ -2077,9 +2119,6 @@ msgstr "Стоимость единицы"
 #~ msgid "Number of steps for this proceed bar."
 #~ msgstr "Количество шагов для этого индикатора выполнения"
 
-#~ msgid "Process Bar"
-#~ msgstr "Индикатор выполнения"
-
 #~ msgid "with {} page"
 #~ msgid_plural "with {} pages"
 #~ msgstr[0] "с {} страницей"
@@ -2260,15 +2299,6 @@ msgstr "Стоимость единицы"
 #~ msgid "Notifications"
 #~ msgstr "Оповещения"
 
-#~ msgid "Parts of the Request objects on the moment of purchase."
-#~ msgstr "Данные запроса на момент покупки."
-
-#~ msgid "Active"
-#~ msgstr "Активен"
-
-#~ msgid "Is this product publicly visible."
-#~ msgstr "Определяет будет ли показан товар на сайте"
-
 #~ msgid "Product Image"
 #~ msgstr "Изображение товара"
 
@@ -2283,9 +2313,6 @@ msgstr "Стоимость единицы"
 
 #~ msgid "Change Password"
 #~ msgstr "Изменить пароль"
-
-#~ msgid "New Password"
-#~ msgstr "Новый пароль"
 
 #~ msgid "Confirm Password"
 #~ msgstr "Подтвердите пароль"
@@ -2410,9 +2437,6 @@ msgstr "Стоимость единицы"
 
 #~ msgid "Continue Shopping"
 #~ msgstr "Продолжить покупки"
-
-#~ msgid "Cancel"
-#~ msgstr "Отменить"
 
 #~ msgid "Price"
 #~ msgstr "Цена"

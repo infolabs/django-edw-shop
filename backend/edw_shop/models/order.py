@@ -167,6 +167,12 @@ class BaseOrder(FSMMixin, EntityModel.materialized):
         'canceled': _("Canceled"),
     }
 
+    VIEW_COMPONENT_LIST = 'order_list'
+
+    VIEW_COMPONENTS = (
+        (VIEW_COMPONENT_LIST, _('List')),
+    )
+
     decimalfield_kwargs = {
         'max_digits': 30,
         'decimal_places': 2,
@@ -218,6 +224,8 @@ class BaseOrder(FSMMixin, EntityModel.materialized):
 
     class Meta:
         abstract = True
+        verbose_name = pgettext_lazy('order_models', "Order")
+        verbose_name_plural = pgettext_lazy('order_models', "Orders")
 
     def __str__(self):
         return self.get_number()
