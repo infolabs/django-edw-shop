@@ -290,6 +290,12 @@ class BaseOrder(FSMMixin, EntityModel.materialized):
             #})
         }
 
+        filters = {
+            'order_status': ("edw_shop.rest.filters.order.stateFilter", {
+                'name': 'status'
+            }),
+        }
+
     """
     'shipped': _("Shipped"), # Отгружен
             'completed': _("Completed"),
