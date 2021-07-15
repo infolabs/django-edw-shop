@@ -283,6 +283,7 @@ class BaseOrder(FSMMixin, EntityModel.materialized):
                 'required': False,
                 'write_only': True
             }),
+
             #todo: delete
             #'cancel': ('rest_framework.serializers.BooleanField', {
             #    'write_only': True,

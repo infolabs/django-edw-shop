@@ -100,8 +100,8 @@ class StatusListFilter(admin.SimpleListFilter):
 
 
 class BaseOrderAdmin(FSMTransitionMixin, EntityChildModelAdmin):
-    list_display = ['get_number', 'uuid', 'customer', 'status_name', 'get_total', 'created_at']
-    list_filter = (StatusListFilter, TermsTreeFilter, 'active', ('forward_relations__to_entity', EntityRelationFilter))
+    list_display = ['get_number', 'uuid', 'customer', 'status_name', 'changed_by_manager', 'get_total', 'created_at']
+    list_filter = (StatusListFilter, TermsTreeFilter, 'active', 'changed_by_manager', ('forward_relations__to_entity', EntityRelationFilter))
     fsm_field = ['status']
     #date_hierarchy = 'created_at'
     inlines = [
