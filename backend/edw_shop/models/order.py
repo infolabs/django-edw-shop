@@ -329,11 +329,47 @@ class BaseOrder(FSMMixin, EntityModel.materialized):
         pass
 
     @transition(
+        field=status, source='new', target='completed',
+        custom=dict(admin=True, button_name=_("New to completed"))
+    )
+    def new_to_completed(self):
+        pass
+
+    @transition(
         field=status, source='new', target='canceled',
         custom=dict(admin=True, button_name=_("New to canceled"))
     )
     def new_to_canceled(self):
         pass
+
+    @transition(
+        field=status, source='processed', target='canceled',
+        custom=dict(admin=True, button_name=_("Processed to canceled"))
+    )
+    def processed_to_canceled(self):
+        pass
+
+    @transition(
+        field=status, source='processed', target='in_work',
+        custom=dict(admin=True, button_name=_("Processed to in_work"))
+    )
+    def processed_to_in_work(self):
+        pass
+
+    @transition(
+        field=status, source='processed', target='shipped',
+        custom=dict(admin=True, button_name=_("Processed to in_work"))
+    )
+    def processed_to_shipped(self):
+        pass
+
+    @transition(
+        field=status, source='processed', target='completed',
+        custom=dict(admin=True, button_name=_("Processed to completed"))
+    )
+    def processed_to_completed(self):
+        pass
+
 
     @transition(
         field=status, source='in_work', target='shipped',
@@ -343,10 +379,31 @@ class BaseOrder(FSMMixin, EntityModel.materialized):
         pass
 
     @transition(
+        field=status, source='in_work', target='completed',
+        custom=dict(admin=True, button_name=_("In work to completed"))
+    )
+    def in_work_to_completed(self):
+        pass
+
+    @transition(
         field=status, source='in_work', target='canceled',
         custom=dict(admin=True, button_name=_("In work to canceled"))
     )
     def in_work_to_canceled(self):
+        pass
+
+    @transition(
+        field=status, source='shipped', target='completed',
+        custom=dict(admin=True, button_name=_("Shipped to completed"))
+    )
+    def shipped_to_completed(self):
+        pass
+
+    @transition(
+        field=status, source='shipped', target='canceled',
+        custom=dict(admin=True, button_name=_("Shipped to canceled"))
+    )
+    def shipped_to_canceled(self):
         pass
 
     @transition(
