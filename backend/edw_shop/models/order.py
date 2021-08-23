@@ -110,7 +110,7 @@ class OrderManager(BaseEntityManager):
 
     #todo: delete
     def filter_from_request(self, request):
-        print("filter_from_request")
+
         """
         Return a queryset containing the orders for the customer associated with the given
         request object.

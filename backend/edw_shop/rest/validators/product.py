@@ -24,6 +24,15 @@ from edw.rest.serializers.entity import EntityValidator
 # Publication validator
 # =========================================================================================================
 class ProductValidator(EntityValidator):
+    def set_context(self, serializer):
+
+        """
+        This hook is called by the serializer instance,
+        prior to the validation call being made.
+        """
+        serializer.Meta.lookup_fields = ('id', 'uuid', 'slug')
+        self.serializer = serializer
+
 
     def __call__(self, attrs):
 
@@ -41,8 +50,8 @@ class ProductValidator(EntityValidator):
         if request_method == 'POST':
             for id_attr in self.serializer.get_id_attrs():
                 id_value = validated_data.get(id_attr, empty)
-                if id_value != empty:
 
+                if id_value != empty:
                     try:
                         instance = model.objects.get(**{id_attr: id_value})
                     except ObjectDoesNotExist:

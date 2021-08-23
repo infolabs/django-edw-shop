@@ -151,7 +151,10 @@ class Product(BaseProduct):
                 'many': True
             }),
             'product_code': ('rest_framework.serializers.CharField', {'required': False}),
-            'sid': ('rest_framework.serializers.CharField', {'required': False}),
+
+            'uuid': ('rest_framework.serializers.CharField', {
+                'required': False,
+            }),
             'slug': ('rest_framework.serializers.CharField', {'required': False}), # 'write_only': True})
             'extra_units': ('rest_framework.serializers.ListField', {
                 'child': ProductUnitSerializer(),
@@ -180,7 +183,7 @@ class Product(BaseProduct):
 
         @staticmethod
         def _update_entity(self, instance, is_created, validated_data):
-            print("UPDATE", instance, is_created, validated_data)
+
             # если есть текстовый контент заменяем все содержание публикации
             html_content = validated_data.pop('html_content', None)
             # экстра единицы измерения
@@ -210,7 +213,7 @@ class Product(BaseProduct):
                                 slug=instance.PRODUCER_TERM_SLUG,
                                 defaults={
                                     "parent_id": root_category.id,
-                                    "name": _("Producer"),
+                                    "name": u'Производитель',#_("Producer"),
                                     "semantic_rule": TermModel.OR_RULE,
                                     "attributes": TermModel.attributes.is_characteristic,
                                     "specification_mode": TermModel.SPECIFICATION_MODES[1][0],
@@ -266,7 +269,7 @@ class Product(BaseProduct):
 
 
         def create(self, validated_data):
-            print("CREATE", validated_data)
+
             origin_validated_data = validated_data.copy()
 
             for key in ('transition', 'html_content', 'extra_units', 'producer'):
@@ -280,7 +283,7 @@ class Product(BaseProduct):
             return instance
 
         def update(self, instance, validated_data):
-            print("update1", instance, validated_data)
+
             self.Meta.model.RESTMeta._update_entity(self, instance, False, validated_data)
 
             return super(self.__class__, self).update(instance, validated_data)
@@ -292,11 +295,6 @@ class Product(BaseProduct):
 
     def __str__(self):
         return self.product_name
-
-    #product properties
-    @property
-    def get_sid(self):
-        return self.sid if self.sid else ""
 
 
     @property
@@ -391,7 +389,6 @@ class Product(BaseProduct):
         extra = {
             'url': self.get_detail_url(data_mart),
             'slug': self.slug,
-            'sid':  self.get_sid,
             'uuid': self.uuid,
             'sku': self.get_sku,
             'product_code': self.get_product_code,

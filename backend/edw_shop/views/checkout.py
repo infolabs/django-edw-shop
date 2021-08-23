@@ -25,7 +25,7 @@ class CheckoutViewSet(GenericViewSet):
     View for our REST endpoint to communicate with the various forms used during the checkout.
     """
     serializer_label = 'checkout'
-    serializer_class = CartSummarySerializer #TODO:
+    serializer_class = CartSummarySerializer
     cart_serializer_class = CartSummarySerializer
 
     def __init__(self, **kwargs):
@@ -41,16 +41,12 @@ class CheckoutViewSet(GenericViewSet):
         form.
         """
         # sort posted form data by plugin order
-        print("upload", request.data)
-        print(request.data.keys())
-        #print(json.loads(request.data))
         cart = CartModel.objects.get_from_request(request)
-        print("---init cart.extra", cart.extra)
+
         dialog_data = []
         for form_class in self.dialog_forms:
-            print("form_class.scope_prefix", form_class.scope_prefix)
+
             if form_class.scope_prefix in request.data.keys():
-                print("has", form_class.scope_prefix, request.data[form_class.scope_prefix])
                 dialog_data.append((form_class, request.data[form_class.scope_prefix]))
                 #for data in request.data[form_class.scope_prefix].values():
                 #   dialog_data.append((form_class, data))
@@ -58,16 +54,14 @@ class CheckoutViewSet(GenericViewSet):
 
         # save data, get text representation and collect potential errors
         errors, response_data, set_is_valid = {}, {}, True
-        print("dialog_data", dialog_data)
+
         with transaction.atomic():
             for form_class, data in dialog_data:
                 form = form_class.form_factory(request, data, cart)
                 if form.is_valid():
-                    print("valid", form.cleaned_data)
                     # empty error dict forces revalidation by the client side validation
                     errors[form_class.form_name] = {}
                 else:
-                    print("not valid", form.errors)
                     errors[form_class.form_name] = form.errors
                     set_is_valid = False
 
@@ -79,10 +73,7 @@ class CheckoutViewSet(GenericViewSet):
             # persist changes in cart
             if set_is_valid:
                 cart.save()
-                print("CART SAVED")
 
-        print("response_data", response_data)
-        print("===end cart.extra", cart.extra)
         # add possible form errors for giving feedback to the customer
         if set_is_valid:
             return Response(response_data)
@@ -109,7 +100,7 @@ class CheckoutViewSet(GenericViewSet):
 
     @action(detail=False, methods=['post'], url_path='purchase')
     def purchase(self, request):
-        print("purchase")
+
         # TODO:
         """
         This is the final step on converting a cart into an order object. It normally is used in

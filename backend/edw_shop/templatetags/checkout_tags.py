@@ -44,7 +44,7 @@ class RenderCheckoutForm(Tag):
         res = {'cart': cart}
         if cart and cart.extra and cart.extra.get(scope_prefix, None):
             res['initial'] = cart.extra.get(scope_prefix, None)
-        print("res", res)
+
         return res
 
     def get_form_class(self, scope_prefix):
@@ -64,7 +64,7 @@ class RenderCheckoutForm(Tag):
         raise Exception("Form class with scope_prefix {} not in app_settings.DIALOG_FORMS".format(scope_prefix))
 
     def render_tag(self, context, form_name, varname):
-        print("render_checkout_form", form_name, varname)
+
         request = getattr(context, 'request', context.get('request', None))
 
         form_cls = self.get_form_class(form_name)
