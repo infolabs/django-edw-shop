@@ -24,6 +24,15 @@ class ProductUnitSerializer(serializers.Serializer):
     uuid = serializers.CharField(required=True, max_length=50)
 
 
+class ProductProducerSerializer(serializers.Serializer):
+    root_producer = serializers.CharField(required=True, max_length=50)
+    guid = serializers.CharField(required=True, max_length=50)
+    name = serializers.CharField(required=True, max_length=255)
+    categories = serializers.ListField(
+        required=False,
+        child=serializers.CharField(required=True, max_length=50)
+    )
+
 
 class ProductSerializer(serializers.ModelSerializer):
     """

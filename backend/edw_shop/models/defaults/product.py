@@ -127,7 +127,7 @@ class Product(BaseProduct):
     has_additional_units.short_description = _('has units')
 
     class RESTMeta:
-        lookup_fields = ('id', 'slug',)
+        lookup_fields = ('id', 'uuid', 'slug',)
 
         validators = [ProductValidator()]
 
@@ -180,6 +180,7 @@ class Product(BaseProduct):
 
         @staticmethod
         def _update_entity(self, instance, is_created, validated_data):
+            print("UPDATE", instance, is_created, validated_data)
             # если есть текстовый контент заменяем все содержание публикации
             html_content = validated_data.pop('html_content', None)
             # экстра единицы измерения
@@ -197,20 +198,13 @@ class Product(BaseProduct):
                 producer_guid = producer['guid']
                 categories = producer['categories']
                 root_producer_term_slug = producer['root_producer']
-                print("producer", producer)
+
                 if categories:
                     for category in categories:
                         category_term = TermModel.objects.active().get(slug=category)
                         if category_term:
-                            print("category_term", category_term.name, category_term.is_leaf_node())
-                            if category_term.is_leaf_node() and category_term.parent:
-                                # создаем на уровне родителя
-                                root_category = get_or_create_term_wrapper(category_term.parent)
-                                print(root_category.id, root_category.name)
-                            else:
-                                print("else")
-                                root_category = get_or_create_term_wrapper(category_term)
-                                print(root_category.id, root_category.name)
+                            root_category = get_or_create_term_wrapper(category_term)
+
                             # Получаем термин папки производитель
                             producer_root_tag, created = root_category.get_children().get_or_create(
                                 slug=instance.PRODUCER_TERM_SLUG,
@@ -219,13 +213,12 @@ class Product(BaseProduct):
                                     "name": _("Producer"),
                                     "semantic_rule": TermModel.OR_RULE,
                                     "attributes": TermModel.attributes.is_characteristic,
+                                    "specification_mode": TermModel.SPECIFICATION_MODES[1][0],
                                     "system_flags": _default_system_flags_restriction
 
                                 })
-                            print("producer_root_tag, created")
-                            print(producer_root_tag.id, producer_root_tag.name, created)
-                            # Получаем термин производителя
 
+                            # Получаем термин производителя
                             product_producer_term, created = producer_root_tag.get_children().get_or_create(
                                 slug=producer_guid,
                                 defaults={
@@ -234,8 +227,6 @@ class Product(BaseProduct):
                                     "semantic_rule": TermModel.OR_RULE,
                                     "system_flags": _default_system_flags_restriction
                                 })
-                            print("product_producer_term, created")
-                            print(product_producer_term.id, product_producer_term.name, created)
 
                             if not created and product_producer_term.name != producer_name:
                                 product_producer_term.name = producer_name
@@ -244,9 +235,9 @@ class Product(BaseProduct):
                             # устанавливаем в товар
                             instance.terms.add(product_producer_term)
                             # усли update добавляем в active_terms_ids
-                            if validated_data.get('active_terms_ids', None) is not None:
-                                print("validated_data", validated_data.get('active_terms_ids', None))
-                                validated_data.get['active_terms_ids'].append(product_producer_term.id)
+                            if validated_data.get('active_terms_ids', None) is not None and \
+                                product_producer_term.id not in validated_data['active_terms_ids']:
+                                validated_data['active_terms_ids'].append(product_producer_term.id)
 
                 else:
                     # Получаем термин корневой папки производитель
@@ -269,13 +260,13 @@ class Product(BaseProduct):
                     # устанавливаем в товар
                     instance.terms.add(product_producer_term)
                     # усли update добавляем в active_terms_ids
-                    if validated_data.get('active_terms_ids', None) is not None:
-                        print("validated_data", validated_data.get('active_terms_ids', None))
-                        validated_data.get['active_terms_ids'].append(product_producer_term.id)
+                    if validated_data.get('active_terms_ids', None) is not None and \
+                            product_producer_term.id not in validated_data['active_terms_ids']:
+                        validated_data['active_terms_ids'].append(product_producer_term.id)
 
 
         def create(self, validated_data):
-
+            print("CREATE", validated_data)
             origin_validated_data = validated_data.copy()
 
             for key in ('transition', 'html_content', 'extra_units', 'producer'):
@@ -289,7 +280,7 @@ class Product(BaseProduct):
             return instance
 
         def update(self, instance, validated_data):
-
+            print("update1", instance, validated_data)
             self.Meta.model.RESTMeta._update_entity(self, instance, False, validated_data)
 
             return super(self.__class__, self).update(instance, validated_data)
@@ -401,6 +392,7 @@ class Product(BaseProduct):
             'url': self.get_detail_url(data_mart),
             'slug': self.slug,
             'sid':  self.get_sid,
+            'uuid': self.uuid,
             'sku': self.get_sku,
             'product_code': self.get_product_code,
             'unit': self.get_unit,
