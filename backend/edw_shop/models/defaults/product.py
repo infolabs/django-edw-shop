@@ -14,6 +14,7 @@ from edw import deferred
 
 from edw_shop.conf import app_settings
 from edw_shop.models.product import BaseProduct
+from edw_shop.models.utils import get_or_create_term_wrapper, _default_system_flags_restriction
 from edw_shop.money.fields import MoneyField
 
 from edw_shop.rest.validators.product import ProductValidator
@@ -75,6 +76,8 @@ class Product(BaseProduct):
         ('out_of_stock', _('out of stock'))
     )
 
+    PRODUCER_TERM_SLUG = 'product_producer'
+    CATEGORY_TERM_PATTERN = 'commercml_category'
 
     # common product fields
     product_name = models.CharField(_("Product name"), max_length=255, blank=False, null=False)
@@ -169,10 +172,14 @@ class Product(BaseProduct):
                 'source': 'data_mart',
                 'read_only': True
             }),
+            'producer' : ('edw_shop.rest.serializers.product.ProductProducerSerializer', {
+                'required': False,
+                'write_only': True
+            })
         }
 
         @staticmethod
-        def _update_entity(self, instance, validated_data):
+        def _update_entity(self, instance, is_created, validated_data):
             # если есть текстовый контент заменяем все содержание публикации
             html_content = validated_data.pop('html_content', None)
             # экстра единицы измерения
@@ -183,23 +190,107 @@ class Product(BaseProduct):
                                                     defaults={"value": unit.get("value", 1.0),
                                                               "name": unit.get("name"),
                                                               "discount": unit.get("discount", 1.0)})
+            # создаем копии производителя категориям
+            producer = validated_data.pop("producer", None)
+            if producer is not None:
+                producer_name = producer['name']
+                producer_guid = producer['guid']
+                categories = producer['categories']
+                root_producer_term_slug = producer['root_producer']
+                print("producer", producer)
+                if categories:
+                    for category in categories:
+                        category_term = TermModel.objects.active().get(slug=category)
+                        if category_term:
+                            print("category_term", category_term.name, category_term.is_leaf_node())
+                            if category_term.is_leaf_node() and category_term.parent:
+                                # создаем на уровне родителя
+                                root_category = get_or_create_term_wrapper(category_term.parent)
+                                print(root_category.id, root_category.name)
+                            else:
+                                print("else")
+                                root_category = get_or_create_term_wrapper(category_term)
+                                print(root_category.id, root_category.name)
+                            # Получаем термин папки производитель
+                            producer_root_tag, created = root_category.get_children().get_or_create(
+                                slug=instance.PRODUCER_TERM_SLUG,
+                                defaults={
+                                    "parent_id": root_category.id,
+                                    "name": _("Producer"),
+                                    "semantic_rule": TermModel.OR_RULE,
+                                    "attributes": TermModel.attributes.is_characteristic,
+                                    "system_flags": _default_system_flags_restriction
+
+                                })
+                            print("producer_root_tag, created")
+                            print(producer_root_tag.id, producer_root_tag.name, created)
+                            # Получаем термин производителя
+
+                            product_producer_term, created = producer_root_tag.get_children().get_or_create(
+                                slug=producer_guid,
+                                defaults={
+                                    "parent_id": producer_root_tag.id,
+                                    "name": producer_name,
+                                    "semantic_rule": TermModel.OR_RULE,
+                                    "system_flags": _default_system_flags_restriction
+                                })
+                            print("product_producer_term, created")
+                            print(product_producer_term.id, product_producer_term.name, created)
+
+                            if not created and product_producer_term.name != producer_name:
+                                product_producer_term.name = producer_name
+                                product_producer_term.save()
+
+                            # устанавливаем в товар
+                            instance.terms.add(product_producer_term)
+                            # усли update добавляем в active_terms_ids
+                            if validated_data.get('active_terms_ids', None) is not None:
+                                print("validated_data", validated_data.get('active_terms_ids', None))
+                                validated_data.get['active_terms_ids'].append(product_producer_term.id)
+
+                else:
+                    # Получаем термин корневой папки производитель
+                    producer_root_tag = TermModel.objects.active().get(slug=root_producer_term_slug)
+                    # Получаем термин производителя
+                    product_producer_term, created = producer_root_tag.get_children().get_or_create(
+                        slug=producer_guid,
+                        defaults={
+                            "parent_id": producer_root_tag.id,
+                            "name": producer_name,
+                            "semantic_rule": TermModel.OR_RULE,
+                            "attributes": TermModel.attributes.is_characteristic,
+                            "system_flags": _default_system_flags_restriction
+                        })
+
+                    if not created and product_producer_term.name != producer_name:
+                        product_producer_term.name = producer_name
+                        product_producer_term.save()
+
+                    # устанавливаем в товар
+                    instance.terms.add(product_producer_term)
+                    # усли update добавляем в active_terms_ids
+                    if validated_data.get('active_terms_ids', None) is not None:
+                        print("validated_data", validated_data.get('active_terms_ids', None))
+                        validated_data.get['active_terms_ids'].append(product_producer_term.id)
+
 
         def create(self, validated_data):
 
             origin_validated_data = validated_data.copy()
 
-            for key in ('transition', 'html_content', 'extra_units'):
+            for key in ('transition', 'html_content', 'extra_units', 'producer'):
                 validated_data.pop(key, None)
 
             instance = super(self.__class__, self).create(validated_data)
 
-            self.Meta.model.RESTMeta._update_entity(self, instance, origin_validated_data)
+            self.Meta.model.RESTMeta._update_entity(self, instance, instance._is_created, origin_validated_data)
+
 
             return instance
 
         def update(self, instance, validated_data):
 
-            self.Meta.model.RESTMeta._update_entity(self, instance, validated_data)
+            self.Meta.model.RESTMeta._update_entity(self, instance, False, validated_data)
 
             return super(self.__class__, self).update(instance, validated_data)
 
