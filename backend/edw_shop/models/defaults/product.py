@@ -18,7 +18,7 @@ from edw_shop.models.utils import get_or_create_term_wrapper, _default_system_fl
 from edw_shop.money.fields import MoneyField
 
 from edw_shop.rest.validators.product import ProductValidator
-from edw_shop.rest.serializers.product import ProductUnitSerializer
+from edw_shop.rest.serializers.product import ProductUnitSerializer, ProductGroupPropertySerializer
 
 from edw_fluent.models.page_layout import (
     get_views_layouts,
@@ -76,7 +76,6 @@ class Product(BaseProduct):
         ('out_of_stock', _('out of stock'))
     )
 
-    PRODUCER_TERM_SLUG = 'product_producer'
     CATEGORY_TERM_PATTERN = 'commercml_category'
 
     # common product fields
@@ -175,7 +174,8 @@ class Product(BaseProduct):
                 'source': 'data_mart',
                 'read_only': True
             }),
-            'producer' : ('edw_shop.rest.serializers.product.ProductProducerSerializer', {
+            'group_props': ('rest_framework.serializers.ListField', {
+                'child': ProductGroupPropertySerializer(),
                 'required': False,
                 'write_only': True
             })
@@ -194,85 +194,68 @@ class Product(BaseProduct):
                                                     defaults={"value": unit.get("value", 1.0),
                                                               "name": unit.get("name"),
                                                               "discount": unit.get("discount", 1.0)})
-            # создаем копии производителя категориям
-            producer = validated_data.pop("producer", None)
-            if producer is not None:
-                producer_name = producer['name']
-                producer_guid = producer['guid']
-                categories = producer['categories']
-                root_producer_term_slug = producer['root_producer']
+            # создаем копии групповых свойств по категориям
+            #producer
 
-                if categories:
+            group_props = validated_data.pop("producer", None)
+
+            group_props
+            if group_props is not None:
+                for group_prop in group_props:
+                    group_prop_name = group_prop['name']
+                    group_prop_guid = group_prop['guid']
+                    parent_group_prop_name = group_prop['parent_name']
+                    parent_group_prop_guid = group_prop['parent_guid']
+                    categories = group_prop['categories']
+                    default_root_term_slug = group_prop['default_root']
+
+                    if not categories:
+                        categories = [default_root_term_slug]
+
                     for category in categories:
                         category_term = TermModel.objects.active().get(slug=category)
                         if category_term:
                             root_category = get_or_create_term_wrapper(category_term)
 
                             # Получаем термин папки производитель
-                            producer_root_tag, created = root_category.get_children().get_or_create(
-                                slug=instance.PRODUCER_TERM_SLUG,
+                            group_root_tag, created = root_category.get_children().get_or_create(
+                                slug=parent_group_prop_guid,
                                 defaults={
                                     "parent_id": root_category.id,
-                                    "name": u'Производитель',#_("Producer"),
+                                    "name": parent_group_prop_name,
                                     "semantic_rule": TermModel.OR_RULE,
                                     "attributes": TermModel.attributes.is_characteristic,
                                     "specification_mode": TermModel.SPECIFICATION_MODES[1][0],
                                     "system_flags": _default_system_flags_restriction
-
                                 })
 
                             # Получаем термин производителя
-                            product_producer_term, created = producer_root_tag.get_children().get_or_create(
-                                slug=producer_guid,
+                            product_group_term, created = group_root_tag.get_children().get_or_create(
+                                slug=group_prop_guid,
                                 defaults={
-                                    "parent_id": producer_root_tag.id,
-                                    "name": producer_name,
+                                    "parent_id": group_root_tag.id,
+                                    "name": group_prop_name,
                                     "semantic_rule": TermModel.OR_RULE,
                                     "system_flags": _default_system_flags_restriction
                                 })
 
-                            if not created and product_producer_term.name != producer_name:
-                                product_producer_term.name = producer_name
-                                product_producer_term.save()
+                            if not created and product_group_term.name != group_prop_name:
+                                product_group_term.name = group_prop_name
+                                product_group_term.save()
 
                             # устанавливаем в товар
-                            instance.terms.add(product_producer_term)
+                            instance.terms.add(product_group_term)
                             # усли update добавляем в active_terms_ids
                             if validated_data.get('active_terms_ids', None) is not None and \
-                                product_producer_term.id not in validated_data['active_terms_ids']:
-                                validated_data['active_terms_ids'].append(product_producer_term.id)
-
-                else:
-                    # Получаем термин корневой папки производитель
-                    producer_root_tag = TermModel.objects.active().get(slug=root_producer_term_slug)
-                    # Получаем термин производителя
-                    product_producer_term, created = producer_root_tag.get_children().get_or_create(
-                        slug=producer_guid,
-                        defaults={
-                            "parent_id": producer_root_tag.id,
-                            "name": producer_name,
-                            "semantic_rule": TermModel.OR_RULE,
-                            "attributes": TermModel.attributes.is_characteristic,
-                            "system_flags": _default_system_flags_restriction
-                        })
-
-                    if not created and product_producer_term.name != producer_name:
-                        product_producer_term.name = producer_name
-                        product_producer_term.save()
-
-                    # устанавливаем в товар
-                    instance.terms.add(product_producer_term)
-                    # усли update добавляем в active_terms_ids
-                    if validated_data.get('active_terms_ids', None) is not None and \
-                            product_producer_term.id not in validated_data['active_terms_ids']:
-                        validated_data['active_terms_ids'].append(product_producer_term.id)
+                                product_group_term.id not in validated_data['active_terms_ids']:
+                                validated_data['active_terms_ids'].append(product_group_term.id)
 
 
         def create(self, validated_data):
 
             origin_validated_data = validated_data.copy()
 
-            for key in ('transition', 'html_content', 'extra_units', 'producer'):
+            for key in ('transition', 'html_content', 'extra_units', 'group_props'):
                 validated_data.pop(key, None)
 
             instance = super(self.__class__, self).create(validated_data)
