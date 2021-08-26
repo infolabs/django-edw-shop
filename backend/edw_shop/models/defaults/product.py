@@ -197,9 +197,8 @@ class Product(BaseProduct):
             # создаем копии групповых свойств по категориям
             #producer
 
-            group_props = validated_data.pop("producer", None)
+            group_props = validated_data.pop("group_props", None)
 
-            group_props
             if group_props is not None:
                 for group_prop in group_props:
                     group_prop_name = group_prop['name']
