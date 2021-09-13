@@ -195,7 +195,7 @@ class Product(BaseProduct):
                                                               "name": unit.get("name"),
                                                               "discount": unit.get("discount", 0.0)})
             else:
-                instance.units.delete()
+                instance.units.all().delete()
             # создаем копии групповых свойств по категориям
             #producer
 
