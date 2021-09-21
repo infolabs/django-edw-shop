@@ -11,6 +11,7 @@ from edw_shop.conf import app_settings
 from edw_shop.models.product import ProductModel
 from edw_shop.rest.money import MoneyField
 from edw.rest.serializers.customer import CustomerSerializer
+from edw.rest.serializers.entity import EntitySummarySerializer
 from .bases import BaseOrderItemSerializer
 
 
@@ -111,7 +112,7 @@ class OrderItemSerializer(BaseOrderItemSerializer):
 
     def get_summary(self, order_item):
         label = self.context.get('render_label', 'order')
-        serializer_class = app_settings.PRODUCT_SUMMARY_SERIALIZER
+        serializer_class = EntitySummarySerializer #app_settings.PRODUCT_SUMMARY_SERIALIZER
         serializer = serializer_class(order_item.product, context=self.context,
                                       read_only=True, label=label)
         return serializer.data
