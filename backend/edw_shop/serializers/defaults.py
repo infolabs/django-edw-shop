@@ -112,7 +112,8 @@ class OrderItemSerializer(BaseOrderItemSerializer):
 
     def get_summary(self, order_item):
         label = self.context.get('render_label', 'order')
-        serializer_class = EntitySummarySerializer #app_settings.PRODUCT_SUMMARY_SERIALIZER
+        serializer_class = app_settings.PRODUCT_SUMMARY_SERIALIZER # EntitySummarySerializer
+        # todo: EntitySummarySerializer для изменения необходимо переделать шаблон детали заказа
         serializer = serializer_class(order_item.product, context=self.context,
                                       read_only=True, label=label)
         return serializer.data
