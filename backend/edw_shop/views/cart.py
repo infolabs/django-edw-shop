@@ -18,22 +18,28 @@ from edw_shop.serializers.cart import (BaseCartSerializer, CartSerializer, CartI
 
 
 class BaseViewSet(viewsets.ModelViewSet):
+
     def get_queryset(self):
+
         try:
             cart = CartModel.objects.get_from_request(self.request)
             if self.kwargs.get(self.lookup_field):
-                # we're interest only into a certain cart item
+
                 return CartItemModel.objects.filter(cart=cart)
-            # otherwise the CartSerializer will show its detail view and list all its cart items
+
             return cart
+
         except CartModel.DoesNotExist:
+
             return CartModel()
 
     def paginate_queryset(self, queryset):
+
         if isinstance(queryset, QuerySet):
             return super(BaseViewSet, self).paginate_queryset(queryset)
 
     def get_serializer(self, *args, **kwargs):
+
         kwargs.update(context=self.get_serializer_context(), label=self.serializer_label)
         many = kwargs.pop('many', False)
         if many or self.item_serializer_class is None:
